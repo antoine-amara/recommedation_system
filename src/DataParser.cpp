@@ -28,3 +28,6 @@ vector<string> DataParser::getGenres() {
 
 vector<string> DataParser::getMovies() {
 }
+
+DataParser::~DataParser() {
+}
