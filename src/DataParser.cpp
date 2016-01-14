@@ -2,53 +2,62 @@
 
 using namespace std;
 
-DataParser::DataParser() {
+DataParser::DataParser(int nbMovies, int nbUsers) {
   this->m_filename = "u";
+  m_datas = gsl_matrix_alloc(nbMovies, nbUsers);
+  this->m_nbMovies = nbMovies;
+  this->m_nbUsers = nbUsers;
 }
 
-DataParser::DataParser(string filename) {
+DataParser::DataParser(string filename, int nbMovies, int nbUsers) {
   this->m_filename = filename;
+  m_datas = gsl_matrix_alloc(nbMovies, nbUsers);
+  this->m_nbMovies = nbMovies;
+  this->m_nbUsers = nbUsers;
 }
 
 void DataParser::parse() {
-  parseDatas(10,10);
+  parseDatas();
   parseGenres();
   parseMovies();
 }
 
-void DataParser::parseDatas(int nbMovies, int nbUsers) {
+void DataParser::parseDatas() {
 
-	int i, j;
-	string file = m_filename+".base";
-	ifstream set(file.c_str(), ios::in);
-	int idM, idU, Mark;
-	gsl_matrix * m_datas = gsl_matrix_alloc(nbMovies,nbUsers);
-	string data;
+  int i, j;
+  string file = m_filename+".base";
+  ifstream set(file.c_str(), ios::in);
+  int idM, idU, Mark;
+  string data;
 
-	if (set) {
-		set >> data;
-		idM = stoi(data);
-		set >> data;
-		idU = stoi(data);
-		set >> data;
-		Mark = stoi(data);
-	}
-	for (i = 0; i < nbMovies; i++){
-		for (j=0; j < nbUsers; j++){
-			if (idM == i && idU == j){
-				gsl_matrix_set(m_datas, i, j, Mark);
-				set >> data;
-				idM = stoi(data);
-				set >> data;
-				idU = stoi(data);
-				set >> data;
-				Mark = stoi(data);
-			}
-			else
-				gsl_matrix_set(m_datas, i, j, -1);
-		}
-	}
-	set.close();
+  if (set) {
+    set >> data;
+    idM = stoi(data);
+    set >> data;
+    idU = stoi(data);
+    set >> data;
+    Mark = stoi(data);
+
+    for (i = 0; i < this->m_nbMovies; i++){
+      for (j=0; j < this->m_nbUsers; j++){
+        if (idM == i && idU == j){
+          gsl_matrix_set(m_datas, i, j, Mark);
+          set >> data;
+          idM = stoi(data);
+          set >> data;
+          idU = stoi(data);
+          set >> data;
+          Mark = stoi(data);
+        }
+        else
+        gsl_matrix_set(m_datas, i, j, 0);
+      }
+    }
+  }
+  else {
+    cout << "ERROR: cannot open dataset" << endl;
+  }
+  set.close();
 }
 
 void DataParser::parseGenres() {
@@ -87,7 +96,7 @@ void DataParser::parseMovies() {
   set.close();
 }
 
-gsl_matrix DataParser::getDatas() {
+gsl_matrix* DataParser::getDatas() {
   return m_datas;
 }
 
@@ -100,5 +109,5 @@ vector<string> DataParser::getMovies() {
 }
 
 DataParser::~DataParser() {
-	gsl_matrix_free (&m_datas);
+  gsl_matrix_free(m_datas);
 }

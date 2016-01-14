@@ -37,7 +37,7 @@ public:
      *    - u.genre
      *    - u.item
      */
-  DataParser();
+  DataParser(int nbMovies, int nbUsers);
 
   /*!
      *  \brief Constructeur.
@@ -52,7 +52,7 @@ public:
      *
      *  \param filename : le nom du dataset.
      */
-  DataParser(std::string filename);
+  DataParser(std::string filename, int nbMovies, int nbUsers);
 
   /*!
      *  \brief Récupération des données des fichiers.
@@ -71,7 +71,7 @@ public:
      *  On notera que le séparateur est une tabulation.
      *
      */
-  void parseDatas(int nbMovies, int nbUsers);
+  void parseDatas();
 
   /*!
      *  \brief Récupération des genres de films.
@@ -80,7 +80,7 @@ public:
      *  Ces informations sont stockées dans le fichier filename.genre et sont organisés de la manière suivante:
      *    genre|nombre de film de ce genre
      *  On notera que le séparateur est ici un pipe, que les notes vont de 1 à 5, l'utilisateur n'a pas noté tous les films,
-     *  dans ce cas la case contient un -1.
+     *  dans ce cas la case contient un 0.
      *
      */
   void parseGenres();
@@ -104,7 +104,7 @@ public:
      *  \return une gsl_matrix avec les notes des films par rapport aux utilisateurs, c'est-à-dire que
      *          chaque ligne est un film et chaque colonne un utilisateur.
      */
-  gsl_matrix getDatas();
+  gsl_matrix* getDatas();
 
   /*!
      *  \brief Récupérer un tableau avec l'ensemble des genres précédemment construit par parseGenres.
@@ -136,7 +136,9 @@ public:
 
 protected:
   std::string m_filename; /*!< Le nom du dataset */
-  gsl_matrix m_datas; /*!< La matrice contenant les notes des films données par les utilisateurs */
+  int m_nbMovies;
+  int m_nbUsers;
+  gsl_matrix *m_datas; /*!< La matrice contenant les notes des films données par les utilisateurs */
   std::vector<std::string> m_genres; /*!< Un tableau contenant les noms des genres des films */
   std::vector<std::string> m_movies; /*!< Un tableau contenant les titres des films */
 };
