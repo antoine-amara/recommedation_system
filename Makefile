@@ -1,7 +1,7 @@
 CXX = g++
 CPP_FILES = $(wildcard src/*.cpp)
 OBJ_FILES = $(addprefix build/,$(notdir $(CPP_FILES:.cpp=.o)))
-CXXFLAGS = -Iinclude/ -W -Wall -ansi -pedantic
+CXXFLAGS = -Iinclude/ -W -Wall -ansi -pedantic -std=c++11
 LDFLAGS = -lgsl -lgslcblas -lm
 EXEC = recommender_system
 

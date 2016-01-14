@@ -1,5 +1,6 @@
 # recommendation_system
-** pji système de recommandation de film, musique ou autre. **
+
+__ pji système de recommandation de film, musique ou autre. __
 
 outils utilisés:
 * GNU GSL: [site officiel](http://www.gnu.org/software/gsl/)

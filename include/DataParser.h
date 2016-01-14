@@ -71,7 +71,7 @@ public:
      *  On notera que le séparateur est une tabulation.
      *
      */
-  void parseDatas();
+  void parseDatas(int nbMovies, int nbUsers);
 
   /*!
      *  \brief Récupération des genres de films.
