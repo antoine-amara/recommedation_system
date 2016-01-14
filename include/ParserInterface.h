@@ -1,6 +1,13 @@
 #ifndef PARSERINTERFACE_H
 #define PARSERINTERFACE_H
 
+/*!
+ * \file ParserInterface.h
+ * \brief Base de tous parser de fichier.
+ * \author Antoine Amara, Jean-Fréderic Durand.
+ * \version 0.1
+ */
+
 /*! \class ParserInterface
    * \brief Interface permettant d'avoir la base d'un parser.
    *

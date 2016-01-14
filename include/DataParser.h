@@ -1,8 +1,10 @@
 #ifndef DATAPARSER_H
 #define DATAPARSER_H
 
+#include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 #include <gsl/gsl_matrix.h>
 
 #include "ParserInterface.h"
@@ -50,7 +52,7 @@ public:
      *
      *  \param filename : le nom du dataset.
      */
-  DataParser(string filename);
+  DataParser(std::string filename);
 
   /*!
      *  \brief Récupération des données des fichiers.
@@ -78,7 +80,7 @@ public:
      *  Ces informations sont stockées dans le fichier filename.genre et sont organisés de la manière suivante:
      *    genre|nombre de film de ce genre
      *  On notera que le séparateur est ici un pipe, que les notes vont de 1 à 5, l'utilisateur n'a pas noté tous les films,
-     *  dans ce cas la case contient un 0.
+     *  dans ce cas la case contient un -1.
      *
      */
   void parseGenres();
@@ -111,7 +113,7 @@ public:
      *
      *  \return un vector de string contenant les noms des genres.
      */
-  std::vector<string> getGenres();
+  std::vector<std::string> getGenres();
 
   /*!
      *  \brief Récupérer un tableau avec les titres des films précédemment construit par parseMovies.
@@ -121,7 +123,7 @@ public:
      *
      *  \return un vector de string contenant les noms des films.
      */
-  std::vector<string> getMovies();
+  std::vector<std::string> getMovies();
 
   /*!
      *  \brief Destructeur
@@ -133,10 +135,10 @@ public:
   virtual ~DataParser();
 
 protected:
-  string m_filename; /*!< Le nom du dataset */
+  std::string m_filename; /*!< Le nom du dataset */
   gsl_matrix m_datas; /*!< La matrice contenant les notes des films données par les utilisateurs */
-  std::vector<string> m_genres; /*!< Un tableau contenant les noms des genres des films */
-  std::vector<string> m_movies; /*!< Un tableau contenant les titres des films */
+  std::vector<std::string> m_genres; /*!< Un tableau contenant les noms des genres des films */
+  std::vector<std::string> m_movies; /*!< Un tableau contenant les titres des films */
 };
 
 #endif
