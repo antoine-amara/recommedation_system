@@ -7,6 +7,9 @@ EXEC = recommender_system
 
 all: $(EXEC)
 
+main.o: main.cpp
+	$(CXX) -o build/$@ $^ $(LDFLAGS)
+
 recommender_system: $(OBJ_FILES) main.o
 	$(CXX) -o build/$@ $^ $(LDFLAGS)
 
@@ -19,6 +22,7 @@ doc:
 	doxygen doc/doc_config
 
 clean:
+	rm -f *.o
 	rm -rf build/*.o
 
 mrproper: clean
