@@ -7,7 +7,7 @@ EXEC = recommender_system
 
 all: $(EXEC)
 
-recommender_system: $(OBJ_FILES) main.o
+recommender_system: $(OBJ_FILES)
 	$(CXX) -o build/$@ $^ $(LDFLAGS)
 
 $(OBJ_FILES): $(CPP_FILES)
