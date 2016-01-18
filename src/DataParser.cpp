@@ -31,23 +31,35 @@ void DataParser::parseDatas() {
   string data;
 
   if (set) {
+    // on consomme l'id du film.
     set >> data;
     idM = stoi(data);
+    // on consomme l'id de l'utilisateur.
     set >> data;
     idU = stoi(data);
+    // on consomme la note du film.
     set >> data;
     Mark = stoi(data);
+    // on consomme le timestamp.
+    set >> data;
 
-    for (i = 0; i < this->m_nbMovies; i++){
-      for (j=0; j < this->m_nbUsers; j++){
-        if (idM == i && idU == j){
+    for (i = 0; i < this->m_nbMovies; ++i){
+      for (j=0; j < this->m_nbUsers; ++j) {
+
+        // les indices de la matrice sont décalée par rapport aux indices des films et utilisateurs.
+        if (idM == i+1 && idU == j+1){
           gsl_matrix_set(m_datas, i, j, Mark);
+          // on consomme l'id du film.
           set >> data;
           idM = stoi(data);
+          // on consomme l'id de l'utilisateur.
           set >> data;
           idU = stoi(data);
+          // on consomme la note du film.
           set >> data;
           Mark = stoi(data);
+          // on consomme le timestamp.
+          set >> data;
         }
         else
         gsl_matrix_set(m_datas, i, j, 0);
@@ -84,16 +96,30 @@ void DataParser::parseMovies() {
 
   if(set) {
     string line;
-    string separator = "|";
+    char separator = '|';
+    vector<string> subline;
 
     while(getline(set, line)) {
-      m_movies.push_back(line.substr(0, line.find(separator)));
+      subline = split(line, separator);
+      this->m_movies.push_back(subline[1]);
     }
   }
   else {
     cout << "ERROR: cannot open dataset" << endl;
   }
   set.close();
+}
+
+vector<string> DataParser::split(string str, char separator) {
+  vector<string> internal;
+  stringstream ss(str); // On transforme la chaine en stream.
+  string tok;
+
+  while(getline(ss, tok, separator)) {
+    internal.push_back(tok);
+  }
+
+  return internal;
 }
 
 gsl_matrix* DataParser::getDatas() {

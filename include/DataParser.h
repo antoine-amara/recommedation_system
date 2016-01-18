@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
 #include <gsl/gsl_matrix.h>
 
 #include "ParserInterface.h"
@@ -29,13 +30,16 @@ public:
   /*!
      *  \brief Constructeur par défaut.
      *
-     *  Constructeur par défaut de la classe DataParser.
+     *  Constructeur minimal.
      *
      *  Ce constructeur considérera que le nom du fichier du dataset sera u.
      *  On considérera donc les fichiers suivants:
      *    - u.data
      *    - u.genre
      *    - u.item
+     *
+     *  \param nbMovies : nombre total de films disponible.
+     *  \param nbUsers : nombre total d'utilisateur.
      */
   DataParser(int nbMovies, int nbUsers);
 
@@ -90,7 +94,7 @@ public:
      *
      *  Méthode permettant de récupérer l'ensemble des informations relatives aux films.
      *  Ces informations sont stockées dans le fichier filename.item et sont organisés de la manière suivante:
-     *    film id|titre/date de sortie|date de sortie en video|IMDb url|genre
+     *    film id|titre|date de sortie|date de sortie en video|IMDb url|genre
      *  On notera que le séparateur est ici le pipe et que le genre est représenté par une suite de booléens.
      *
      */
@@ -136,11 +140,24 @@ public:
 
 protected:
   std::string m_filename; /*!< Le nom du dataset */
-  int m_nbMovies;
-  int m_nbUsers;
+  int m_nbMovies; /*!< Le nombre total de films disponible */
+  int m_nbUsers; /*!< Le nombre total d'utilisateur */
   gsl_matrix *m_datas; /*!< La matrice contenant les notes des films données par les utilisateurs */
   std::vector<std::string> m_genres; /*!< Un tableau contenant les noms des genres des films */
   std::vector<std::string> m_movies; /*!< Un tableau contenant les titres des films */
+
+private:
+  /*!
+     *  \brief Permets de découper une chaîne de caractères.
+     *
+     *  Méthode permettant de découper une chaîne de caractères suivant un séparateur.
+     *
+     *  \param str: la chaîne de caractères à splitté.
+     *  \param separator: le séparateur choisit pour splitter.
+     *
+     *  \return un vector de string contenant les éléments splittés de la chaîne.
+     */
+  std::vector<std::string> split(std::string str, char separator);
 };
 
 #endif
