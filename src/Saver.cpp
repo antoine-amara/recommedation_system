@@ -43,7 +43,7 @@ void Saver::save(MovieRecommender object) {
 }
 
 void Saver::load() {
-	FILE* fichier = NULL;
+	FILE* fichier;
 	char chaine[TAILLE_MAX] = "";
 
 	fichier = fopen(this->m_filename,"r");
@@ -54,8 +54,10 @@ void Saver::load() {
 		fgets(chaine, TAILLE_MAX, fichier);
 		int n = atoi(chaine) ;
 
-		assert(m != NULL && n != NULL);
-		this->m_theta = gsl_matrix_alloc(m,n);
+		if (m == NULL || n == NULL)
+			this->m_theta = gsl_matrix_alloc(m,n);
+		else
+			cout << "ERROR : File bad construction in line 1 or 2" << endl;
 
 		gsl_matrix_fscanf(fichier, m_theta);
 
@@ -64,18 +66,18 @@ void Saver::load() {
 		fgets(chaine, TAILLE_MAX, fichier);
 		int n = atoi(chaine) ;
 
-		assert(m != NULL && n != NULL);
-		this->m_X = gsl_matrix_alloc(m,n);
+		if (m == NULL || n == NULL)
+			this->m_X = gsl_matrix_alloc(m,n);
+		else
+			cout << "ERROR : File bad construction in line 1 or 2" << endl;
 
 		gsl_matrix_fscanf(fichier, m_X);
 
-		if (fgets(chaine, TAILLE_MAX, fichier) != NULL){
+		if (fgets(chaine, TAILLE_MAX, fichier) != NULL)
 			this->m_alpha = atof(chaine);
-		}
 	}
-	else{
+	else
 		cout << "ERROR : Cannot open file" << endl;
-	}
 	fclose(fichier);
 }
 
