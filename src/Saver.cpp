@@ -54,22 +54,16 @@ void Saver::load() {
 		fgets(chaine, TAILLE_MAX, fichier);
 		int n = atoi(chaine) ;
 
-		if (m == NULL || n == NULL)
-			this->m_theta = gsl_matrix_alloc(m,n);
-		else
-			cout << "ERROR : File bad construction in line 1 or 2" << endl;
+		this->m_theta = gsl_matrix_alloc(m,n);	
 
 		gsl_matrix_fscanf(fichier, m_theta);
 
 		fgets(chaine, TAILLE_MAX, fichier);
 		m = atoi(chaine);
 		fgets(chaine, TAILLE_MAX, fichier);
-	  n = atoi(chaine) ;
+	  	n = atoi(chaine) ;
 
-		if (m == NULL || n == NULL)
-			this->m_X = gsl_matrix_alloc(m,n);
-		else
-			cout << "ERROR : File bad construction in line 1 or 2" << endl;
+		this->m_X = gsl_matrix_alloc(m,n);
 
 		gsl_matrix_fscanf(fichier, m_X);
 
