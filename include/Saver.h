@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
+#include <assert.h>
 #include <gsl/gsl_matrix.h>
 
 #include "MovieRecommender.h"

@@ -1,20 +1,32 @@
-CXX = g++
-CPP_FILES = $(wildcard src/*.cpp)
-OBJ_FILES = $(addprefix build/,$(notdir $(CPP_FILES:.cpp=.o)))
-CXXFLAGS = -Iinclude/ -W -Wall -ansi -pedantic -std=c++11
-LDFLAGS = -lgsl -lgslcblas -lm
-EXEC = recommender_system
+TARGET   = recommender_system
 
-all: $(EXEC)
+CC       = g++
+# compiling flags here
+CFLAGS   = -std=c++11 -Wall -Iinclude/
 
-main.o: main.cpp
-	$(CXX) -o $@ -c $< $(CXXFLAGS)
+LINKER   = g++ -o
+# linking flags here
+LFLAGS   = -Wall -Iinclude/ -lgsl -lgslcblas -lm
 
-recommender_system: $(OBJ_FILES) main.o
-	$(CXX) -o build/$@ $^ $(LDFLAGS)
+# change these to set the proper directories where each files shoould be
+SRCDIR   = src
+INCLUDE = include
+OBJDIR   = build
+BINDIR   = build
 
-$(OBJ_FILES): $(CPP_FILES)
-	$(CXX) -o $@ -c $< $(CXXFLAGS)
+SOURCES  := $(wildcard $(SRCDIR)/*.cpp)
+INCLUDES := $(wildcard $(INCLUDE)/*.h)
+OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
+rm       = rm -rf
+
+
+$(BINDIR)/$(TARGET): $(OBJECTS)
+	@$(LINKER) $@ $(LFLAGS) $(OBJECTS)
+	@echo "Linking complete!"
+
+$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "Compiled "$<" successfully!"
 
 .PHONY: clean mrproper doc
 
@@ -22,10 +34,11 @@ doc:
 	doxygen doc/doc_config
 
 clean:
-	rm -f *.o
-	rm -rf build/*.o
+	@$(rm) $(OBJECTS)
+	@$(rm) doc/html
+	@$(rm) doc/latex
+	@echo "Cleanup complete!"
 
 mrproper: clean
-	rm -rf build/$(EXEC)
-	rm -rf doc/html re
-	rm -rf doc/latex
+	@$(rm) $(BINDIR)/$(TARGET)
+	@echo "Project is clean"
