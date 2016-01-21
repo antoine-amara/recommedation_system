@@ -46,7 +46,7 @@ void Saver::load() {
 	FILE* fichier = NULL;
 	char chaine[TAILLE_MAX] = "";
 
-	fichier = fopen(this->m_filename,"r");
+	fichier = fopen(this->m_filename.c_str(),"r");
 
 	if (fichier != NULL){
 		fgets(chaine, TAILLE_MAX, fichier);
@@ -60,9 +60,9 @@ void Saver::load() {
 		gsl_matrix_fscanf(fichier, m_theta);
 
 		fgets(chaine, TAILLE_MAX, fichier);
-		int m = atoi(chaine);
+		m = atoi(chaine);
 		fgets(chaine, TAILLE_MAX, fichier);
-		int n = atoi(chaine) ;
+	  n = atoi(chaine) ;
 
 		assert(m != NULL && n != NULL);
 		this->m_X = gsl_matrix_alloc(m,n);
