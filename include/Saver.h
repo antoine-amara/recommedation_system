@@ -2,6 +2,9 @@
 #define SAVER_H
 
 #include <string>
+#include <iostream>
+#include <sstream>
+#include <stdio.h>
 #include <gsl/gsl_matrix.h>
 
 #include "MovieRecommender.h"
@@ -30,8 +33,8 @@ public:
      *  est mr.save.
      *
      */
-
   Saver();
+
   /*!
      *  \brief Constructeur
      *
@@ -102,7 +105,7 @@ public:
   virtual ~Saver();
 
 protected:
-  string m_filename; /*!< Nom du fichier de sauvegarde, utilisé aussi bien pour l'écriture que la lecture */
+  std::string m_filename; /*!< Nom du fichier de sauvegarde, utilisé aussi bien pour l'écriture que la lecture */
   gsl_matrix* m_theta; /*!< Matrice de paramètres thêta, représente les préférences des utilisateurs */
   gsl_matrix* m_X; /*!< Matrice de paramètres X, représente la catégorisation des films */
   double m_alpha; /*!< Le taux d'apprentissage utilisé lors d'un entraînement de l'IA */
