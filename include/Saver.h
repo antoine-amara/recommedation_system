@@ -31,7 +31,7 @@ public:
      *  \brief Constructeur par défaut.
      *
      *  Ce constructeur considérera que le nom du fichier de sauvegarde
-     *  est mr.save.
+     *  est mr. La sauvegarde/chargement sera effectuer dans les fichiers mr.theta et mr.X.
      *
      */
   Saver();
@@ -39,7 +39,7 @@ public:
   /*!
      *  \brief Constructeur
      *
-     *  Ce constructeur prend un nom de fichier de sauvegarde. le nom du fichier sera donc filename.save.
+     *  Ce constructeur prend un nom de fichier de sauvegarde. le nom des fichiers de sauvegarde seront filename.theta et filename.X.
      *
      *  \param filename : le nom du fichier de sauvegarde à charger ou à écrire.
      */
@@ -52,7 +52,7 @@ public:
      *  Les éléments sauvegardés seront les matrices thêta et X, qui sont les matrices des paramètres
      *  permettant d'effectuer des prédictions(et donc de déduire des recommandations par la suite).
      *  Le taux d'apprentissage alpha sera également sauvegardé si il est disponible.(dans le cas d'une IA
-     *  en cours d'entraînement). Le tout sera sauvegardé dans le fichier filename.save.
+     *  en cours d'entraînement). Theta sera sauvegardé dans le fichier filename.theta et X dans le fichier filename.X.
      *
      *  \param object : l'objet représentant l'IA a sauvegardé.
      */
@@ -62,7 +62,7 @@ public:
      *  \brief Chargement d'un état d'une IA.
      *
      *  Méthode permettant de charger un état d'un objet MovieRecommender(de l'IA donc)
-     *  précédemment sauvegardé dans un fichier filename.save. Les éléments chargés seront
+     *  précédemment sauvegardé dans 2 fichiers: filename.theta et filename.X. Les éléments chargés seront
      *  les matrices de paramètres thêta et X permettant de faire des prédictions(et donc
      *  d'effectuer des recommandations), si il a été sauvegardé, le taux d'apprentissage alpha
      *  sera également chargé.
