@@ -117,9 +117,6 @@ void Saver::load() {
 		this->m_X = gsl_matrix_alloc(m,n);
 
 		gsl_matrix_fscanf(X, m_X);
-
-		if (fgets(chaine, TAILLE_MAX, theta) != NULL)
-			this->m_alpha = atof(chaine);
 	}
 	else
 		cout << "ERROR : Cannot open file" << endl;
@@ -133,10 +130,6 @@ gsl_matrix* Saver::getTheta() {
 
 gsl_matrix* Saver::getX() {
   return this->m_X;
-}
-
-double Saver::getAlpha() {
-  return this->m_alpha;
 }
 
 Saver::~Saver() {

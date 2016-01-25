@@ -51,8 +51,7 @@ public:
      *  Méthode permettant de sauvegarder l'état d'un objet MovieRecommender(de l'IA donc).
      *  Les éléments sauvegardés seront les matrices thêta et X, qui sont les matrices des paramètres
      *  permettant d'effectuer des prédictions(et donc de déduire des recommandations par la suite).
-     *  Le taux d'apprentissage alpha sera également sauvegardé si il est disponible.(dans le cas d'une IA
-     *  en cours d'entraînement). Theta sera sauvegardé dans le fichier filename.theta et X dans le fichier filename.X.
+     *  Theta sera sauvegardé dans le fichier filename.theta et X dans le fichier filename.X.
      *
      *  \param object : l'objet représentant l'IA a sauvegardé.
      */
@@ -64,8 +63,7 @@ public:
      *  Méthode permettant de charger un état d'un objet MovieRecommender(de l'IA donc)
      *  précédemment sauvegardé dans 2 fichiers: filename.theta et filename.X. Les éléments chargés seront
      *  les matrices de paramètres thêta et X permettant de faire des prédictions(et donc
-     *  d'effectuer des recommandations), si il a été sauvegardé, le taux d'apprentissage alpha
-     *  sera également chargé.
+     *  d'effectuer des recommandations).
      *
      */
   void load();
@@ -89,16 +87,6 @@ public:
   gsl_matrix* getX();
 
   /*!
-     *  \brief Récupérer le taux d'apprentissage.
-     *
-     *  Getter permettant de récupérer le taux d'apprentissage. Celui-ci est défini seulement si le saver
-     *  a été utilisé durant un entraînement.
-     *
-     *  \return un double représentant le taux d'apprentissage.
-     */
-  double getAlpha();
-
-  /*!
      *  \brief Destructeur
      *
      *  Permets de désallouer les éléments dynamiques, ici ce sera les gsl_matrix m_theta et m_X.
@@ -109,7 +97,6 @@ protected:
   std::string m_filename; /*!< Nom du fichier de sauvegarde, utilisé aussi bien pour l'écriture que la lecture */
   gsl_matrix* m_theta; /*!< Matrice de paramètres thêta, représente les préférences des utilisateurs */
   gsl_matrix* m_X; /*!< Matrice de paramètres X, représente la catégorisation des films */
-  double m_alpha; /*!< Le taux d'apprentissage utilisé lors d'un entraînement de l'IA */
 };
 
 #endif
