@@ -98,10 +98,8 @@ void Saver::load() {
 	if (theta && X){
 		fgets(chaine, TAILLE_MAX, theta);
 		int m = atoi(chaine);
-    cout << m << endl;
 		fgets(chaine, TAILLE_MAX, theta);
 		int n = atoi(chaine) ;
-    cout << n << endl;
 
     this->m_theta = gsl_matrix_alloc(m,n);
 
@@ -109,10 +107,8 @@ void Saver::load() {
 
     fgets(chaine, TAILLE_MAX, X);
 		m = atoi(chaine);
-    cout << m << endl;
 		fgets(chaine, TAILLE_MAX, X);
 	  n = atoi(chaine) ;
-    cout << n << endl;
 
 		this->m_X = gsl_matrix_alloc(m,n);
 
