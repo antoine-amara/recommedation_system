@@ -14,7 +14,7 @@
  * \file DataParser.h
  * \brief Le parser à utilisé pour le système de recommandation de films.
  * \author Antoine Amara, Jean-Fréderic Durand.
- * \version 0.2
+ * \version 0.3
  */
 
 /*! \class DataParser
@@ -30,7 +30,6 @@ public:
   /*!
      *  \brief Constructeur par défaut.
      *
-     *  Constructeur minimal.
      *
      *  Ce constructeur considérera que le nom du fichier du dataset sera u.
      *  On considérera donc les fichiers suivants:
@@ -70,8 +69,8 @@ public:
      *  \brief Récupération des notes données par les utilisateurs.
      *
      *  Méthode permettant de récupérer les notes données aux différents films par les utilisateurs.
-     *  Ces informations sont stockées dans le fichier filename.data et sont organisées de la manière suivante:
-     *    film id   utilisateur id    note    timestamp
+     *  Ces informations sont stockées dans le fichier filename.data et sont organisées de la manière suivante:\n
+     *    film id   utilisateur id    note    timestamp\n
      *  On notera que le séparateur est une tabulation.
      *
      */
@@ -81,8 +80,8 @@ public:
      *  \brief Récupération des genres de films.
      *
      *  Méthode permettant de récupérer les informations de classification. Ici les films sont catégorisés par leur genre.
-     *  Ces informations sont stockées dans le fichier filename.genre et sont organisés de la manière suivante:
-     *    genre|nombre de film de ce genre
+     *  Ces informations sont stockées dans le fichier filename.genre et sont organisés de la manière suivante:\n
+     *    genre|nombre de film de ce genre\n
      *  On notera que le séparateur est ici un pipe, que les notes vont de 1 à 5, l'utilisateur n'a pas noté tous les films,
      *  dans ce cas la case contient un 0.
      *
@@ -93,8 +92,8 @@ public:
      *  \brief Récupération des informations sur les films.
      *
      *  Méthode permettant de récupérer l'ensemble des informations relatives aux films.
-     *  Ces informations sont stockées dans le fichier filename.item et sont organisés de la manière suivante:
-     *    film id|titre|date de sortie|date de sortie en video|IMDb url|genre
+     *  Ces informations sont stockées dans le fichier filename.item et sont organisés de la manière suivante:\n
+     *    film id|titre|date de sortie|date de sortie en video|IMDb url|genre\n
      *  On notera que le séparateur est ici le pipe et que le genre est représenté par une suite de booléens.
      *
      */

@@ -38,7 +38,7 @@ vector<string> MovieRecommender::recommend() {
 double MovieRecommender::computeCost() {
 }
 
-void MovieRecommender::saveState() {
+void MovieRecommender::saveState(string filename) {
 }
 
 void MovieRecommender::loadState(string filename) {
