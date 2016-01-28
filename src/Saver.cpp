@@ -7,12 +7,16 @@ Saver::Saver() {
   this->m_filename = "mr";
   this->m_theta = NULL;
   this->m_X = NULL;
+  this->m_nbMovies = 0;
+  this->m_nbUsers = 0;
 }
 
 Saver::Saver(string filename) {
 	this->m_filename = filename;
 	this->m_theta = NULL;
 	this->m_X = NULL;
+  this->m_nbMovies = 0;
+  this->m_nbUsers = 0;
 }
 
 void Saver::save(MovieRecommender object) {
@@ -98,6 +102,8 @@ void Saver::load() {
 	if (theta && X){
 		fgets(chaine, TAILLE_MAX, theta);
 		int m = atoi(chaine);
+    // sauvegarde du nombre de films
+    this->m_nbMovies = m;
 		fgets(chaine, TAILLE_MAX, theta);
 		int n = atoi(chaine) ;
 
@@ -107,6 +113,8 @@ void Saver::load() {
 
     fgets(chaine, TAILLE_MAX, X);
 		m = atoi(chaine);
+    // sauvegarde du nombre d'utilisteurs
+    this->m_nbUsers;
 		fgets(chaine, TAILLE_MAX, X);
 	  n = atoi(chaine) ;
 
@@ -126,6 +134,14 @@ gsl_matrix* Saver::getTheta() {
 
 gsl_matrix* Saver::getX() {
   return this->m_X;
+}
+
+int Saver::getNbMovies(){
+  return this->m_nbMovies;
+}
+
+int Saver::getNbUsers(){
+  return this->m_nbUsers;
 }
 
 Saver::~Saver() {

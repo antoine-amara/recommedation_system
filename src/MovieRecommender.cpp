@@ -23,7 +23,12 @@ MovieRecommender::MovieRecommender(string dataset, int nbMovies, int nbUsers, gs
   this->m_parser = DataParser(dataset, nbMovies, nbUsers);
 }
 
-MovieRecommender::MovieRecommender(Saver saver) {
+MovieRecommender::MovieRecommender(string dataset, Saver saver) {
+  saver.load();
+  this->m_theta = saver.getTheta();
+  this->m_X = saver.getX();
+  this->m_ratings = NULL;
+  this->m_parser = DataParser(dataset, save.getNbMovies, save.getNbUsers);
 }
 
 void MovieRecommender::train(double alpha) {

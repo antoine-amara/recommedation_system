@@ -48,7 +48,7 @@ public:
      *    - dataset.genre
      *    - dataset.item
      *
-     *  \param dataset: le nom du dataset a utilisé.
+     *  \param dataset: le nom du dataset à utiliser.
      *  \param nbMovies: le nombre total de films traité par l'algorithme.
      *  \param nbUsers: le nombre total d'utilisateurs traité par l'algorithme.
      */
@@ -66,7 +66,7 @@ public:
      *  X(représentant la catégorisation par genre de chaque film) sont données. Les 2 matrices doivent
      *  avoir la taille donnée par les variables nbMovies et nbUsers.
      *
-     *  \param dataset: le nom du dataset a utilisé.
+     *  \param dataset: le nom du dataset à utiliser.
      *  \param nbMovies: le nombre total de films traité par l'algorithme.
      *  \param nbUsers: le nombre total d'utilisateurs traité par l'algorithme.
      *  \param theta: la matrice de paramètres thêta, représentant ici les préférences utilisateur pour chaque genre de film.
@@ -80,9 +80,10 @@ public:
      *  Constructeur permettant l'initialisation de l'algorithme via un objet Saver qui charge les informations
      *  via deux fichiers(filename.theta pour la matrice Theta et filename.X pour X).
      *
+     *  \param dataset: le nom du dataset à utiliser.
      *  \param saver: l'objet saver permettant de charger les matrices thêta et X.
      */
-  MovieRecommender(Saver saver);
+  MovieRecommender(std::string dataset, Saver saver);
 
   /*!
      *  \brief Permets d'effectuer l'apprentissage.
