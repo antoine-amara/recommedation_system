@@ -35,6 +35,16 @@ void MovieRecommender::train(double alpha) {
 }
 
 void MovieRecommender::predict() {
+  int mX = this->m_X->size1;
+  int mY = this->m_Y->size2;
+  gsl_matrix* m_X_t;
+  m_X_t = gsl_matrix_alloc(mY,mX);
+  
+  // transposition m_X
+  gsl_matrix_transpose_memcpy(m_X_t, this->m_X);
+  
+  //(m_theta)*(m_X_t)
+  
 }
 
 vector<string> MovieRecommender::recommend() {
