@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <gsl/gsl_matrix.h>
+#include <gsl/gsl_blas.h>
 
 #include "AiInterface.h"
 #include "DataParser.h"
