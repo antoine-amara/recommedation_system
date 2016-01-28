@@ -7,7 +7,8 @@
 
 #include "AiInterface.h"
 #include "DataParser.h"
-#include "Saver.h"
+
+class Saver;
 
 /*!
  * \file MovieRecommender.h
