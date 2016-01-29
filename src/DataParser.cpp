@@ -2,6 +2,9 @@
 
 using namespace std;
 
+DataParser::DataParser() {
+}
+
 DataParser::DataParser(int nbMovies, int nbUsers) {
   this->m_filename = "u";
   m_datas = gsl_matrix_alloc(nbMovies, nbUsers);

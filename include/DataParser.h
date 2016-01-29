@@ -27,6 +27,8 @@
 class DataParser : public ParserInterface {
 
 public:
+
+  DataParser();
   /*!
      *  \brief Constructeur par défaut.
      *
