@@ -96,7 +96,7 @@ public:
      *
      *  \param alpha : le taux d'apprentissage utilisé pour la décente de gradient.
      */
-  void train(double alpha);
+  void train(double alpha, double lambda);
 
   /*!
      *  \brief Construire la matrice complète notes des films/utilisateurs.
@@ -131,6 +131,8 @@ public:
      *  \return un double représentant l'erreur globale que commet l'algorithme sur ces prédictions.
      */
   double computeCost();
+
+  gsl_matrix* computeError();
 
   /*!
      *  \brief Sauvegarde d'un état de l'objet.
@@ -203,7 +205,7 @@ public:
 protected:
   gsl_matrix* m_theta; /*!< Matrice de paramètres, elle représente les préférences des utilisateurs en fonction des genres de films. */
   gsl_matrix* m_X; /*!< Matrice de paramètres, elle représente la catégorie de chaque film. */
-  gsl_matrix* m_ratings; /*!< Matrice contenant les predictions. On a donc la matrice complète des notes des films données par l'ensemble des utilisateurs. */
+  gsl_matrix* m_ratings; /*!< Matrice contenant les predictions. On a donc la matrice complète et corrigé des notes des films données par l'ensemble des utilisateurs. */
   DataParser m_parser; /*!< Objet DataParser contenant les informations du dataset, c'est-à-dire la matrice des notes données par les utilisateurs(incomplète), l'ensemble des genres de films présents dans le dataset ainsi que les titres de tous les films. */
 };
 

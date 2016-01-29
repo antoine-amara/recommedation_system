@@ -32,7 +32,15 @@ MovieRecommender::MovieRecommender(string dataset, Saver saver) {
   this->m_parser = DataParser(dataset, save.getNbMovies, save.getNbUsers);
 }
 
-void MovieRecommender::train(double alpha) {
+void MovieRecommender::train(double alpha, double lambda) {
+  double threshold = 0.1;
+  gsl_matrix *error;
+
+  while(computeCost > threshold) {
+    error = computeError();
+  }
+
+  gsl_matrix_free(error);
 }
 
 void MovieRecommender::predict() {
@@ -44,7 +52,21 @@ vector<string> MovieRecommender::recommend() {
 double MovieRecommender::computeCost() {
 }
 
+gsl_matrix* MovieRecommender::computeError() {
+  gsl_matrix* copy;
+
+  gsl_matrix_alloc(copy, this->m_ratings->size1, this->m_ratings->size2);
+
+  predict();
+  gsl_matrix_memcpy(copy, this->m_ratings);
+  gsl_matrix_sub(copy, this->m_parser->getDatas());
+
+  return copy;
+}
+
 void MovieRecommender::saveState(string filename) {
+  Saver saver = Saver(filename);
+  saver.save(this);
 }
 
 void MovieRecommender::loadState(string filename) {
