@@ -61,11 +61,32 @@ void MovieRecommender::predict() {
 vector<string> MovieRecommender::recommend() {
 }
 
-double MovieRecommender::computeCost() {
-  
+double MovieRecommender::computeCost(double lambda) {
+    /*
+     * Premier Element *
+     * m_error_2 *
+     */
+    //calcul de m_error_t (transposée de m_error)
+    gsl_matrix* m_error = computeError();
+    gsl_matrix* m_error_t = gsl_matrix_alloc(m_error->size2, m_error->size1);
+    gsl_matrix_transpose_memcpy(m_error_t, m_error);
+    //multiplication m_error*m_error_t dans m_error_2
+    gsl_matrix* m_error_2 = gsl_matrix_alloc(m_error->size1, m_error_t->size1);
+    gsl_blas_dgemm(CblasNoTrans,CblasNoTrans, 
+                1.0, &m_error,&m_error_t,
+                0.0, &m_error_2);
+    //multiplication m_error_2*1/2 da,s m_error_2
+    gsl_matrix_scale(m_error_2,(1/2));
+    /*
+     * Deuxieme Element *
+     */
+    
+
+
 }
 
 gsl_matrix* MovieRecommender::computeError() {
+  //computeError() = N*-N
   gsl_matrix* copy;
 
   gsl_matrix_alloc(copy, this->m_ratings->size1, this->m_ratings->size2);
