@@ -114,6 +114,18 @@ double MovieRecommender::computeCost(double lambda) {
     /*
      * Deuxieme Element *
      */
+    gsl_matrix * m_X_2 = gsl_matrix_alloc(m_X->size1, m_X->size2);
+    gsl_blas_dgemm(CblasTrans,CblasNoTrans, 
+                1.0, &m_X, &m_X,
+                0.0, &m_X_2);
+
+    /*
+     * Troisième élément
+     */
+    gsl_matrix * m_theta_2 = gsl_matrix_alloc(m_theta->size1, m_theta->size2);
+    gsl_blas_dgemm(CblasTrans,CblasNoTrans, 
+                1.0, &m_theta, &m_theta,
+                0.0, &m_theta_2);
 
 }
 
