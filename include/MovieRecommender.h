@@ -175,8 +175,10 @@ public:
      *  Setter permettant de charger un nouveau dataset pour l'entraînement.
      *
      *  \param set : le nom du dataset.
+     *  \param nbMovies : le nombre de films.
+     *  \param nbUsers : le nombre d'utilisateurs.
      */
-  void setDatas(std::string set);
+  void setDatas(std::string set, int nbMovies, int nbUsers);
 
   /*!
      *  \brief Récupérer la matrice de paramètres thêta.

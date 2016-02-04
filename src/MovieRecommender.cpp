@@ -177,7 +177,9 @@ void MovieRecommender::printState(double lambda) {
   cout << "cout : " << computeCost(double lambda)<<endl;
 }
 
-void MovieRecommender::setDatas(string set) {
+void MovieRecommender::setDatas(string set, int nbMovies, int nbUsers) {
+  this->m_parser = DataParser(set, nbMovies, nbUsers);
+  m_parser.parse();
 }
 
 gsl_matrix* MovieRecommender::getTheta() {
