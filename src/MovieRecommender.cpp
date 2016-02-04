@@ -155,9 +155,26 @@ void MovieRecommender::saveState(string filename) {
 }
 
 void MovieRecommender::loadState(string filename) {
+  Saver saver = Saver(filename);
+  saver.load();
 }
 
-void MovieRecommender::printState() {
+void MovieRecommender::printState(double lambda) {
+  cout << "Theta" << endl;
+  for (int i = 0; i < m_theta->size1; i++){
+    for (int j = 0; j < m_theta->size2; j++){
+      cout << "|" << gsl_matrix_get(m_theta, i ,j);
+    }
+    cout << "|" << endl;
+  }
+  cout << "X" << endl
+  for (int i = 0; i < m_X->size1; i++){
+    for (int j = 0; j < m_X->size2; j++){
+      cout << "|" << gsl_matrix_get(m_X, i ,j);
+    }
+    cout << "|" << endl;
+  }
+  cout << "cout : " << computeCost(double lambda)<<endl;
 }
 
 void MovieRecommender::setDatas(string set) {

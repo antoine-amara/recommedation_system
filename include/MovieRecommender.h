@@ -129,9 +129,10 @@ public:
      *  C'est donc une erreur qui est calculée. Cette erreur doit être minimale pour assurer la performance des recommandations effectuée.
      *  L'entraînement est là pour minimiser cette erreur.
      *
+     *  \param lambda : Le paramètre de régularisation.
      *  \return un double représentant l'erreur globale que commet l'algorithme sur ces prédictions.
      */
-  double computeCost();
+  double computeCost(double lambda);
 
   gsl_matrix* computeError();
 
@@ -164,8 +165,9 @@ public:
      *    - la matrice de paramètres X.
      *    - la fonction de cout J(thêta).
      *
+     *  \param lambda : Le paramètre de régularisation.
      */
-  void printState();
+  void printState(double lamba);
 
   /*!
      *  \brief Changer le dataset.
