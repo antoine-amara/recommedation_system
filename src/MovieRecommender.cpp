@@ -115,15 +115,23 @@ double MovieRecommender::computeCost(double lambda) {
      * Deuxieme Element *
      */
 
+}
 
 gsl_matrix* MovieRecommender::computeError() {
   //computeError() = N*-N
   gsl_matrix* copy;
 
   copy = gsl_matrix_alloc(this->m_ratings->size1, this->m_ratings->size2);
-
   predict();
   gsl_matrix_memcpy(copy, this->m_ratings);
+  //la différence ne pouvant pas jouer sur les valeurs non prédites 
+  //on remet a 0 celles non notés dans la copie de N*
+  for (int i = 0; i < this->m_parser->size1; i++){
+    for (int j = 0; j < this->m_parser->size2; j++){
+      if (gsl_matrix_get(this->m_parser, i, j) == 0)
+        gsl_matrix_set(copy,i,j,0);
+    }
+  }
   gsl_matrix_sub(copy, this->m_parser.getDatas());
 
   return copy;
