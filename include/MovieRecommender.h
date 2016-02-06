@@ -129,6 +129,7 @@ public:
      *  C'est donc une erreur qui est calculée. Cette erreur doit être minimale pour assurer la performance des recommandations effectuée.
      *  L'entraînement est là pour minimiser cette erreur.
      *
+     *  \param lambda : Le paramètre de régularisation.
      *  \return un double représentant l'erreur globale que commet l'algorithme sur ces prédictions.
      */
   double computeCost(double lambda);
@@ -164,8 +165,9 @@ public:
      *    - la matrice de paramètres X.
      *    - la fonction de cout J(thêta).
      *
+     *  \param lambda : Le paramètre de régularisation.
      */
-  void printState();
+  void printState(double lamba);
 
   /*!
      *  \brief Changer le dataset.
@@ -173,8 +175,10 @@ public:
      *  Setter permettant de charger un nouveau dataset pour l'entraînement.
      *
      *  \param set : le nom du dataset.
+     *  \param nbMovies : le nombre de films.
+     *  \param nbUsers : le nombre d'utilisateurs.
      */
-  void setDatas(std::string set);
+  void setDatas(std::string set, int nbMovies, int nbUsers);
 
   /*!
      *  \brief Récupérer la matrice de paramètres thêta.
