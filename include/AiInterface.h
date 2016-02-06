@@ -41,7 +41,7 @@ public:
      *
      *  \return l'erreur globale commise par l'algorithme sur une prédiction.
      */
-  virtual double computeCost() = 0;
+  virtual double computeCost(double lambda) = 0;
 };
 
 #endif

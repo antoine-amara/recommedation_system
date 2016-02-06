@@ -131,7 +131,7 @@ public:
      *
      *  \return un double représentant l'erreur globale que commet l'algorithme sur ces prédictions.
      */
-  double computeCost();
+  double computeCost(double lambda);
 
   gsl_matrix* computeError();
 

@@ -48,7 +48,7 @@ void MovieRecommender::train(double alpha, double lambda) {
   regularizationtheta = gsl_matrix_alloc(this->m_theta->size1, this->m_theta->size2);
   intermediatetheta = gsl_matrix_alloc(this->m_theta->size1, this->m_theta->size2);
 
-  while(computeCost() > threshold) {
+  while(computeCost(alpha) > threshold) {
     error = computeError();
 
     // on calcule la nouvelle matrice X(on effectue la decente de gradient)
@@ -93,6 +93,36 @@ void MovieRecommender::predict() {
 }
 
 vector<string> MovieRecommender::recommend(int user, int nbMovies) {
+  gsl_vector *user_rates, *movie, *other_movie, *res;
+  int sum;
+  unsigned int j, i, best_movie;
+  vector<string> movies;
+
+  user_rates = gsl_vector_alloc(this->m_parser.getDatas()->size2);
+  other_movie = gsl_vector_alloc(this->m_parser.getDatas()->size1);
+  movie = gsl_vector_alloc(this->m_parser.getDatas()->size1);
+  res = gsl_vector_alloc(this->m_parser.getDatas()->size1);
+  gsl_matrix_get_row(user_rates, this->m_parser.getDatas(), user);
+
+  best_movie = gsl_vector_max_index(user_rates);
+
+  gsl_matrix_get_row(movie, this->m_X, best_movie);
+
+  for(i = 0; i < this->m_X->size2; ++i) {
+    sum = 0;
+    if(i != best_movie) {
+      gsl_vector_memcpy(res, movie);
+      gsl_matrix_get_row(other_movie, this->m_X, i);
+      gsl_vector_sub(res, other_movie);
+      for(j = 0; j < res->size; ++j) {
+        sum += gsl_vector_get(res, j);
+      }
+      if(sum > -1 && sum < 1 ) {
+        movies.push_back(this->m_parser.getMovies()[i]);
+      }
+    }
+  }
+  return movies;
 }
 
 double MovieRecommender::computeCost(double lambda) {
@@ -106,15 +136,15 @@ double MovieRecommender::computeCost(double lambda) {
     gsl_matrix_transpose_memcpy(m_error_t, m_error);
     //multiplication m_error*m_error_t dans m_error_2
     gsl_matrix* m_error_2 = gsl_matrix_alloc(m_error->size1, m_error_t->size1);
-    gsl_blas_dgemm(CblasNoTrans,CblasNoTrans, 
-                1.0, &m_error,&m_error_t,
-                0.0, &m_error_2);
-    //multiplication m_error_2*1/2 da,s m_error_2
+    gsl_blas_dgemm(CblasNoTrans,CblasNoTrans,
+                1.0, m_error,m_error_t,
+                0.0, m_error_2);
+    //multiplication m_error_2*1/2 dans m_error_2
     gsl_matrix_scale(m_error_2,(1/2));
     /*
      * Deuxieme Element *
      */
-
+}
 
 gsl_matrix* MovieRecommender::computeError() {
   //computeError() = N*-N
