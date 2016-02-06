@@ -146,17 +146,18 @@ void MovieRecommender::predict() {
       */
       gsl_matrix * m_X_2 = gsl_matrix_alloc(m_X->size1, m_X->size2);
       gsl_blas_dgemm(CblasTrans,CblasNoTrans,
-        1.0, &m_X, &m_X,
-        0.0, &m_X_2);
+        1.0, m_X, m_X,
+        0.0, m_X_2);
 
         /*
         * Troisième élément
         */
         gsl_matrix * m_theta_2 = gsl_matrix_alloc(m_theta->size1, m_theta->size2);
         gsl_blas_dgemm(CblasTrans,CblasNoTrans,
-          1.0, &m_theta, &m_theta,
-          0.0, &m_theta_2);
+          1.0, m_theta, m_theta,
+          0.0, m_theta_2);
 
+          return gsl_matrix_get(m_theta_2, 0, 0);
         }
 
         gsl_matrix* MovieRecommender::computeError() {
@@ -168,9 +169,9 @@ void MovieRecommender::predict() {
           gsl_matrix_memcpy(copy, this->m_ratings);
           //la différence ne pouvant pas jouer sur les valeurs non prédites
           //on remet a 0 celles non notés dans la copie de N*
-          for (int i = 0; i < this->m_parser->size1; i++){
-            for (int j = 0; j < this->m_parser->size2; j++){
-              if (gsl_matrix_get(this->m_parser, i, j) == 0)
+          for (unsigned int i = 0; i < this->m_parser.getDatas()->size1; i++){
+            for (unsigned int j = 0; j < this->m_parser.getDatas()->size2; j++){
+              if (gsl_matrix_get(this->m_parser.getDatas(), i, j) == 0)
               gsl_matrix_set(copy,i,j,0);
             }
           }
@@ -191,20 +192,20 @@ void MovieRecommender::predict() {
 
         void MovieRecommender::printState(double lambda) {
           cout << "Theta" << endl;
-          for (int i = 0; i < m_theta->size1; i++){
-            for (int j = 0; j < m_theta->size2; j++){
+          for (unsigned int i = 0; i < m_theta->size1; i++){
+            for (unsigned int j = 0; j < m_theta->size2; j++){
               cout << "|" << gsl_matrix_get(m_theta, i ,j);
             }
             cout << "|" << endl;
           }
-          cout << "X" << endl
-          for (int i = 0; i < m_X->size1; i++){
-            for (int j = 0; j < m_X->size2; j++){
+          cout << "X" << endl;
+          for (unsigned int i = 0; i < m_X->size1; i++){
+            for (unsigned int j = 0; j < m_X->size2; j++){
               cout << "|" << gsl_matrix_get(m_X, i ,j);
             }
             cout << "|" << endl;
           }
-          cout << "cout : " << computeCost(double lambda)<<endl;
+          cout << "cout : " << computeCost(lambda) << endl;
         }
 
         void MovieRecommender::setDatas(string set, int nbMovies, int nbUsers) {

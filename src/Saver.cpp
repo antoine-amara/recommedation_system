@@ -114,7 +114,7 @@ void Saver::load() {
     fgets(chaine, TAILLE_MAX, X);
 		m = atoi(chaine);
     // sauvegarde du nombre d'utilisteurs
-    this->m_nbUsers;
+    this->m_nbUsers = m;
 		fgets(chaine, TAILLE_MAX, X);
 	  n = atoi(chaine) ;
 
