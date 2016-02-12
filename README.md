@@ -24,4 +24,5 @@ outils utilisés:
 
 ## Debug report:
 * fonction predict ok
+* fonction computeError ok
 * fonction computeCost segfault (coredumped)
