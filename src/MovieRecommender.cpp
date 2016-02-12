@@ -126,6 +126,13 @@ void MovieRecommender::predict() {
   }
 
   double MovieRecommender::computeCost(double lambda) {
+    unsigned int i, j;
+    gsl_vector *v, *row;
+    double sumX, sumTheta, sumError;
+
+    sumX = 0;
+    sumTheta = 0;
+
     /*
     * Premier Element *
     * m_error_2 *
@@ -139,15 +146,26 @@ void MovieRecommender::predict() {
     gsl_blas_dgemm(CblasNoTrans,CblasNoTrans,
       1.0, m_error,m_error_t,
       0.0, m_error_2);
-      //multiplication m_error_2*1/2 dans m_error_2
-      gsl_matrix_scale(m_error_2,(1/2));
       /*
       * Deuxieme Element *
       */
-      gsl_matrix * m_X_2 = gsl_matrix_alloc(m_X->size1, m_X->size2);
+      gsl_matrix *m_X_2 = gsl_matrix_alloc(m_X->size1, m_X->size2);
       gsl_blas_dgemm(CblasTrans,CblasNoTrans,
         1.0, m_X, m_X,
         0.0, m_X_2);
+
+        v = gsl_vector_calloc(m_X_2->size2);
+        row = gsl_vector_calloc(m_X_2->size2);
+
+        /* sommes des éléments */
+        for(i = 0; i < m_X_2->size1; ++i) {
+          gsl_matrix_get_row(row, m_X_2, i);
+          gsl_vector_add(v, row);
+        }
+
+        for(i = 0; i < m_X_2->size2; ++i) {
+          sumX += gsl_vector_get(v, i);
+        }
 
         /*
         * Troisième élément
@@ -157,7 +175,28 @@ void MovieRecommender::predict() {
           1.0, m_theta, m_theta,
           0.0, m_theta_2);
 
-          return gsl_matrix_get(m_theta_2, 0, 0);
+          v = gsl_vector_calloc(m_theta_2->size2);
+          row = gsl_vector_calloc(m_theta_2->size2);
+
+          /* sommes des éléments */
+          for(i = 0; i < m_theta_2->size1; ++i) {
+            gsl_matrix_get_row(row, m_X_2, i);
+            gsl_vector_add(v, row);
+          }
+
+          for(i = 0; i < m_theta_2->size2; ++i) {
+            sumTheta += gsl_vector_get(v, i);
+          }
+
+          sumError = 0;
+          for(i = 0; i < m_error_2->size1; ++i) {
+            for(j = 0; j < m_error_2->size2; ++j) {
+              sumError += gsl_matrix_get(m_error_2, i, j);
+            }
+          }
+
+
+          return 1/2 * sumError + (lambda/2) * sumX + (lambda/2) * sumTheta;
         }
 
         gsl_matrix* MovieRecommender::computeError() {
