@@ -79,16 +79,9 @@ void MovieRecommender::train(double alpha, double lambda) {
 
 void MovieRecommender::predict() {
 
-  // transposition m_X
-  int mX = this->m_X->size1;
-  int mY = this->m_X->size2;
-  gsl_matrix* m_X_t;
-  m_X_t = gsl_matrix_alloc(mY,mX);
-  gsl_matrix_transpose_memcpy(m_X_t, this->m_X);
-
   //(m_theta)*(m_X_t)
-  gsl_blas_dgemm(CblasNoTrans,CblasNoTrans,
-    1.0, m_theta,m_X_t,
+  gsl_blas_dgemm(CblasNoTrans,CblasTrans,
+    1.0, m_theta,m_X,
     0.0, m_ratings);
   }
 
@@ -122,6 +115,11 @@ void MovieRecommender::predict() {
         }
       }
     }
+    gsl_vector_free(user_rates);
+    gsl_vector_free(movie);
+    gsl_vector_free(other_movie);
+    gsl_vector_free(res);
+
     return movies;
   }
 
@@ -138,63 +136,67 @@ void MovieRecommender::predict() {
     * m_error_2 *
     */
     //calcul de m_error_t (transposée de m_error)
-    gsl_matrix* m_error = computeError();
-    gsl_matrix* m_error_t = gsl_matrix_alloc(m_error->size2, m_error->size1);
-    gsl_matrix_transpose_memcpy(m_error_t, m_error);
+    gsl_matrix* error = computeError();
     //multiplication m_error*m_error_t dans m_error_2
-    gsl_matrix* m_error_2 = gsl_matrix_alloc(m_error->size1, m_error_t->size1);
-    gsl_blas_dgemm(CblasNoTrans,CblasNoTrans,
-      1.0, m_error,m_error_t,
-      0.0, m_error_2);
+    gsl_matrix* error_2 = gsl_matrix_alloc(error->size1, error->size2);
+    gsl_blas_dgemm(CblasNoTrans,CblasTrans,
+      1.0, error,error,
+      0.0, error_2);
       /*
       * Deuxieme Element *
       */
-      gsl_matrix *m_X_2 = gsl_matrix_alloc(m_X->size1, m_X->size2);
+      gsl_matrix *X_2 = gsl_matrix_alloc(m_X->size1, m_X->size2);
       gsl_blas_dgemm(CblasTrans,CblasNoTrans,
         1.0, m_X, m_X,
-        0.0, m_X_2);
+        0.0, X_2);
 
-        v = gsl_vector_calloc(m_X_2->size2);
-        row = gsl_vector_calloc(m_X_2->size2);
+        v = gsl_vector_calloc(X_2->size2);
+        row = gsl_vector_calloc(X_2->size2);
 
         /* sommes des éléments */
-        for(i = 0; i < m_X_2->size1; ++i) {
-          gsl_matrix_get_row(row, m_X_2, i);
+        for(i = 0; i < X_2->size1; ++i) {
+          gsl_matrix_get_row(row, X_2, i);
           gsl_vector_add(v, row);
         }
 
-        for(i = 0; i < m_X_2->size2; ++i) {
+        for(i = 0; i < X_2->size2; ++i) {
           sumX += gsl_vector_get(v, i);
         }
 
         /*
         * Troisième élément
         */
-        gsl_matrix * m_theta_2 = gsl_matrix_alloc(m_theta->size1, m_theta->size2);
+        gsl_matrix * theta_2 = gsl_matrix_alloc(m_theta->size1, m_theta->size2);
         gsl_blas_dgemm(CblasTrans,CblasNoTrans,
           1.0, m_theta, m_theta,
-          0.0, m_theta_2);
+          0.0, theta_2);
 
-          v = gsl_vector_calloc(m_theta_2->size2);
-          row = gsl_vector_calloc(m_theta_2->size2);
+          v = gsl_vector_calloc(theta_2->size2);
+          row = gsl_vector_calloc(theta_2->size2);
 
           /* sommes des éléments */
-          for(i = 0; i < m_theta_2->size1; ++i) {
-            gsl_matrix_get_row(row, m_X_2, i);
+          for(i = 0; i < theta_2->size1; ++i) {
+            gsl_matrix_get_row(row, X_2, i);
             gsl_vector_add(v, row);
           }
 
-          for(i = 0; i < m_theta_2->size2; ++i) {
+          for(i = 0; i < theta_2->size2; ++i) {
             sumTheta += gsl_vector_get(v, i);
           }
 
           sumError = 0;
-          for(i = 0; i < m_error_2->size1; ++i) {
-            for(j = 0; j < m_error_2->size2; ++j) {
-              sumError += gsl_matrix_get(m_error_2, i, j);
+          for(i = 0; i < error_2->size1; ++i) {
+            for(j = 0; j < error_2->size2; ++j) {
+              sumError += gsl_matrix_get(error_2, i, j);
             }
           }
 
+          gsl_vector_free(v);
+          gsl_vector_free(row);
+          gsl_matrix_free(error);
+          gsl_matrix_free(error_2);
+          gsl_matrix_free(X_2);
+          gsl_matrix_free(theta_2);
 
           return 1/2 * sumError + (lambda/2) * sumX + (lambda/2) * sumTheta;
         }
