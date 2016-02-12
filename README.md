@@ -21,3 +21,7 @@ outils utilisés:
 * compiler les sources du projet: make
 * créer la documentation du projet: make doc
 * nettoyer le projet: make mrproper
+
+## Debug report:
+* fonction predict ok
+* fonction computeCost segfault (coredumped)

@@ -20,11 +20,14 @@ MovieRecommender::MovieRecommender(string dataset, int nbMovies, int nbUsers) {
 }
 
 MovieRecommender::MovieRecommender(string dataset, int nbMovies, int nbUsers, gsl_matrix* theta, gsl_matrix* X) {
-  this->m_theta = theta;
-  this->m_X = X;
-  this->m_ratings = gsl_matrix_alloc(nbMovies, nbUsers);
-  this->m_parser = DataParser(dataset, nbMovies, nbUsers);
-  m_parser.parse();
+  this->m_theta = gsl_matrix_alloc(theta->size1, theta->size2);
+  gsl_matrix_memcpy (this->m_theta, theta);
+  this->m_X = gsl_matrix_alloc(X->size1, X->size2);
+  gsl_matrix_memcpy (this->m_X, X);
+  this->m_ratings = gsl_matrix_alloc(nbUsers, nbMovies);
+  /* pour test */
+  //this->m_parser = DataParser(dataset, nbMovies, nbUsers);
+  //m_parser.parse();
 }
 
 MovieRecommender::MovieRecommender(string dataset, Saver saver) {
@@ -246,6 +249,17 @@ void MovieRecommender::predict() {
             }
             cout << "|" << endl;
           }
+
+          /* pour test */
+          cout << "Predict" << endl;
+          for (unsigned int i = 0; i < m_ratings->size1; i++){
+            for (unsigned int j = 0; j < m_ratings->size2; j++){
+              cout << "|" << gsl_matrix_get(m_ratings, i ,j);
+            }
+            cout << "|" << endl;
+          }
+          /* end test */
+
           cout << "cout : " << computeCost(lambda) << endl;
         }
 
@@ -263,5 +277,13 @@ void MovieRecommender::predict() {
         }
 
         MovieRecommender::~MovieRecommender() {
-          gsl_matrix_free(m_ratings);
+          if(m_theta != NULL) {
+            gsl_matrix_free(m_theta);
+          }
+          if(m_X != NULL) {
+            gsl_matrix_free(m_X);
+          }
+          if(m_ratings != NULL) {
+            gsl_matrix_free(m_ratings);
+          }
         }
