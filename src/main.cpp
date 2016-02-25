@@ -9,17 +9,17 @@ using namespace std;
 
 int main(void) {
   int nbMovies, nbUsers, nbGenres;
-  gsl_matrix *theta, *X, *error;
-  double lambda;
+  gsl_matrix *theta, *X;
+  double lambda, alpha;
 
-  nbMovies = 5;
-  nbUsers = 4;
-  nbGenres = 3;
+  nbMovies = 1682;
+  nbUsers = 943;
+  nbGenres = 19;
   lambda = 0.001;
+  alpha = 0.001;
 
-  theta = gsl_matrix_alloc(nbUsers, nbGenres);
+  /*theta = gsl_matrix_alloc(nbUsers, nbGenres);
   X = gsl_matrix_calloc(nbMovies, nbGenres);
-  error = gsl_matrix_alloc(nbUsers, nbMovies);
 
   gsl_matrix_set(theta, 0, 0, 1.0);
   gsl_matrix_set(theta, 0, 1, 5.0);
@@ -38,26 +38,13 @@ int main(void) {
   gsl_matrix_set(X, 1, 1, 1.0);
   gsl_matrix_set(X, 2, 1, 1.0);
   gsl_matrix_set(X, 3, 2, 1.0);
-  gsl_matrix_set(X, 4, 2, 1.0);
+  gsl_matrix_set(X, 4, 2, 1.0);*/
 
-  MovieRecommender *mr = new MovieRecommender("data/testparser", nbMovies, nbUsers, theta, X);
-  error = mr->computeError();
-  //mr->predict();
-  //mr->printState(lambda);
+  MovieRecommender *mr = new MovieRecommender("data/u", nbMovies, nbUsers, nbGenres);
+  mr->train(alpha, lambda);
 
-  cout << "Error" << endl;
-  for (unsigned int i = 0; i < error->size1; i++){
-    for (unsigned int j = 0; j < error->size2; j++){
-      cout << "|" << gsl_matrix_get(error, i ,j);
-    }
-    cout << "|" << endl;
-  }
-
-  gsl_matrix_free(theta);
-  gsl_matrix_free(X);
-  gsl_matrix_free(error);
-
-  delete(mr);
+  //gsl_matrix_free(theta);
+  //gsl_matrix_free(X);
 
   return 0;
 }

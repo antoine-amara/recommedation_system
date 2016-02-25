@@ -25,4 +25,6 @@ outils utilisés:
 ## Debug report:
 * fonction predict ok
 * fonction computeError ok
-* fonction computeCost segfault (coredumped)
+* fonction computeCost ok mais pas sur a 100%
+* train ok mais pas sur a 100% et algo evolue permettant de modifier alpha au cour du temps
+* initParams segfault array out of bounds (je ne sais pas pourquoi les boucles sont pourtant simple !!!)

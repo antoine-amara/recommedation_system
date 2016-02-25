@@ -5,6 +5,7 @@
 #include <vector>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_blas.h>
+#include <gsl/gsl_rng.h>
 
 #include "AiInterface.h"
 #include "DataParser.h"
@@ -38,8 +39,9 @@ public:
      *
      *  \param nbMovies: le nombre total de films traité par l'algorithme.
      *  \param nbUsers: le nombre total d'utilisateurs traité par l'algorithme.
+     *  \param nbFeatures: le nombre total de genre qui vont servir à catégorisé les films.
      */
-  MovieRecommender(int nbMovies, int nbUsers);
+  MovieRecommender(int nbMovies, int nbUsers, int nbFeatures);
 
   /*!
      *  \brief Constructeur avec un nom de fichier.
@@ -53,8 +55,9 @@ public:
      *  \param dataset: le nom du dataset à utiliser.
      *  \param nbMovies: le nombre total de films traité par l'algorithme.
      *  \param nbUsers: le nombre total d'utilisateurs traité par l'algorithme.
+     *  \param nbFeatures: le nombre total de genre qui vont servir à catégorisé les films.
      */
-  MovieRecommender(std::string dataset, int nbMovies, int nbUsers);
+  MovieRecommender(std::string dataset, int nbMovies, int nbUsers, int nbFeatures);
 
   /*!
      *  \brief Constructeur avec initialisation des matrices thêta et X.
@@ -96,6 +99,7 @@ public:
      *  de déterminer la vitesse de la décente du gradient.
      *
      *  \param alpha : le taux d'apprentissage utilisé pour la décente de gradient.
+     *  \param lambda: Le paramètre de régularisation.
      */
   void train(double alpha, double lambda);
 
@@ -129,12 +133,10 @@ public:
      *  C'est donc une erreur qui est calculée. Cette erreur doit être minimale pour assurer la performance des recommandations effectuée.
      *  L'entraînement est là pour minimiser cette erreur.
      *
-     *  \param lambda : Le paramètre de régularisation.
+     *  \param lambda : le paramètre de régularisation.
      *  \return un double représentant l'erreur globale que commet l'algorithme sur ces prédictions.
      */
   double computeCost(double lambda);
-
-  gsl_matrix* computeError();
 
   /*!
      *  \brief Sauvegarde d'un état de l'objet.
@@ -212,6 +214,15 @@ protected:
   gsl_matrix* m_X; /*!< Matrice de paramètres, elle représente la catégorie de chaque film. */
   gsl_matrix* m_ratings; /*!< Matrice contenant les predictions. On a donc la matrice complète et corrigé des notes des films données par l'ensemble des utilisateurs. */
   DataParser *m_parser; /*!< Objet DataParser contenant les informations du dataset, c'est-à-dire la matrice des notes données par les utilisateurs(incomplète), l'ensemble des genres de films présents dans le dataset ainsi que les titres de tous les films. */
+
+private:
+  gsl_matrix* computeError();
+
+  /*
+   *  Methode permettant d'initialiser les matrices de paramètres theta et X, les 2 matrices sont initialisés
+   *  via un generateur de nombre aléatoire, ces nombres sont compris entre 0 et 1.
+  */
+  void initParams();
 };
 
 #endif
