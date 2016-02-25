@@ -27,4 +27,9 @@ outils utilisés:
 * fonction computeError ok
 * fonction computeCost ok mais pas sur a 100%
 * train ok mais pas sur a 100% et algo evolue permettant de modifier alpha au cour du temps
-* initParams segfault array out of bounds (je ne sais pas pourquoi les boucles sont pourtant simple !!!)
+* initParams OK
+
+## Premier entrainement
+Pemiere tentative d'entrainement avec le datatset u1, rattage total.
+Des les premiere iterations, le fonction de cout J(theta) explose, elle ne diminue jamais malgre la diminution du taux
+d'apprentissage. Il faut verifier les operation matriciels de la fonction de cout(computeCost) et de la decente de gradient(train). On remarque que au bout de 3 iterations, la fonction de cout est tellement eleve que meme un double ne peut la stocker !!!

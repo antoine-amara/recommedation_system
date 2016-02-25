@@ -62,11 +62,15 @@ void MovieRecommender::train(double alpha, double lambda) {
     cout << "enter while" << endl;
     if(cost > oldcost) {
       // on diminue alpha
-      alpha = 4000 / (4000 + 0.1);
+      cout << "minus alpha" << endl;
+      alpha = 1.0 / (1.0 + 4000.0);
+      cout << alpha << endl;
     }
     else {
+      cout << "alpha x 3" << endl;
       //on augmente alpha
       alpha *= 3;
+      cout << alpha << endl;
     }
 
     oldcost = cost;
@@ -90,13 +94,12 @@ void MovieRecommender::train(double alpha, double lambda) {
     gsl_matrix_sub(m_theta, intermediatetheta);
 
     cost = computeCost(lambda);
+    printState(lambda);
   }
 
   cout << "end gradient decent saving ..." << endl;
 
   saveState("train_result");
-
-  cout << "free" << endl;
 
   gsl_matrix_free(error);
   gsl_matrix_free(regularizationX);
@@ -268,6 +271,7 @@ void MovieRecommender::predict() {
         }
 
         void MovieRecommender::printState(double lambda) {
+          /*
           cout << "Theta" << endl;
           for (unsigned int i = 0; i < m_theta->size1; i++){
             for (unsigned int j = 0; j < m_theta->size2; j++){
@@ -281,17 +285,7 @@ void MovieRecommender::predict() {
               cout << "|" << gsl_matrix_get(m_X, i ,j);
             }
             cout << "|" << endl;
-          }
-
-          /* pour test */
-          cout << "Predict" << endl;
-          for (unsigned int i = 0; i < m_ratings->size1; i++){
-            for (unsigned int j = 0; j < m_ratings->size2; j++){
-              cout << "|" << gsl_matrix_get(m_ratings, i ,j);
-            }
-            cout << "|" << endl;
-          }
-          /* end test */
+          }*/
 
           cout << "cout : " << computeCost(lambda) << endl;
         }
@@ -322,19 +316,15 @@ void MovieRecommender::predict() {
 
           for(i = 0; i < m_theta->size1; ++i) {
             for(j = 0; j < m_theta->size2; ++j) {
-              gsl_matrix_set(m_theta, gsl_rng_uniform(r), i, j);
+              gsl_matrix_set(m_theta, gsl_rng_uniform(r), j, i);
             }
           }
-
-          cout << "end init theta" << endl;
 
           for(i = 0; i < m_X->size1; ++i) {
             for(j = 0; j < m_X->size2; ++j) {
-              gsl_matrix_set(m_X, gsl_rng_uniform(r), i, j);
+              gsl_matrix_set(m_X, gsl_rng_uniform(r), j, i);
             }
           }
-
-          cout << "end init X" << endl;
         }
 
         MovieRecommender::~MovieRecommender() {
