@@ -271,21 +271,8 @@ void MovieRecommender::predict() {
         }
 
         void MovieRecommender::printState(double lambda) {
-          /*
-          cout << "Theta" << endl;
-          for (unsigned int i = 0; i < m_theta->size1; i++){
-            for (unsigned int j = 0; j < m_theta->size2; j++){
-              cout << "|" << gsl_matrix_get(m_theta, i ,j);
-            }
-            cout << "|" << endl;
-          }
-          cout << "X" << endl;
-          for (unsigned int i = 0; i < m_X->size1; i++){
-            for (unsigned int j = 0; j < m_X->size2; j++){
-              cout << "|" << gsl_matrix_get(m_X, i ,j);
-            }
-            cout << "|" << endl;
-          }*/
+          //printMatrix("Theta", m_theta);
+          //printMatrix("X", m_X);
 
           cout << "cout : " << computeCost(lambda) << endl;
         }
@@ -304,7 +291,6 @@ void MovieRecommender::predict() {
         }
 
         void MovieRecommender::initParams() {
-          cout << "begin init matrices" << endl;
           unsigned int i, j;
           const gsl_rng_type * T;
           gsl_rng * r;
@@ -324,6 +310,16 @@ void MovieRecommender::predict() {
             for(j = 0; j < m_X->size2; ++j) {
               gsl_matrix_set(m_X, gsl_rng_uniform(r), j, i);
             }
+          }
+        }
+
+        void MovieRecommender::printMatrix(string message, gsl_matrix *matrix) {
+          cout << message << endl;
+          for (unsigned int i = 0; i < matrix->size1; i++){
+            for (unsigned int j = 0; j < matrix->size2; j++){
+              cout << "|" << gsl_matrix_get(matrix, i ,j);
+            }
+            cout << "|" << endl;
           }
         }
 

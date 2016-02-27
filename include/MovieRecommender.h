@@ -223,6 +223,11 @@ private:
    *  via un generateur de nombre aléatoire, ces nombres sont compris entre 0 et 1.
   */
   void initParams();
+
+  /*
+   *  Methode permettant d'afficher l'état d'une gsl_matrix sur la sortie standard.
+  */
+  void printMatrix(std::string message, gsl_matrix *matrix);
 };
 
 #endif
