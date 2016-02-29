@@ -178,6 +178,7 @@ void MovieRecommender::predict() {
     gsl_blas_dgemm(CblasTrans,CblasNoTrans,
       1.0, error,error,
       0.0, error_2);
+
       /*
       * Deuxieme Element *
       */
@@ -185,7 +186,6 @@ void MovieRecommender::predict() {
       gsl_blas_dgemm(CblasTrans,CblasNoTrans,
         1.0, m_X, m_X,
         0.0, X_2);
-
 
         v = gsl_vector_calloc(X_2->size2);
         row = gsl_vector_calloc(X_2->size2);
@@ -214,7 +214,7 @@ void MovieRecommender::predict() {
 
           /* sommes des éléments */
           for(i = 0; i < theta_2->size1; ++i) {
-            gsl_matrix_get_row(row, X_2, i);
+            gsl_matrix_get_row(row, theta_2, i);
             gsl_vector_add(v, row);
           }
 
@@ -228,7 +228,6 @@ void MovieRecommender::predict() {
               sumError += gsl_matrix_get(error_2, i, j);
             }
           }
-
           gsl_vector_free(v);
           gsl_vector_free(row);
           gsl_matrix_free(error);
@@ -236,7 +235,7 @@ void MovieRecommender::predict() {
           gsl_matrix_free(X_2);
           gsl_matrix_free(theta_2);
 
-          return 1/2 * sumError + (lambda/2) * sumX + (lambda/2) * sumTheta;
+          return 1.0/2.0 * sumError + (lambda/2.0) * sumX + (lambda/2.0) * sumTheta;
         }
 
         gsl_matrix* MovieRecommender::computeError() {
