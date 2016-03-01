@@ -40,12 +40,15 @@ MovieRecommender::MovieRecommender(string dataset, Saver saver) {
   m_parser->parse();
 }
 
-void MovieRecommender::train(double alpha, double lambda) {
-  double threshold = 0.8;
+void MovieRecommender::train(double alpha, double lambda, int save = 30) {
+  double threshold = 0.5;
   double cost, oldcost;
+  int i;
   gsl_matrix *error;
   gsl_matrix *regularizationX, *regularizationtheta;
   gsl_matrix *intermediateX, *intermediatetheta;
+
+  i = save;
 
   cost = 1.0;
   oldcost = cost;
@@ -67,9 +70,9 @@ void MovieRecommender::train(double alpha, double lambda) {
       cout << alpha << endl;
     }
     else {
-      cout << "alpha x 3" << endl;
+      cout << "alpha x 2" << endl;
       //on augmente alpha
-      alpha *= 3;
+      alpha *= 2;
       cout << alpha << endl;
     }
 
@@ -95,7 +98,17 @@ void MovieRecommender::train(double alpha, double lambda) {
 
     cost = computeCost(lambda);
     printState(lambda);
+
+    if(i == 0) {
+      saveState("train_result");
+      i = save;
+    }
+    else {
+      i--;
+    }
   }
+  predict();
+  printMatrix("real rates", m_ratings);
 
   cout << "end gradient decent saving ..." << endl;
 
@@ -301,13 +314,16 @@ void MovieRecommender::predict() {
 
           for(i = 0; i < m_theta->size1; ++i) {
             for(j = 0; j < m_theta->size2; ++j) {
-              gsl_matrix_set(m_theta, gsl_rng_uniform(r), j, i);
+              double n = gsl_rng_uniform(r);
+              gsl_matrix_set(m_theta, i, j, n);
             }
           }
+          printMatrix("theta", m_theta);
 
           for(i = 0; i < m_X->size1; ++i) {
             for(j = 0; j < m_X->size2; ++j) {
-              gsl_matrix_set(m_X, gsl_rng_uniform(r), j, i);
+              double n = gsl_rng_uniform(r);
+              gsl_matrix_set(m_X, i, j, n);
             }
           }
         }

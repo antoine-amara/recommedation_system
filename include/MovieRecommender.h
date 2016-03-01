@@ -98,10 +98,11 @@ public:
      *  On notera que l'entrainement se fait grâce à une décente de gradient. Le taux d'apprentissage alpha permet
      *  de déterminer la vitesse de la décente du gradient.
      *
-     *  \param alpha : le taux d'apprentissage utilisé pour la décente de gradient.
-     *  \param lambda: Le paramètre de régularisation.
+     *  \param alpha: le taux d'apprentissage utilisé pour la décente de gradient.
+     *  \param lambda: le paramètre de régularisation.
+     *  \param save: definit la pas pour la sauvegarde régulière de l'IA, les matrices theta et x seront sauvegardé tous les "save" itérations de l'entraînement.
      */
-  void train(double alpha, double lambda);
+  void train(double alpha, double lambda, int save = 30);
 
   /*!
      *  \brief Construire la matrice complète notes des films/utilisateurs.

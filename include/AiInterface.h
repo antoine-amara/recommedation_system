@@ -24,7 +24,7 @@ public:
      *
      *  \param alpha: le taux d'apprentissage, il définit la vitesse de l'entrainement.
      */
-  virtual void train(double alpha, double lambda) = 0;
+  virtual void train(double alpha, double lambda, int save = 30) = 0;
 
   /*!
      *  \brief Permets d'effectuer une à plusieurs prédictions.
