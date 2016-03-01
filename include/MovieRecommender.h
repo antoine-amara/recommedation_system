@@ -201,8 +201,6 @@ public:
      */
   gsl_matrix* getX();
 
-  gsl_matrix* computeError();
-
   /*!
      *  \brief Destructeur
      *
@@ -219,6 +217,7 @@ protected:
   DataParser *m_parser; /*!< Objet DataParser contenant les informations du dataset, c'est-à-dire la matrice des notes données par les utilisateurs(incomplète), l'ensemble des genres de films présents dans le dataset ainsi que les titres de tous les films. */
 
 private:
+  gsl_matrix* computeError();
 
   /*
    *  Methode permettant d'initialiser les matrices de paramètres theta et X, les 2 matrices sont initialisés

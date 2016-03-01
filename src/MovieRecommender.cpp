@@ -40,7 +40,7 @@ MovieRecommender::MovieRecommender(string dataset, Saver saver) {
   m_parser->parse();
 }
 
-void MovieRecommender::train(double alpha, double lambda, int save = 30) {
+void MovieRecommender::train(double alpha, double lambda, int save) {
   double threshold = 0.5;
   double cost, oldcost;
   int i;
