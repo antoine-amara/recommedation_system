@@ -81,6 +81,10 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
     oldcost = cost;
 
     error = computeError();
+
+    cout << "error info" << endl;
+
+
     // on calcule la nouvelle matrice X(on effectue la decente de gradient)
     gsl_matrix_memcpy(regularizationX, this->m_X);
     gsl_matrix_scale(regularizationX, lambda);
@@ -107,6 +111,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
     else {
       i--;
     }
+    gsl_matrix_free(error);
   }
   predict();
   printMatrix("real rates", m_ratings);
@@ -115,7 +120,6 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
 
   saveState("train_result");
 
-  gsl_matrix_free(error);
   gsl_matrix_free(regularizationX);
   gsl_matrix_free(regularizationtheta);
   gsl_matrix_free(intermediateX);
@@ -133,6 +137,8 @@ void MovieRecommender::predict() {
     0.0, rates);
 
     gsl_matrix_transpose_memcpy(m_ratings, rates);
+
+    gsl_matrix_free(rates);
   }
 
   vector<string> MovieRecommender::recommend(int user, int nbMovies) {

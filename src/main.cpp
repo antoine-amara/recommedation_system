@@ -44,8 +44,8 @@ int main(void) {
   MovieRecommender *mr = new MovieRecommender("data/u", nbMovies, nbUsers, theta, X);
   mr->train(alpha, lambda);
 
-  //gsl_matrix_free(theta);
-  //gsl_matrix_free(X);
+  gsl_matrix_free(theta);
+  gsl_matrix_free(X);
 
   return 0;
 }
