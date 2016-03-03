@@ -61,10 +61,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
   regularizationtheta = gsl_matrix_alloc(this->m_theta->size1, this->m_theta->size2);
   intermediatetheta = gsl_matrix_alloc(this->m_theta->size1, this->m_theta->size2);
 
-  cout << "end init training" << endl;
-
   while(cost > threshold) {
-    cout << "enter while" << endl;
     if(cost > oldcost) {
       // on diminue alpha
       cout << "minus alpha" << endl;
@@ -81,8 +78,6 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
     oldcost = cost;
 
     error = computeError();
-
-    cout << "error info" << endl;
 
 
     // on calcule la nouvelle matrice X(on effectue la decente de gradient)
@@ -105,6 +100,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
     printState(lambda);
 
     if(i == 0) {
+      cout << "saving ..." << endl;
       saveState("train_result");
       i = save;
     }

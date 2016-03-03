@@ -12,13 +12,13 @@ int main(void) {
   gsl_matrix *theta, *X;
   double lambda, alpha;
 
-  nbMovies = 5;
-  nbUsers = 4;
-  nbGenres = 3;
+  nbMovies = 1682;
+  nbUsers = 943;
+  nbGenres = 19;
   lambda = 0.0001;
   alpha = 0.001;
 
-  theta = gsl_matrix_alloc(nbUsers, nbGenres);
+  /*theta = gsl_matrix_alloc(nbUsers, nbGenres);
   X = gsl_matrix_calloc(nbMovies, nbGenres);
 
   gsl_matrix_set(theta, 0, 0, 1.0);
@@ -38,14 +38,14 @@ int main(void) {
   gsl_matrix_set(X, 1, 1, 1.0);
   gsl_matrix_set(X, 2, 1, 1.0);
   gsl_matrix_set(X, 3, 2, 1.0);
-  gsl_matrix_set(X, 4, 2, 1.0);
+  gsl_matrix_set(X, 4, 2, 1.0);*/
 
-  Saver s = Saver("train_result");
-  MovieRecommender *mr = new MovieRecommender("data/u", nbMovies, nbUsers, theta, X);
+  //Saver s = Saver("train_result");
+  MovieRecommender *mr = new MovieRecommender("data/u", nbMovies, nbUsers, nbGenres);
   mr->train(alpha, lambda);
 
-  gsl_matrix_free(theta);
-  gsl_matrix_free(X);
+  //gsl_matrix_free(theta);
+  //gsl_matrix_free(X);
 
   return 0;
 }
