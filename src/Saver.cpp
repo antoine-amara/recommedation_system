@@ -107,6 +107,9 @@ void Saver::load() {
 		fgets(chaine, TAILLE_MAX, theta);
 		int n = atoi(chaine) ;
 
+    cout << "m: " << m << endl;
+    cout << "n: " << n << endl;
+
     this->m_theta = gsl_matrix_alloc(m,n);
 
     gsl_matrix_fscanf(theta, m_theta);
@@ -118,6 +121,9 @@ void Saver::load() {
 		fgets(chaine, TAILLE_MAX, X);
 	  n = atoi(chaine) ;
 
+    cout << "m: " << m << endl;
+    cout << "n: " << n << endl;
+
 		this->m_X = gsl_matrix_alloc(m,n);
 
 		gsl_matrix_fscanf(X, m_X);
@@ -126,6 +132,8 @@ void Saver::load() {
 		cout << "ERROR : Cannot open file" << endl;
 	fclose(theta);
   fclose(X);
+
+  cout << "end load" << endl;
 }
 
 gsl_matrix* Saver::getTheta() {

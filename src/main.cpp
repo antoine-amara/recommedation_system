@@ -12,10 +12,10 @@ int main(void) {
   gsl_matrix *theta, *X;
   double lambda, alpha;
 
-  nbMovies = 1682;
-  nbUsers = 943;
-  nbGenres = 19;
-  lambda = 0.0;
+  nbMovies = 5;
+  nbUsers = 4;
+  nbGenres = 3;
+  lambda = 0.0001;
   alpha = 0.001;
 
   theta = gsl_matrix_alloc(nbUsers, nbGenres);
@@ -40,6 +40,7 @@ int main(void) {
   gsl_matrix_set(X, 3, 2, 1.0);
   gsl_matrix_set(X, 4, 2, 1.0);
 
+  Saver s = Saver("train_result");
   MovieRecommender *mr = new MovieRecommender("data/u", nbMovies, nbUsers, theta, X);
   mr->train(alpha, lambda);
 

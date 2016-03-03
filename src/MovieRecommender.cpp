@@ -33,8 +33,10 @@ MovieRecommender::MovieRecommender(string dataset, int nbMovies, int nbUsers, gs
 
 MovieRecommender::MovieRecommender(string dataset, Saver saver) {
   saver.load();
-  this->m_theta = saver.getTheta();
-  this->m_X = saver.getX();
+  this->m_theta = gsl_matrix_alloc(saver.getTheta()->size1, saver.getTheta()->size2);
+  gsl_matrix_memcpy (this->m_theta, saver.getTheta());
+  this->m_X = gsl_matrix_alloc(saver.getX()->size1, saver.getX()->size2);
+  gsl_matrix_memcpy (this->m_X, saver.getX());
   this->m_ratings = gsl_matrix_alloc(saver.getNbMovies(), saver.getNbUsers());
   this->m_parser = new DataParser(dataset, saver.getNbMovies(), saver.getNbUsers());
   m_parser->parse();
@@ -79,7 +81,6 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
     oldcost = cost;
 
     error = computeError();
-
     // on calcule la nouvelle matrice X(on effectue la decente de gradient)
     gsl_matrix_memcpy(regularizationX, this->m_X);
     gsl_matrix_scale(regularizationX, lambda);
@@ -256,8 +257,8 @@ void MovieRecommender::predict() {
           //computeError() = N*-N
           gsl_matrix* copy;
 
-          copy = gsl_matrix_alloc(this->m_ratings->size1, this->m_ratings->size2);
           predict();
+          copy = gsl_matrix_alloc(this->m_ratings->size1, this->m_ratings->size2);
           gsl_matrix_memcpy(copy, this->m_ratings);
           //la différence ne pouvant pas jouer sur les valeurs non prédites
           //on remet a 0 celles non notés dans la copie de N*
