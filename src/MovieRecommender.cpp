@@ -6,8 +6,9 @@ using namespace std;
 MovieRecommender::MovieRecommender(int nbMovies, int nbUsers, int nbFeatures) {
   this->m_theta = gsl_matrix_alloc(nbUsers, nbFeatures);
   this->m_X = gsl_matrix_alloc(nbMovies, nbFeatures);
-  this->m_ratings = gsl_matrix_alloc(nbMovies, nbUsers);
   this->m_parser = new DataParser(nbMovies, nbUsers);
+  this->m_nbMovies = nbMovies;
+  this->m_nbUsers = nbUsers;
   initParams();
   m_parser->parse();
 }
@@ -15,8 +16,9 @@ MovieRecommender::MovieRecommender(int nbMovies, int nbUsers, int nbFeatures) {
 MovieRecommender::MovieRecommender(string dataset, int nbMovies, int nbUsers, int nbFeatures) {
   this->m_theta = gsl_matrix_alloc(nbUsers, nbFeatures);
   this->m_X = gsl_matrix_alloc(nbMovies, nbFeatures);
-  this->m_ratings = gsl_matrix_alloc(nbMovies, nbUsers);
   this->m_parser = new DataParser(dataset, nbMovies, nbUsers);
+  this->m_nbMovies = nbMovies;
+  this->m_nbUsers = nbUsers;
   initParams();
   m_parser->parse();
 }
@@ -26,8 +28,9 @@ MovieRecommender::MovieRecommender(string dataset, int nbMovies, int nbUsers, gs
   gsl_matrix_memcpy (this->m_theta, theta);
   this->m_X = gsl_matrix_alloc(X->size1, X->size2);
   gsl_matrix_memcpy (this->m_X, X);
-  this->m_ratings = gsl_matrix_alloc(nbMovies, nbUsers);
   this->m_parser = new DataParser(dataset, nbMovies, nbUsers);
+  this->m_nbMovies = nbMovies;
+  this->m_nbUsers = nbUsers;
   m_parser->parse();
 }
 
@@ -37,8 +40,9 @@ MovieRecommender::MovieRecommender(string dataset, Saver saver) {
   gsl_matrix_memcpy (this->m_theta, saver.getTheta());
   this->m_X = gsl_matrix_alloc(saver.getX()->size1, saver.getX()->size2);
   gsl_matrix_memcpy (this->m_X, saver.getX());
-  this->m_ratings = gsl_matrix_alloc(saver.getNbMovies(), saver.getNbUsers());
   this->m_parser = new DataParser(dataset, saver.getNbMovies(), saver.getNbUsers());
+  this->m_nbMovies = saver.getNbMovies();
+  this->m_nbUsers = saver.getNbUsers();
   m_parser->parse();
 }
 
@@ -109,8 +113,6 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
     }
     gsl_matrix_free(error);
   }
-  predict();
-  printMatrix("real rates", m_ratings);
 
   cout << "end gradient decent saving ..." << endl;
 
@@ -122,19 +124,31 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
   gsl_matrix_free(intermediatetheta);
 }
 
-void MovieRecommender::predict() {
+gsl_matrix* MovieRecommender::predict() {
   gsl_matrix *rates;
+  gsl_matrix *ratings;
 
-  rates = gsl_matrix_alloc(m_ratings->size2, m_ratings->size1);
+  ratings = gsl_matrix_alloc(m_nbMovies, m_nbUsers);
+  rates = gsl_matrix_alloc(m_nbUsers, m_nbMovies);
+
+  cout << "theta infos: " << endl;
+  cout << "size1: " << m_theta->size1 << " size2: " << m_theta->size2 << endl;
+
+  cout << "X infos: " << endl;
+  cout << "size1: " << m_X->size1 << " size2: " << m_X->size2 << endl;
 
   //(m_theta)*(m_X_t)
   gsl_blas_dgemm(CblasNoTrans,CblasTrans,
     1.0, m_theta,m_X,
     0.0, rates);
 
-    gsl_matrix_transpose_memcpy(m_ratings, rates);
+  cout << "blas OK" << endl;
+
+    gsl_matrix_transpose_memcpy(ratings, rates);
 
     gsl_matrix_free(rates);
+
+    return ratings;
   }
 
   vector<string> MovieRecommender::recommend(int user, int nbMovies) {
@@ -257,22 +271,22 @@ void MovieRecommender::predict() {
         gsl_matrix* MovieRecommender::computeError() {
 
           //computeError() = N*-N
-          gsl_matrix* copy;
+          gsl_matrix* ratings;
 
-          predict();
-          copy = gsl_matrix_alloc(this->m_ratings->size1, this->m_ratings->size2);
-          gsl_matrix_memcpy(copy, this->m_ratings);
+          ratings = NULL;
+
+          ratings = predict();
           //la différence ne pouvant pas jouer sur les valeurs non prédites
           //on remet a 0 celles non notés dans la copie de N*
           for (unsigned int i = 0; i < this->m_parser->getDatas()->size1; i++){
             for (unsigned int j = 0; j < this->m_parser->getDatas()->size2; j++){
               if (gsl_matrix_get(this->m_parser->getDatas(), i, j) == 0)
-              gsl_matrix_set(copy,i,j,0);
+              gsl_matrix_set(ratings,i,j,0);
             }
           }
-          gsl_matrix_sub(copy, this->m_parser->getDatas());
+          gsl_matrix_sub(ratings, this->m_parser->getDatas());
 
-          return copy;
+          return ratings;
         }
 
         void MovieRecommender::saveState(string filename) {
@@ -321,7 +335,6 @@ void MovieRecommender::predict() {
               gsl_matrix_set(m_theta, i, j, n);
             }
           }
-          printMatrix("theta", m_theta);
 
           for(i = 0; i < m_X->size1; ++i) {
             for(j = 0; j < m_X->size2; ++j) {
@@ -347,9 +360,6 @@ void MovieRecommender::predict() {
           }
           if(m_X != NULL) {
             gsl_matrix_free(m_X);
-          }
-          if(m_ratings != NULL) {
-            gsl_matrix_free(m_ratings);
           }
 
 

@@ -1,6 +1,8 @@
 #ifndef AIINTERFACE_H
 #define AIINTERFACE_H
 
+#include <gsl/gsl_matrix.h>
+
 /*!
  * \file AiInterface.h
  * \brief Base de tout algorithme de machine learning.
@@ -32,7 +34,7 @@ public:
      *  Méthode permettant d'évaluer une instance du problème voulu, si l'algorithme est entrainé, il doit pouvoir approcher la réponse du problème(d'une valeur extrêmement proche).
      *
      */
-  virtual void predict() = 0;
+  virtual gsl_matrix* predict() = 0;
 
   /*!
      *  \brief Calcul de la fonction de coût.
