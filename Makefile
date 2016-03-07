@@ -6,7 +6,7 @@ CFLAGS   = -std=c++11 -Wall -Iinclude/
 
 LINKER   = g++ -o
 # linking flags here
-LFLAGS   = -Wall -Iinclude/ -lgsl -lgslcblas -lm
+LFLAGS   = -Wall -lm -lgsl -lgslcblas -Iinclude/
 
 # change these to set the proper directories where each files shoould be
 SRCDIR   = src
@@ -21,7 +21,7 @@ rm       = rm -rf
 
 
 $(BINDIR)/$(TARGET): $(OBJECTS)
-	@$(LINKER) $@ $(LFLAGS) $(OBJECTS)
+	@$(LINKER) $@ $(OBJECTS) $(LFLAGS)
 	@echo "Linking complete!"
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
