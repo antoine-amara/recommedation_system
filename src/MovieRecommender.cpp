@@ -47,7 +47,7 @@ MovieRecommender::MovieRecommender(string dataset, Saver saver) {
 }
 
 void MovieRecommender::train(double alpha, double lambda, int save) {
-  double threshold = 0.5;
+  double threshold = 0.1;
   double cost, oldcost;
   int i;
   gsl_matrix *error;
@@ -135,6 +135,7 @@ gsl_matrix* MovieRecommender::predict() {
   gsl_blas_dgemm(CblasNoTrans,CblasTrans,
     1.0, m_theta,m_X,
     0.0, rates);
+  cout << "blas" << endl;
 
     gsl_matrix_transpose_memcpy(ratings, rates);
 

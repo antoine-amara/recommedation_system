@@ -103,7 +103,7 @@ void Saver::load() {
 		fgets(chaine, TAILLE_MAX, theta);
 		int m = atoi(chaine);
     // sauvegarde du nombre de films
-    this->m_nbMovies = m;
+    this->m_nbUsers = m;
 		fgets(chaine, TAILLE_MAX, theta);
 		int n = atoi(chaine) ;
 
@@ -117,7 +117,7 @@ void Saver::load() {
     fgets(chaine, TAILLE_MAX, X);
 		m = atoi(chaine);
     // sauvegarde du nombre d'utilisteurs
-    this->m_nbUsers = m;
+    this->m_nbMovies = m;
 		fgets(chaine, TAILLE_MAX, X);
 	  n = atoi(chaine) ;
 
