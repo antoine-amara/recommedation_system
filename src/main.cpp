@@ -9,14 +9,14 @@ using namespace std;
 
 int main(void) {
   int nbMovies, nbUsers, nbGenres;
-  gsl_matrix *theta, *X;
+  //gsl_matrix *theta, *X;
   double lambda, alpha;
 
   nbMovies = 1682;
   nbUsers = 943;
   nbGenres = 19;
-  lambda = 0.0001;
-  alpha = 0.001;
+  lambda = 5/100;
+  alpha = 0.01;
 
   /*theta = gsl_matrix_alloc(nbUsers, nbGenres);
   X = gsl_matrix_calloc(nbMovies, nbGenres);
