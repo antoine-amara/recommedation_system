@@ -47,16 +47,17 @@ MovieRecommender::MovieRecommender(string dataset, Saver saver) {
 }
 
 void MovieRecommender::train(double alpha, double lambda, int save) {
-  double threshold = 0.1;
+  double threshold = 3;
   double cost, oldcost;
-  int i;
+  int i, j;
   gsl_matrix *error;
   gsl_matrix *regularizationX, *regularizationtheta;
   gsl_matrix *intermediateX, *intermediatetheta;
 
   i = save;
+  j = 0;
 
-  cost = 1.0;
+  cost = 5.0;
   oldcost = cost;
 
   regularizationX = gsl_matrix_alloc(this->m_X->size1, this->m_X->size2);
@@ -65,11 +66,11 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
   regularizationtheta = gsl_matrix_alloc(this->m_theta->size1, this->m_theta->size2);
   intermediatetheta = gsl_matrix_alloc(this->m_theta->size1, this->m_theta->size2);
 
-  while(cost > threshold) {
+  while(j < 500) {
     if(cost > oldcost) {
       // on diminue alpha
       cout << "minus alpha" << endl;
-      alpha = 1.0 / (1.0 + 4000.0);
+      alpha /= 5.0;
       cout << alpha << endl;
     }
     else {
@@ -104,7 +105,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
     printState(lambda);
 
     if(i == 0) {
-      cout << "saving ..." << endl;
+      //cout << "saving ..." << endl;
       //saveState("train_result");
       i = save;
     }
@@ -112,6 +113,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
       i--;
     }
     gsl_matrix_free(error);
+    j++;
   }
 
   cout << "end gradient decent saving ..." << endl;
@@ -133,13 +135,8 @@ gsl_matrix* MovieRecommender::predict() {
 
   //(m_theta)*(m_X_t)
   gsl_blas_dgemm(CblasNoTrans,CblasTrans,
-    1.0, m_theta,m_X,
-    0.0, rates);
-  cout << "blas" << endl;
-
-    gsl_matrix_transpose_memcpy(ratings, rates);
-
-    gsl_matrix_free(rates);
+    1.0, m_X, m_theta,
+    0.0, ratings);
 
     return ratings;
   }
@@ -184,7 +181,6 @@ gsl_matrix* MovieRecommender::predict() {
 
   double MovieRecommender::computeCost(double lambda) {
     unsigned int i, j;
-    gsl_vector *v, *row;
     double sumX, sumTheta, sumError;
 
     sumX = 0;
@@ -210,17 +206,11 @@ gsl_matrix* MovieRecommender::predict() {
         1.0, m_X, m_X,
         0.0, X_2);
 
-        v = gsl_vector_calloc(X_2->size2);
-        row = gsl_vector_calloc(X_2->size2);
-
-        /* sommes des éléments */
+        sumX = 0;
         for(i = 0; i < X_2->size1; ++i) {
-          gsl_matrix_get_row(row, X_2, i);
-          gsl_vector_add(v, row);
-        }
-
-        for(i = 0; i < X_2->size2; ++i) {
-          sumX += gsl_vector_get(v, i);
+          for(j = 0; j < X_2->size2; ++j) {
+            sumX += gsl_matrix_get(X_2, i, j);
+          }
         }
 
         /*
@@ -232,17 +222,13 @@ gsl_matrix* MovieRecommender::predict() {
           0.0, theta_2);
 
 
-          v = gsl_vector_calloc(theta_2->size2);
-          row = gsl_vector_calloc(theta_2->size2);
 
+          sumTheta = 0;
           /* sommes des éléments */
           for(i = 0; i < theta_2->size1; ++i) {
-            gsl_matrix_get_row(row, theta_2, i);
-            gsl_vector_add(v, row);
-          }
-
-          for(i = 0; i < theta_2->size2; ++i) {
-            sumTheta += gsl_vector_get(v, i);
+            for(j = 0; j < theta_2->size2; ++j) {
+              sumTheta += gsl_matrix_get(theta_2, i, j);
+            }
           }
 
           sumError = 0;
@@ -251,14 +237,12 @@ gsl_matrix* MovieRecommender::predict() {
               sumError += gsl_matrix_get(error_2, i, j);
             }
           }
-          gsl_vector_free(v);
-          gsl_vector_free(row);
           gsl_matrix_free(error);
           gsl_matrix_free(error_2);
           gsl_matrix_free(X_2);
           gsl_matrix_free(theta_2);
 
-          return 1.0/20000 * sumError + (lambda/2.0) * sumX + (lambda/2.0) * sumTheta;
+          return sqrt(1.0/15 * sumError + (lambda/2.0) * sumX + (lambda/2.0) * sumTheta);
         }
 
         gsl_matrix* MovieRecommender::computeError() {

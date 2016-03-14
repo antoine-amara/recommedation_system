@@ -7,14 +7,14 @@ DataParser::DataParser() {
 
 DataParser::DataParser(int nbMovies, int nbUsers) {
   this->m_filename = "u";
-  m_datas = gsl_matrix_alloc(nbMovies, nbUsers);
+  m_datas = gsl_matrix_calloc(nbMovies, nbUsers);
   this->m_nbMovies = nbMovies;
   this->m_nbUsers = nbUsers;
 }
 
 DataParser::DataParser(string filename, int nbMovies, int nbUsers) {
   this->m_filename = filename;
-  m_datas = gsl_matrix_alloc(nbMovies, nbUsers);
+  m_datas = gsl_matrix_calloc(nbMovies, nbUsers);
   this->m_nbMovies = nbMovies;
   this->m_nbUsers = nbUsers;
 }
@@ -46,6 +46,7 @@ void DataParser::parseDatas() {
     // on consomme le timestamp.
     set >> data;
 
+
     for (i = 0; i < this->m_nbMovies; ++i){
       for (j=0; j < this->m_nbUsers; ++j) {
 
@@ -64,8 +65,6 @@ void DataParser::parseDatas() {
           // on consomme le timestamp.
           set >> data;
         }
-        else
-        gsl_matrix_set(m_datas, i, j, 0);
       }
     }
   }
