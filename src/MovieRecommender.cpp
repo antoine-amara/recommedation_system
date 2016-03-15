@@ -47,15 +47,14 @@ MovieRecommender::MovieRecommender(string dataset, Saver saver) {
 }
 
 void MovieRecommender::train(double alpha, double lambda, int save) {
-  double threshold = 3;
+  double threshold = 1;
   double cost, oldcost;
-  int i, j;
+  int i;
   gsl_matrix *error;
   gsl_matrix *regularizationX, *regularizationtheta;
   gsl_matrix *intermediateX, *intermediatetheta;
 
   i = save;
-  j = 0;
 
   cost = 5.0;
   oldcost = cost;
@@ -66,11 +65,11 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
   regularizationtheta = gsl_matrix_alloc(this->m_theta->size1, this->m_theta->size2);
   intermediatetheta = gsl_matrix_alloc(this->m_theta->size1, this->m_theta->size2);
 
-  while(j < 500) {
+  while(j < 1) {
     if(cost > oldcost) {
       // on diminue alpha
       cout << "minus alpha" << endl;
-      alpha /= 5.0;
+      alpha /= 100.0;
       cout << alpha << endl;
     }
     else {
@@ -105,15 +104,14 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
     printState(lambda);
 
     if(i == 0) {
-      //cout << "saving ..." << endl;
-      //saveState("train_result");
+      cout << "saving ..." << endl;
+      saveState("train_result");
       i = save;
     }
     else {
       i--;
     }
     gsl_matrix_free(error);
-    j++;
   }
 
   cout << "end gradient decent saving ..." << endl;
@@ -127,11 +125,9 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
 }
 
 gsl_matrix* MovieRecommender::predict() {
-  gsl_matrix *rates;
   gsl_matrix *ratings;
 
   ratings = gsl_matrix_alloc(m_nbMovies, m_nbUsers);
-  rates = gsl_matrix_alloc(m_nbUsers, m_nbMovies);
 
   //(m_theta)*(m_X_t)
   gsl_blas_dgemm(CblasNoTrans,CblasTrans,
@@ -242,7 +238,7 @@ gsl_matrix* MovieRecommender::predict() {
           gsl_matrix_free(X_2);
           gsl_matrix_free(theta_2);
 
-          return sqrt(1.0/15 * sumError + (lambda/2.0) * sumX + (lambda/2.0) * sumTheta);
+          return sqrt(1.0/80000.0 * sumError + (lambda/80000.0) * sumX + (lambda/80000) * sumTheta);
         }
 
         gsl_matrix* MovieRecommender::computeError() {
@@ -268,7 +264,7 @@ gsl_matrix* MovieRecommender::predict() {
 
         void MovieRecommender::saveState(string filename) {
           Saver saver = Saver(filename);
-          saver.save(*this);
+          saver.save(this);
         }
 
         void MovieRecommender::loadState(string filename) {

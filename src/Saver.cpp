@@ -19,10 +19,17 @@ Saver::Saver(string filename) {
   this->m_nbUsers = 0;
 }
 
-void Saver::save(MovieRecommender object) {
+void Saver::save(MovieRecommender *object) {
   FILE* theta, *X;
+  gsl_matrix *copy_theta, *copy_X;
   string filetheta, fileX;
   stringstream size;
+
+  copy_theta = gsl_matrix_alloc(object->getTheta()->size1, object->getTheta()->size2);
+  copy_X = gsl_matrix_alloc(object->getX()->size1, object->getX()->size2);
+
+  gsl_matrix_memcpy(copy_theta, object->getTheta());
+  gsl_matrix_memcpy(copy_X, object->getX());
 
   filetheta = this->m_filename+".theta";
   fileX = this->m_filename+".X";
@@ -35,7 +42,7 @@ void Saver::save(MovieRecommender object) {
 
   if(theta && X) {
     // on ecrit le nombre de ligne de theta.
-    size << object.getTheta()->size1;
+    size << copy_theta->size1;
     fputs(size.str().c_str(), theta);
 
     // on passe à la ligne suivante.
@@ -45,20 +52,20 @@ void Saver::save(MovieRecommender object) {
     size.str("");
 
     // on ecrit le nombre de colonne de theta.
-    size << object.getTheta()->size2;
+    size << copy_theta->size2;
     fputs(size.str().c_str(), theta);
 
     // on passe à la ligne suivante.
     fputs("\n", theta);
 
     // on ecrit la matrice theta dans le fichier
-    gsl_matrix_fprintf(theta, object.getTheta(), "%f");
+    gsl_matrix_fprintf(theta, copy_theta, "%f");
 
     // on vide le stringstream
     size.str("");
 
     // on ecrit le nombre de ligne de X.
-    size << object.getX()->size1;
+    size << copy_X->size1;
     fputs(size.str().c_str(), X);
 
     // on passe à la ligne suivante.
@@ -68,14 +75,14 @@ void Saver::save(MovieRecommender object) {
     size.str("");
 
     // on ecrit le nombre de colonne de X.
-    size << object.getX()->size2;
+    size << copy_X->size2;
     fputs(size.str().c_str(), X);
 
     // on passe à la ligne suivante.
     fputs("\n", X);
 
     // on ecrit la matrice X dans le fichier
-    gsl_matrix_fprintf(X, object.getX(), "%f");
+    gsl_matrix_fprintf(X, copy_X, "%f");
 
     fclose(theta);
     fclose(X);
@@ -83,6 +90,9 @@ void Saver::save(MovieRecommender object) {
   else {
     cout << "ERROR: cannot open file" << endl;
   }
+
+  gsl_matrix_free(copy_theta);
+  gsl_matrix_free(copy_X);
 }
 
 void Saver::load() {

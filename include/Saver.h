@@ -55,7 +55,7 @@ public:
      *
      *  \param object : l'objet représentant l'IA a sauvegardé.
      */
-  void save(MovieRecommender object);
+  void save(MovieRecommender *object);
 
   /*!
      *  \brief Chargement d'un état d'une IA.
