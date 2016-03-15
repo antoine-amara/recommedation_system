@@ -56,8 +56,8 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
 
   i = save;
 
-  cost = 5.0;
-  oldcost = cost;
+  cost = computeCost(lambda);
+  oldcost = 0.0;
 
   regularizationX = gsl_matrix_alloc(this->m_X->size1, this->m_X->size2);
   intermediateX = gsl_matrix_alloc(this->m_X->size1, this->m_X->size2);
@@ -65,22 +65,8 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
   regularizationtheta = gsl_matrix_alloc(this->m_theta->size1, this->m_theta->size2);
   intermediatetheta = gsl_matrix_alloc(this->m_theta->size1, this->m_theta->size2);
 
-  while(j < 1) {
-    if(cost > oldcost) {
-      // on diminue alpha
-      cout << "minus alpha" << endl;
-      alpha /= 100.0;
-      cout << alpha << endl;
-    }
-    else {
-      cout << "alpha x 2" << endl;
-      //on augmente alpha
-      alpha *= 2;
-      cout << alpha << endl;
-    }
-
-    oldcost = cost;
-
+  while(cost > threshold) {
+    // on calcule les erreurs comises par le système
     error = computeError();
 
 
@@ -100,8 +86,22 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
     gsl_matrix_scale(intermediatetheta, alpha);
     gsl_matrix_sub(m_theta, intermediatetheta);
 
+    oldcost = cost;
     cost = computeCost(lambda);
     printState(lambda);
+
+    if(cost > oldcost) {
+      // on diminue alpha
+      cout << "minus alpha" << endl;
+      alpha /= 10.0;
+      cout << alpha << endl;
+    }
+    else {
+      cout << "alpha x 2" << endl;
+      //on augmente alpha
+      alpha *= 2;
+      cout << alpha << endl;
+    }
 
     if(i == 0) {
       cout << "saving ..." << endl;
@@ -238,7 +238,7 @@ gsl_matrix* MovieRecommender::predict() {
           gsl_matrix_free(X_2);
           gsl_matrix_free(theta_2);
 
-          return sqrt(1.0/80000.0 * sumError + (lambda/80000.0) * sumX + (lambda/80000) * sumTheta);
+          return 1.0/80000.0 * sumError + (lambda/80000.0) * sumX + (lambda/80000) * sumTheta;
         }
 
         gsl_matrix* MovieRecommender::computeError() {
