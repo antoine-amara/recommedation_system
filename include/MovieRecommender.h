@@ -84,12 +84,23 @@ public:
      *  \brief Constructeur avec initialisation des matrices thêta et X via un Saver.
      *
      *  Constructeur permettant l'initialisation de l'algorithme via un objet Saver qui charge les informations
-     *  via deux fichiers(filename.theta pour la matrice Theta et filename.X pour X).
+     *  via deux fichiers(filename.theta pour la matrice Theta et filename.X pour X), il charge également un dataset.
      *
      *  \param dataset: le nom du dataset à utiliser.
      *  \param saver: l'objet saver permettant de charger les matrices thêta et X.
      */
   MovieRecommender(std::string dataset, Saver saver);
+
+  /*!
+     *  \brief Constructeur avec initialisation des matrices thêta et X via un Saver.
+     *
+     *  Constructeur permettant l'initialisation de l'algorithme via un objet Saver qui charge les informations
+     *  via deux fichiers(filename.theta pour la matrice Theta et filename.X pour X).
+     *
+     *  \param dataset: le nom du dataset à utiliser.
+     *  \param saver: l'objet saver permettant de charger les matrices thêta et X.
+     */
+  MovieRecommender(Saver saver);
 
   /*!
      *  \brief Permets d'effectuer l'apprentissage.
@@ -212,8 +223,8 @@ public:
   virtual ~MovieRecommender();
 
 protected:
-  int m_nbMovies;
-  int m_nbUsers;
+  int m_nbMovies;/*!< Le nombre total de films que l'on traite. */
+  int m_nbUsers;/*!< Le nombre total d'utilisateurs' que l'on traite. */
   gsl_matrix* m_theta; /*!< Matrice de paramètres, elle représente les préférences des utilisateurs en fonction des genres de films. */
   gsl_matrix* m_X; /*!< Matrice de paramètres, elle représente la catégorie de chaque film. */
   DataParser *m_parser; /*!< Objet DataParser contenant les informations du dataset, c'est-à-dire la matrice des notes données par les utilisateurs(incomplète), l'ensemble des genres de films présents dans le dataset ainsi que les titres de tous les films. */

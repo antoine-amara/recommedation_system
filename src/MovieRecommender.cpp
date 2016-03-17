@@ -46,6 +46,17 @@ MovieRecommender::MovieRecommender(string dataset, Saver saver) {
   m_parser->parse();
 }
 
+MovieRecommender::MovieRecommender(Saver saver) {
+  saver.load();
+  this->m_theta = gsl_matrix_alloc(saver.getTheta()->size1, saver.getTheta()->size2);
+  gsl_matrix_memcpy (this->m_theta, saver.getTheta());
+  this->m_X = gsl_matrix_alloc(saver.getX()->size1, saver.getX()->size2);
+  gsl_matrix_memcpy (this->m_X, saver.getX());
+  this->m_nbMovies = saver.getNbMovies();
+  this->m_nbUsers = saver.getNbUsers();
+  m_parser->parse();
+}
+
 void MovieRecommender::train(double alpha, double lambda, int save) {
   double threshold = 1;
   double cost, oldcost;
@@ -178,6 +189,9 @@ gsl_matrix* MovieRecommender::predict() {
   double MovieRecommender::computeCost(double lambda) {
     unsigned int i, j;
     double sumX, sumTheta, sumError;
+    double N;
+
+    N = m_parser->getN() + 0.0;
 
     sumX = 0;
     sumTheta = 0;
@@ -238,7 +252,7 @@ gsl_matrix* MovieRecommender::predict() {
           gsl_matrix_free(X_2);
           gsl_matrix_free(theta_2);
 
-          return 1.0/80000.0 * sumError + (lambda/80000.0) * sumX + (lambda/80000) * sumTheta;
+          return 1.0/N * sumError + (lambda/N) * sumX + (lambda/N) * sumTheta;
         }
 
         gsl_matrix* MovieRecommender::computeError() {
