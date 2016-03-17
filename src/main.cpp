@@ -1,6 +1,7 @@
 #include "DataParser.h"
 #include "Saver.h"
 #include "MovieRecommender.h"
+#include "Vector3.h"
 #include <gsl/gsl_matrix.h>
 #include <iostream>
 
@@ -8,6 +9,7 @@ using namespace std;
 
 
 int main(void) {
+
   int nbMovies, nbUsers, nbGenres;
   //gsl_matrix *theta, *X;
   //gsl_matrix *rates;
@@ -18,6 +20,8 @@ int main(void) {
   nbGenres = 19;
   lambda = 5/100;
   alpha = 0.001;
+  
+
 
   //rates = gsl_matrix_alloc(nbMovies, nbUsers);
   /*theta = gsl_matrix_alloc(nbUsers, nbGenres);
