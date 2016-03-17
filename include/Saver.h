@@ -14,7 +14,7 @@
  * \file Saver.h
  * \brief Permets de sauvegarder l'état de l'IA.
  * \author Antoine Amara, Jean-Fréderic Durand.
- * \version 0.2
+ * \version 0.3
  */
 
  /*! \class Saver
@@ -55,7 +55,7 @@ public:
      *
      *  \param object : l'objet représentant l'IA a sauvegardé.
      */
-  void save(MovieRecommender object);
+  void save(MovieRecommender *object);
 
   /*!
      *  \brief Chargement d'un état d'une IA.
@@ -87,6 +87,24 @@ public:
   gsl_matrix* getX();
 
   /*!
+     *  \brief Récupère le nombre de films
+     *
+     *  Getter permettant de récupérer le nombre entier représentant le nombre de ligne de la matrice Theta.
+     *
+     *  \return un entier.
+     */
+  int getNbMovies();
+
+  /*!
+     *  \brief Récupère le nombre d'utilisateurs.
+     *
+     *  Getter permettant de récupérer le nombre entier représentant le nombre de ligne de la matrice X.
+     *
+     *  \return un entier.
+     */
+  int getNbUsers();
+
+  /*!
      *  \brief Destructeur
      *
      *  Permets de désallouer les éléments dynamiques, ici ce sera les gsl_matrix m_theta et m_X.
@@ -97,6 +115,8 @@ protected:
   std::string m_filename; /*!< Nom du fichier de sauvegarde, utilisé aussi bien pour l'écriture que la lecture */
   gsl_matrix* m_theta; /*!< Matrice de paramètres thêta, représente les préférences des utilisateurs */
   gsl_matrix* m_X; /*!< Matrice de paramètres X, représente la catégorisation des films */
+  int m_nbMovies; /*!< Nombre de films, représente le nombre de ligne de theta (sauvegardé en première ligne du fichier .theta)*/
+  int m_nbUsers; /*!< Nombre d'utilisateur, représente le nombre de ligne de X (sauvegardé en première ligne du fichier .X)*/
 };
 
 #endif

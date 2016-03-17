@@ -14,7 +14,7 @@
  * \file DataParser.h
  * \brief Le parser à utilisé pour le système de recommandation de films.
  * \author Antoine Amara, Jean-Fréderic Durand.
- * \version 0.2
+ * \version 0.3
  */
 
 /*! \class DataParser
@@ -27,10 +27,11 @@
 class DataParser : public ParserInterface {
 
 public:
+
+  DataParser();
   /*!
      *  \brief Constructeur par défaut.
      *
-     *  Constructeur minimal.
      *
      *  Ce constructeur considérera que le nom du fichier du dataset sera u.
      *  On considérera donc les fichiers suivants:
@@ -70,8 +71,8 @@ public:
      *  \brief Récupération des notes données par les utilisateurs.
      *
      *  Méthode permettant de récupérer les notes données aux différents films par les utilisateurs.
-     *  Ces informations sont stockées dans le fichier filename.data et sont organisées de la manière suivante:
-     *    film id   utilisateur id    note    timestamp
+     *  Ces informations sont stockées dans le fichier filename.data et sont organisées de la manière suivante:\n
+     *    film id   utilisateur id    note    timestamp\n
      *  On notera que le séparateur est une tabulation.
      *
      */
@@ -81,8 +82,8 @@ public:
      *  \brief Récupération des genres de films.
      *
      *  Méthode permettant de récupérer les informations de classification. Ici les films sont catégorisés par leur genre.
-     *  Ces informations sont stockées dans le fichier filename.genre et sont organisés de la manière suivante:
-     *    genre|nombre de film de ce genre
+     *  Ces informations sont stockées dans le fichier filename.genre et sont organisés de la manière suivante:\n
+     *    genre|nombre de film de ce genre\n
      *  On notera que le séparateur est ici un pipe, que les notes vont de 1 à 5, l'utilisateur n'a pas noté tous les films,
      *  dans ce cas la case contient un 0.
      *
@@ -93,8 +94,8 @@ public:
      *  \brief Récupération des informations sur les films.
      *
      *  Méthode permettant de récupérer l'ensemble des informations relatives aux films.
-     *  Ces informations sont stockées dans le fichier filename.item et sont organisés de la manière suivante:
-     *    film id|titre|date de sortie|date de sortie en video|IMDb url|genre
+     *  Ces informations sont stockées dans le fichier filename.item et sont organisés de la manière suivante:\n
+     *    film id|titre|date de sortie|date de sortie en video|IMDb url|genre\n
      *  On notera que le séparateur est ici le pipe et que le genre est représenté par une suite de booléens.
      *
      */
@@ -109,6 +110,15 @@ public:
      *          chaque ligne est un film et chaque colonne un utilisateur.
      */
   gsl_matrix* getDatas();
+
+  /*!
+     *  \brief Récupérer le paramètre N du dataset.
+     *
+     *  Getter permettant de récupérer le paramètre N du dataset qui correspond au nombre de données présente dans celui-ci.
+     *
+     *  \return un entier représentant le nombre de ligne que l'on a compté.
+     */
+  int getN();
 
   /*!
      *  \brief Récupérer un tableau avec l'ensemble des genres précédemment construit par parseGenres.
@@ -142,6 +152,7 @@ protected:
   std::string m_filename; /*!< Le nom du dataset */
   int m_nbMovies; /*!< Le nombre total de films disponible */
   int m_nbUsers; /*!< Le nombre total d'utilisateur */
+  int m_N; /*!< Le nomre de données présente dans le dataset */
   gsl_matrix *m_datas; /*!< La matrice contenant les notes des films données par les utilisateurs */
   std::vector<std::string> m_genres; /*!< Un tableau contenant les noms des genres des films */
   std::vector<std::string> m_movies; /*!< Un tableau contenant les titres des films */

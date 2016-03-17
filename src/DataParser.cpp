@@ -2,18 +2,23 @@
 
 using namespace std;
 
+DataParser::DataParser() {
+}
+
 DataParser::DataParser(int nbMovies, int nbUsers) {
   this->m_filename = "u";
-  m_datas = gsl_matrix_alloc(nbMovies, nbUsers);
+  m_datas = gsl_matrix_calloc(nbMovies, nbUsers);
   this->m_nbMovies = nbMovies;
   this->m_nbUsers = nbUsers;
+  this->m_N = 0;
 }
 
 DataParser::DataParser(string filename, int nbMovies, int nbUsers) {
   this->m_filename = filename;
-  m_datas = gsl_matrix_alloc(nbMovies, nbUsers);
+  m_datas = gsl_matrix_calloc(nbMovies, nbUsers);
   this->m_nbMovies = nbMovies;
   this->m_nbUsers = nbUsers;
+  this->m_N = 0;
 }
 
 void DataParser::parse() {
@@ -24,52 +29,50 @@ void DataParser::parse() {
 
 void DataParser::parseDatas() {
 
-  int i, j;
   string file = m_filename+".base";
   ifstream set(file.c_str(), ios::in);
   int idM, idU, Mark;
   string data;
 
   if (set) {
-    // on consomme l'id du film.
-    set >> data;
-    idM = stoi(data);
     // on consomme l'id de l'utilisateur.
     set >> data;
-    idU = stoi(data);
+    idU = stoi(data) - 1;
+    // on consomme l'id du film.
+    set >> data;
+    idM = stoi(data) - 1;
     // on consomme la note du film.
     set >> data;
     Mark = stoi(data);
     // on consomme le timestamp.
     set >> data;
 
-    for (i = 0; i < this->m_nbMovies; ++i){
-      for (j=0; j < this->m_nbUsers; ++j) {
+    m_N++;
 
-        // les indices de la matrice sont décalée par rapport aux indices des films et utilisateurs.
-        if (idM == i+1 && idU == j+1){
-          gsl_matrix_set(m_datas, i, j, Mark);
-          // on consomme l'id du film.
-          set >> data;
-          idM = stoi(data);
-          // on consomme l'id de l'utilisateur.
-          set >> data;
-          idU = stoi(data);
-          // on consomme la note du film.
-          set >> data;
-          Mark = stoi(data);
-          // on consomme le timestamp.
-          set >> data;
-        }
-        else
-        gsl_matrix_set(m_datas, i, j, 0);
-      }
+    while(!set.eof()) {
+
+      // les indices de la matrice sont décalée par rapport aux indices des films et utilisateurs.
+      gsl_matrix_set(m_datas, idM, idU, Mark);
+      // on consomme l'id du film.
+      set >> data;
+      idU = stoi(data) - 1;
+      // on consomme l'id de l'utilisateur.
+      set >> data;
+      idM = stoi(data) - 1;
+      // on consomme la note du film.
+      set >> data;
+      Mark = stoi(data);
+      // on consomme le timestamp.
+      set >> data;
+
+      m_N++;
     }
   }
   else {
     cout << "ERROR: cannot open dataset" << endl;
   }
   set.close();
+  m_N--;
 }
 
 void DataParser::parseGenres() {
@@ -124,6 +127,10 @@ vector<string> DataParser::split(string str, char separator) {
 
 gsl_matrix* DataParser::getDatas() {
   return m_datas;
+}
+
+int DataParser::getN() {
+  return m_N;
 }
 
 vector<string> DataParser::getGenres() {
