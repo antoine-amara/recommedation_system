@@ -47,22 +47,25 @@ public:
 	}
 
 	/*!
-	  *  \brief Set x ou a.
+	  *  \brief Renvoie x ou a (le premier élément du triplet).
 	  *
+	  *  \return x
 	  */
 	inline double x() const {return m_c[0];}
 	inline double a() const {return m_c[0];}
 
 	/*!
-	  *  \brief Set y ou b.
+	  *  \brief Renvoie y ou b (le deuxième élément du triplet).
 	  *
+	  *  \return y
 	  */
 	inline double y() const {return m_c[1];}
 	inline double b() const {return m_c[1];}
 
 	/*!
-	  *  \brief Set z ou c.
+	  *  \brief Renvoie z ou c (le dernier élément du triplet).
 	  *
+	  *  \return z
 	  */
 	inline double z() const {return m_c[2];}
 	inline double c() const {return m_c[2];}
