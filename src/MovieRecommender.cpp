@@ -58,7 +58,7 @@ MovieRecommender::MovieRecommender(Saver saver) {
 }
 
 void MovieRecommender::train(double alpha, double lambda, int save) {
-  double threshold = 1;
+  double threshold = 2;
   double cost, oldcost;
   int i;
   gsl_matrix *error;

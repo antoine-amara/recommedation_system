@@ -17,7 +17,7 @@ int main(void) {
   nbUsers = 943;
   nbGenres = 19;
   lambda = 5/100;
-  alpha = 0.01;
+  alpha = 0.001;
 
   //rates = gsl_matrix_alloc(nbMovies, nbUsers);
   /*theta = gsl_matrix_alloc(nbUsers, nbGenres);
