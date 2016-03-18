@@ -3,6 +3,7 @@
 
 #include "Vector3.h"
 #include "MovieRecommender.h"
+#include "DataParser.h"
 
 class Validator {
 	
@@ -31,10 +32,17 @@ public:
 	 void computeError(std::string dataset);
 
 	 /*!
-	 *  \brief Calcul l'erreur de l'ensemble des dataset	 *
+	 *  \brief Calcul l'erreur de l'ensemble des dataset
 	 *
 	 */
 	 void computeGlobalError();
+
+	 /*!
+	 *  \brief Affiche un rapport détaillé des opérations effectués lors d'un 
+	 *  computeGlobalError().
+	 *
+	 */
+	 void printReport();
 
 
 protected:

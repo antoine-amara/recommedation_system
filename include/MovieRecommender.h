@@ -207,7 +207,7 @@ public:
   /*!
      *  \brief Récupérer la matrice de paramètres X.
      *
-     *  Getter permettant de récupérer la matrice de paramètre thêta qui correspond aux catégorisations des films.
+     *  Getter permettant de récupérer la matrice de paramètre X qui correspond aux catégorisations des films.
      *
      *  \return une gsl_matrix avec des valeurs(double) représentant l'appartenance de chaque film aux différentes catégories.
      */
