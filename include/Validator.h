@@ -20,7 +20,21 @@ public:
 	 *  \param filename : Un string correspondant au nom de fichier de base.
 	 *  \param nbTestSets : Un int correspondant aux nombres de set de tests voulu.
 	 */
-	Validator();	
+	Validator();
+
+	/*!
+	 *  \brief Calcul l'erreur d'un dataset
+	 *
+	 *  \param dataset : Un string correspondant au nom du dataset
+	 *
+	 */
+	 void computeError(std::string dataset);
+
+	 /*!
+	 *  \brief Calcul l'erreur de l'ensemble des dataset	 *
+	 *
+	 */
+	 void computeGlobalError();
 
 
 protected:
