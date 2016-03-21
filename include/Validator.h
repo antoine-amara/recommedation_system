@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <numeric>
+#include <string>
 
 #include "Vector3.h"
 #include "MovieRecommender.h"
@@ -24,7 +26,9 @@ public:
 	Validator();
 
 	/*!
-	 *  \brief Calcul l'erreur d'un dataset
+	 *  \brief Calcul l'erreur d'un dataset.
+	 *  La fonction calcul l'erreur d'un dataset et l'ajoute au vector<int>
+	 *  m_errors.
 	 *
 	 *  \param dataset : Un string correspondant au nom du dataset
 	 *
@@ -32,10 +36,14 @@ public:
 	 void computeError(std::string dataset);
 
 	 /*!
-	 *  \brief Calcul l'erreur de l'ensemble des dataset
+	 *  \brief Calcul l'erreur de l'ensemble des dataset.
+	 *  La fonction somme l'ensemble des erreurs calculées dans
+	 *  m_errors et renvoie la moyenne des erreurs.
 	 *
+	 *
+	 *  \return un entier correspondant au résultat
 	 */
-	 void computeGlobalError();
+	 int computeGlobalError();
 
 	 /*!
 	 *  \brief Affiche un rapport détaillé des opérations effectués lors d'un 
@@ -44,6 +52,12 @@ public:
 	 */
 	 void printReport();
 
+	 /*!
+     *  \brief Destructeur
+     *
+     *  Permets de désallouer les éléments dynamiques.
+     */
+  	virtual ~Validator();
 
 protected:
   int m_nbTestSets;
