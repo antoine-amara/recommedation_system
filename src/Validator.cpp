@@ -2,27 +2,28 @@
 
 using namespace std;
 
-Validator::Validator(){
+Validator::Validator() {
 	this->m_nbTestSets = 5;
-	this->m_movieRecommender = MovieRecommender("u");
+	this->m_movieRecommender = MovieRecommender(Saver());
 	this->m_errors = vector<int>();
 }
 
-Validator::Validator(string filename, int nbTestSets){
+Validator::Validator(string filename, int nbTestSets) {
 	this->m_nbTestSets = nbTestSets;
-	this->m_movieRecommender = MovieRecommender(filename);
+	this->m_movieRecommender = MovieRecommender(Saver(filename));
 	this->m_errors = vector<int>();
 }
 
 void Validator::start(){
 	for(unsigned int i=0; i < this->m_nbTestSets; i++){
-		computeError("u"+toString(i));
+		string name = "u."+to_string(i);
+		computeError(name);
 	}
 	printReport();
 }
 
 void Validator::computeError(string dataset){
-	DataParser d = new DataParser(this->m_movieRecommender.getX()->size2, this->m_movieRecommender.getTheta()->size2);
+	DataParser* d = new DataParser(this->m_movieRecommender.getX()->size2, this->m_movieRecommender.getTheta()->size2);
 	Vector3 dTest = d.parseTest();
 	int errorCount = 0;
 
@@ -45,7 +46,7 @@ int Validator::computeGlobalError(){
 	return GlobalError;
 }
 
-void printReport(){
+void Validator::printReport(){
 	for(unsigned int i = 0; i < this->m_errors.size(); i++){
 		cout << "DataSet :" << i;
 		cout << "Error :" << this->m_errors[i] << endl;
@@ -57,5 +58,4 @@ void printReport(){
 }
 
 Validator::~Validator(){
-
 }

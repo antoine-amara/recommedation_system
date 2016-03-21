@@ -1,0 +1,72 @@
+Compiled src/main.cpp successfully!
+src/Validator.cpp: In constructor ‘Validator::Validator()’:
+src/Validator.cpp:5:22: error: no matching function for call to ‘MovieRecommender::MovieRecommender()’
+ Validator::Validator() {
+                      ^
+src/Validator.cpp:5:22: note: candidates are:
+In file included from include/Validator.h:7:0,
+                 from src/Validator.cpp:1:
+include/MovieRecommender.h:103:3: note: MovieRecommender::MovieRecommender(Saver)
+   MovieRecommender(Saver saver);
+   ^
+include/MovieRecommender.h:103:3: note:   candidate expects 1 argument, 0 provided
+include/MovieRecommender.h:92:3: note: MovieRecommender::MovieRecommender(std::string, Saver)
+   MovieRecommender(std::string dataset, Saver saver);
+   ^
+include/MovieRecommender.h:92:3: note:   candidate expects 2 arguments, 0 provided
+include/MovieRecommender.h:81:3: note: MovieRecommender::MovieRecommender(std::string, int, int, gsl_matrix*, gsl_matrix*)
+   MovieRecommender(std::string dataset, int nbMovies, int nbUsers, gsl_matrix* theta, gsl_matrix* X);
+   ^
+include/MovieRecommender.h:81:3: note:   candidate expects 5 arguments, 0 provided
+include/MovieRecommender.h:61:3: note: MovieRecommender::MovieRecommender(std::string, int, int, int)
+   MovieRecommender(std::string dataset, int nbMovies, int nbUsers, int nbFeatures);
+   ^
+include/MovieRecommender.h:61:3: note:   candidate expects 4 arguments, 0 provided
+include/MovieRecommender.h:45:3: note: MovieRecommender::MovieRecommender(int, int, int)
+   MovieRecommender(int nbMovies, int nbUsers, int nbFeatures);
+   ^
+include/MovieRecommender.h:45:3: note:   candidate expects 3 arguments, 0 provided
+include/MovieRecommender.h:29:7: note: constexpr MovieRecommender::MovieRecommender(const MovieRecommender&)
+ class MovieRecommender : public AiInterface {
+       ^
+include/MovieRecommender.h:29:7: note:   candidate expects 1 argument, 0 provided
+src/Validator.cpp: In constructor ‘Validator::Validator(std::string, int)’:
+src/Validator.cpp:11:53: error: no matching function for call to ‘MovieRecommender::MovieRecommender()’
+ Validator::Validator(string filename, int nbTestSets) {
+                                                     ^
+src/Validator.cpp:11:53: note: candidates are:
+In file included from include/Validator.h:7:0,
+                 from src/Validator.cpp:1:
+include/MovieRecommender.h:103:3: note: MovieRecommender::MovieRecommender(Saver)
+   MovieRecommender(Saver saver);
+   ^
+include/MovieRecommender.h:103:3: note:   candidate expects 1 argument, 0 provided
+include/MovieRecommender.h:92:3: note: MovieRecommender::MovieRecommender(std::string, Saver)
+   MovieRecommender(std::string dataset, Saver saver);
+   ^
+include/MovieRecommender.h:92:3: note:   candidate expects 2 arguments, 0 provided
+include/MovieRecommender.h:81:3: note: MovieRecommender::MovieRecommender(std::string, int, int, gsl_matrix*, gsl_matrix*)
+   MovieRecommender(std::string dataset, int nbMovies, int nbUsers, gsl_matrix* theta, gsl_matrix* X);
+   ^
+include/MovieRecommender.h:81:3: note:   candidate expects 5 arguments, 0 provided
+include/MovieRecommender.h:61:3: note: MovieRecommender::MovieRecommender(std::string, int, int, int)
+   MovieRecommender(std::string dataset, int nbMovies, int nbUsers, int nbFeatures);
+   ^
+include/MovieRecommender.h:61:3: note:   candidate expects 4 arguments, 0 provided
+include/MovieRecommender.h:45:3: note: MovieRecommender::MovieRecommender(int, int, int)
+   MovieRecommender(int nbMovies, int nbUsers, int nbFeatures);
+   ^
+include/MovieRecommender.h:45:3: note:   candidate expects 3 arguments, 0 provided
+include/MovieRecommender.h:29:7: note: constexpr MovieRecommender::MovieRecommender(const MovieRecommender&)
+ class MovieRecommender : public AiInterface {
+       ^
+include/MovieRecommender.h:29:7: note:   candidate expects 1 argument, 0 provided
+src/Validator.cpp: In member function ‘void Validator::start()’:
+src/Validator.cpp:18:34: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(unsigned int i=0; i < this->m_nbTestSets; i++){
+                                  ^
+src/Validator.cpp: In member function ‘void Validator::computeError(std::string)’:
+src/Validator.cpp:27:20: error: request for member ‘parseTest’ in ‘d’, which is of pointer type ‘DataParser*’ (maybe you meant to use ‘->’ ?)
+  Vector3 dTest = d.parseTest();
+                    ^
+make: *** [build/Validator.o] Erreur 1

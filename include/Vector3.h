@@ -1,3 +1,6 @@
+#ifndef VECTOR3_H
+#define VECTOR3_H
+
 #include <iostream>
 
 class Vector3{
@@ -106,6 +109,13 @@ public:
 	void add(double x,double y,double z);
 
 	/*!
+	  *  \brief Renvoie la taille du Vector3
+	  *
+	  *  \return un double
+	  */
+	double size();
+
+	/*!
 	  *  \brief Affiche les éléments du Vector3.
 	  *
 	  *
@@ -124,3 +134,4 @@ protected:
 	double m_c[3];
 
 };
+#endif // VECTOR3_H

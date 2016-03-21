@@ -5,6 +5,7 @@
 
 #include "Vector3.h"
 #include "MovieRecommender.h"
+#include "Saver.h"
 #include "DataParser.h"
 
 class Validator {
@@ -23,7 +24,14 @@ public:
 	 *  \param filename : Un string correspondant au nom de fichier de base.
 	 *  \param nbTestSets : Un int correspondant aux nombres de set de tests voulu.
 	 */
-	Validator();
+	Validator(std::string filename, int nbTestSets);
+
+	/*!
+	 *  \brief Lance l'analyse du validateur et imprime un rapport.
+	 *
+	 *
+	 */
+	void start();
 
 	/*!
 	 *  \brief Calcul l'erreur d'un dataset.
