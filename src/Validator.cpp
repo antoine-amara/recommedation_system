@@ -23,13 +23,12 @@ void Validator::start(){
 
 void Validator::computeError(string dataset){
 	DataParser d = new DataParser(this->m_movieRecommender.getX().size2, this->m_movieRecommender.getTheta().size2);
-	d.parse();
 	Vector3 dTest = d.parseTest();
 	int errorCount = 0;
 
 	for(unsigned int i = 0; i < dTest.size(); i++){
-		double mark = gsl_matrix_get(m_movieRecommender.predict(),dTest.getY(),dTest.getX());
-		if(mark != dTest.getZ())
+		double mark = gsl_matrix_get(m_movieRecommender.predict(),dTest.y(),dTest.x());
+		if(mark != dTest.z())
 			errorCount++;
 	}
 
