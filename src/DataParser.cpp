@@ -118,13 +118,18 @@ Vector3* DataParser::parseTest() {
   /* BUG: durant l'execution l'adresse du ifstream ne bouge pas XD mais il y a segfault a la deuxieme lecture */
   /* BUG: la variable de type string data est perdu apres insertions dans le Vector3 */
 
-  Vector3 d[0] = Vector3();
+  
   ifstream set(m_filename.c_str(), ios::in);
+
+  set.seekg (0, set.end);
+  int length = set.tellg();
+  set.seekg (0, set.beg);
+
   int idM, idU, Mark;
   string data;
-  int i;
-
-  i = 0;
+  int i = 0;
+  Vector3 d[length];
+  d[length] = Vector3();
 
   if (set) {
     // on consomme l'id de l'utilisateur.
