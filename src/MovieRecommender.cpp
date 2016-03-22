@@ -54,11 +54,10 @@ MovieRecommender::MovieRecommender(Saver saver) {
   gsl_matrix_memcpy (this->m_X, saver.getX());
   this->m_nbMovies = saver.getNbMovies();
   this->m_nbUsers = saver.getNbUsers();
-  m_parser->parse();
 }
 
 void MovieRecommender::train(double alpha, double lambda, int save) {
-  double threshold = 2;
+  double threshold = 0.5;
   double cost, oldcost;
   int i;
   gsl_matrix *error;

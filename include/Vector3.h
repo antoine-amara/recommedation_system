@@ -1,7 +1,10 @@
+#ifndef VECTOR3_H
+#define VECTOR3_H
+
 #include <iostream>
 
 class Vector3{
-	
+
 public:
 	/*!
 	  *  \brief Constructeur par défaut.
@@ -17,7 +20,7 @@ public:
 	  *  Ce constructeur initialisera un Vecteur3.
 	  *  Les valeurs seront (x,y,z).
 	  *
-	  *  \param x : un double 
+	  *  \param x : un double
 	  *  \param y : un double
 	  *  \param z : un double
 	  */
@@ -27,11 +30,11 @@ public:
 	  *  \brief Set (x,y,z)
 	  *
 	  *  Défini les éléments (x,y,z) au Vector3.
-	  *  
-	  *  \param x : un double 
+	  *
+	  *  \param x : un double
 	  *  \param y : un double
 	  *  \param z : un double
-	  *  
+	  *
 	  */
 	void set(double x,double y,double z);
 
@@ -95,13 +98,13 @@ public:
     inline void c(double k) {m_c[2]=k;}
 
     /*!
-	  *  \brief Ajoute aux éléments existant du Vector3, 
+	  *  \brief Ajoute aux éléments existant du Vector3,
 	  *  les éléments (x,y,z).
 	  *
-	  *  \param x : un double 
+	  *  \param x : un double
 	  *  \param y : un double
 	  *  \param z : un double
-	  *  
+	  *
 	  */
 	void add(double x,double y,double z);
 
@@ -116,7 +119,7 @@ public:
 	  *  \brief Destructeur.
 	  *
 	  *  Désalloue les éléments dynamiques.
-	  *  
+	  *
 	  */
 	virtual ~Vector3();
 
@@ -124,3 +127,5 @@ protected:
 	double m_c[3];
 
 };
+
+#endif

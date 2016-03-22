@@ -2,7 +2,7 @@ TARGET   = recommender_system
 
 CC       = g++
 # compiling flags here
-CFLAGS   = -std=c++11 -Wall -Iinclude/
+CFLAGS   = -std=c++11 -Wall -Iinclude/ -g
 
 LINKER   = g++ -o
 # linking flags here
