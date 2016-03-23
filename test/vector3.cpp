@@ -10,7 +10,7 @@ using namespace std;
 
 int main(void){
   //
-  Vector3 test[0] = Vector3(3,3,3);
+  Vector3 test[0] = Vector3();
 
   test[0].set(1,0,0);
 
