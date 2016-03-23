@@ -62,7 +62,7 @@ int main(void) {
   //delete(mr);
   //gsl_matrix_free(rates);
 
-  DataParser parser = DataParser("data/testparser.base", nbMovies, nbUsers);
+  DataParser parser = DataParser("data/testparser.base", 5, 4);
   Vector3* data = parser.parseTest();
 
   return 0;
