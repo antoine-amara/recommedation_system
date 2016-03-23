@@ -22,7 +22,9 @@ void Vector3::add(double x,double y,double z) {
     m_c[2]+=z;
 }
 
-
+double Vector3::size(){
+	sqrt(m_c[0]*m_c[0]+m_c[1]*m_c[1]+m_c[2]*m_c[2]);
+}
 
 void Vector3::printV() const {
     cout << "(" << this->x() << "," << this->y() << "," << this->z() << ")" << endl;

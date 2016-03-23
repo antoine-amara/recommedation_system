@@ -109,6 +109,13 @@ public:
 	void add(double x,double y,double z);
 
 	/*!
+	  *  \brief Renvoie la taille du Vector3
+	  *
+	  *  \return un double
+	  */
+	double size();
+
+	/*!
 	  *  \brief Affiche les éléments du Vector3.
 	  *
 	  *
