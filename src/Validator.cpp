@@ -15,7 +15,7 @@ Validator::Validator(string filename, int nbTestSets) {
 }
 
 void Validator::start(){
-	for(unsigned int i=0; i < this->m_nbTestSets; i++){
+	for(int i=0; i < this->m_nbTestSets; i++){
 		string name = "u."+to_string(i);
 		computeError(name);
 	}

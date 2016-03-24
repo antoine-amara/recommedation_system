@@ -1,4 +1,3 @@
-Compiled src/main.cpp successfully!
 src/Validator.cpp: In constructor ‘Validator::Validator()’:
 src/Validator.cpp:5:22: error: no matching function for call to ‘MovieRecommender::MovieRecommender()’
  Validator::Validator() {
@@ -61,10 +60,6 @@ include/MovieRecommender.h:29:7: note: constexpr MovieRecommender::MovieRecommen
  class MovieRecommender : public AiInterface {
        ^
 include/MovieRecommender.h:29:7: note:   candidate expects 1 argument, 0 provided
-src/Validator.cpp: In member function ‘void Validator::start()’:
-src/Validator.cpp:18:34: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-  for(unsigned int i=0; i < this->m_nbTestSets; i++){
-                                  ^
 src/Validator.cpp: In member function ‘void Validator::computeError(std::string)’:
 src/Validator.cpp:27:20: error: request for member ‘parseTest’ in ‘d’, which is of pointer type ‘DataParser*’ (maybe you meant to use ‘->’ ?)
   Vector3 dTest = d.parseTest();
