@@ -4,13 +4,15 @@ using namespace std;
 
 Validator::Validator() {
 	this->m_nbTestSets = 5;
-	this->m_movieRecommender = MovieRecommender(Saver());
+	Saver s = Saver();
+	this->m_movieRecommender = MovieRecommender(s);
 	this->m_errors = vector<int>();
 }
 
 Validator::Validator(string filename, int nbTestSets) {
 	this->m_nbTestSets = nbTestSets;
-	this->m_movieRecommender = MovieRecommender(Saver(filename));
+	Saver s = Saver(filename);
+	this->m_movieRecommender = MovieRecommender(s);
 	this->m_errors = vector<int>();
 }
 
@@ -23,13 +25,13 @@ void Validator::start(){
 }
 
 void Validator::computeError(string dataset){
-	DataParser* d = new DataParser(this->m_movieRecommender.getX()->size2, this->m_movieRecommender.getTheta()->size2);
-	Vector3 dTest = d.parseTest();
+	DataParser* d = new DataParser(this->m_movieRecommender.getX()->size1, this->m_movieRecommender.getTheta()->size1);
+	Vector3* dTest = d->parseTest();
 	int errorCount = 0;
 
-	for(unsigned int i = 0; i < dTest.size(); i++){
-		double mark = gsl_matrix_get(m_movieRecommender.predict(),dTest.y(),dTest.x());
-		if(mark != dTest.z())
+	for(int i = 0; i < d->getN(); i++){
+		int mark = gsl_matrix_get(m_movieRecommender.predict(),dTest[i].x(),dTest[i].y());
+		if(mark != dTest[i].z())
 			errorCount++;
 	}
 
@@ -42,7 +44,7 @@ int Validator::computeGlobalError(){
 	int taille = this->m_errors.size();
 	int GlobalError = accumulate(this->m_errors.begin(), this->m_errors.end(),0);
 	GlobalError /= taille;
-	
+
 	return GlobalError;
 }
 

@@ -64,6 +64,7 @@ int main(void) {
 
   DataParser parser = DataParser("data/testparser.base", nbMovies, nbUsers);
   Vector3* data = parser.parseTest();
+  cout << "N: " << parser.getN() << endl;
 
   return 0;
 }

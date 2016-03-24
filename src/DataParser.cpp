@@ -114,22 +114,17 @@ void DataParser::parseMovies() {
 }
 
 Vector3* DataParser::parseTest() {
-
-  /* BUG: durant l'execution l'adresse du ifstream ne bouge pas XD mais il y a segfault a la deuxieme lecture */
-  /* BUG: la variable de type string data est perdu apres insertions dans le Vector3 */
-
-  
   ifstream set(m_filename.c_str(), ios::in);
-
-  set.seekg (0, set.end);
-  int length = set.tellg();
-  set.seekg (0, set.beg);
-
   int idM, idU, Mark;
   string data;
   int i = 0;
-  Vector3 d[length];
-  d[length] = Vector3();
+
+  while(getline(set, data)) ++m_N;
+  set.clear();
+  set.seekg (0, set.beg);
+
+  Vector3 d[m_N];
+  d[m_N] = Vector3();
 
   if (set) {
     // on consomme l'id de l'utilisateur.
@@ -144,21 +139,12 @@ Vector3* DataParser::parseTest() {
     // on consomme le timestamp.
     set >> data;
 
-    cout << "data before insert: " << data << endl;
-
-    d[i].set(idM, idU, Mark);
-
-    cout << "data after insert" << data << endl;
-
     while(!set.eof()) {
-      cout << "while" << endl;
 
       // les indices de la matrice sont décalée par rapport aux indices des films et utilisateurs.
-      //datas[i].set(idM, idU, Mark);
+      d[i].set(idM, idU, Mark);
       // on consomme l'id du film.
-      cout << "data before second read: " << data << endl;
       set >> data;
-      cout << "data after second read: " << data << endl;
       idU = stoi(data) - 1;
       // on consomme l'id de l'utilisateur.
       set >> data;
@@ -168,6 +154,8 @@ Vector3* DataParser::parseTest() {
       Mark = stoi(data);
       // on consomme le timestamp.
       set >> data;
+
+      d[i].printV();
 
       i++;
     }

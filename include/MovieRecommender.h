@@ -29,6 +29,8 @@ class Saver;
 class MovieRecommender : public AiInterface {
 
 public:
+
+  MovieRecommender();
   /*!
      *  \brief Constructeur de base.
      *

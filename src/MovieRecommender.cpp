@@ -3,6 +3,8 @@
 
 using namespace std;
 
+MovieRecommender::MovieRecommender() {}
+
 MovieRecommender::MovieRecommender(int nbMovies, int nbUsers, int nbFeatures) {
   this->m_theta = gsl_matrix_alloc(nbUsers, nbFeatures);
   this->m_X = gsl_matrix_alloc(nbMovies, nbFeatures);
