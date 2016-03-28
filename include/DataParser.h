@@ -111,7 +111,7 @@ public:
      *  On notera que le séparateur est une tabulation.
      *
      */
-  Vector3* parseTest();
+  void parseTest(Vector3* d, int N);
 
   /*!
      *  \brief Récupérer la matrice des notes précédemment construite par parseDatas.

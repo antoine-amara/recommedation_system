@@ -56,10 +56,11 @@ MovieRecommender::MovieRecommender(Saver saver) {
   gsl_matrix_memcpy (this->m_X, saver.getX());
   this->m_nbMovies = saver.getNbMovies();
   this->m_nbUsers = saver.getNbUsers();
+  m_parser = NULL;
 }
 
 void MovieRecommender::train(double alpha, double lambda, int save) {
-  double threshold = 0.5;
+  double threshold = 0.2;
   double cost, oldcost;
   int i;
   gsl_matrix *error;
@@ -147,6 +148,38 @@ gsl_matrix* MovieRecommender::predict() {
     0.0, ratings);
 
     return ratings;
+  }
+
+  gsl_matrix* MovieRecommender::normalize() {
+    gsl_matrix* m = predict();
+    unsigned int i, j;
+
+    for(i = 0; i < m->size1; ++i) {
+      for(j = 0; j < m->size2; ++j) {
+        int value = round(gsl_matrix_get(m, i, j));
+        gsl_matrix_set(m, i, j, (double)value);
+      }
+    }
+
+    return m;
+  }
+
+  int MovieRecommender::round(double a) {
+    double decimal;
+    int res;
+
+    if(a < 0) {
+      decimal = a - ceil(a);
+      if(decimal < -0.5) res = ceil(a);
+      else res = floor(a);
+    }
+    else {
+      decimal = a - floor(a);
+      if(decimal < 0.5) res = floor(a);
+      else res = ceil(a);
+    }
+
+    return res;
   }
 
   vector<string> MovieRecommender::recommend(int user, int nbMovies) {
@@ -345,5 +378,7 @@ gsl_matrix* MovieRecommender::predict() {
         MovieRecommender::~MovieRecommender() {
           gsl_matrix_free(m_theta);
           gsl_matrix_free(m_X);
-          delete(m_parser);
+
+          if(m_parser != NULL)
+            delete(m_parser);
         }

@@ -127,8 +127,20 @@ public:
      *  les matrices de paramètres thêta et X pour effectuer les prédictions, donc il faut utiliser ce modèle
      *  pour faire des recommandations seulement si l'entrainement a été effectué.
      *
+     * \return une gsl_matrix avec les notes sous forme de réel entre 0 et 5.
      */
   gsl_matrix* predict();
+
+  /*!
+     *  \brief Construire la matrice complète et normalisé notes des films/utilisateurs.
+     *
+     *  Méthode permettant de construire la matrice des prédictions des notes des film par rapport aux utilisateurs
+     *  mais avec des valeurs normalisé. En effet les notes sont des entiers entre 0 et 5 et les prédictions de l'IA
+     *  nous renvoie des réels. Cette méthode est donc la pour résoudre ce problème.
+     *
+     *  \return une gsl_matrix avec les notes sous forme d'entier entre 0 et 5.
+     */
+  gsl_matrix* normalize();
 
   /*!
      *  \brief Recommander des films à un utilisateur.
@@ -233,6 +245,11 @@ protected:
 
 private:
   gsl_matrix* computeError();
+
+  /*
+   * Méthode permettant d'arrondir un nombre.
+  */
+  int round(double a);
 
   /*
    *  Methode permettant d'initialiser les matrices de paramètres theta et X, les 2 matrices sont initialisés

@@ -9,22 +9,23 @@
 #include "DataParser.h"
 
 class Validator {
-	
+
 public:
 	/*!
 	 *  \brief Constructeur par défaut.
 	 *
 	 */
-	Validator();
+	Validator(int N);
 
 	/*!
-	 *  \brief Constructeur prennant en paramètre un nom 
+	 *  \brief Constructeur prennant en paramètre un nom
 	 *  de fichier et un nombre de set de tests.
 	 *
 	 *  \param filename : Un string correspondant au nom de fichier de base.
 	 *  \param nbTestSets : Un int correspondant aux nombres de set de tests voulu.
+	 *	\param N : le nombre d'entrées dans les datasets de test.
 	 */
-	Validator(std::string filename, int nbTestSets);
+	Validator(std::string filename, int nbTestSets, int N);
 
 	/*!
 	 *  \brief Lance l'analyse du validateur et imprime un rapport.
@@ -54,7 +55,7 @@ public:
 	 int computeGlobalError();
 
 	 /*!
-	 *  \brief Affiche un rapport détaillé des opérations effectués lors d'un 
+	 *  \brief Affiche un rapport détaillé des opérations effectués lors d'un
 	 *  computeGlobalError().
 	 *
 	 */
@@ -68,10 +69,8 @@ public:
   	virtual ~Validator();
 
 protected:
-  int m_nbTestSets;
-  /*!< Nombre de fichiers test */
-  MovieRecommender m_movieRecommender;
-  /*!< L'objet MovieReccommender permettant de faire les prédictions */
-  std::vector<int> m_errors;
-  /*!< Le Vecteur des erreurs commise par le MovieRecommender */
+	std::string m_filename; /*!< Nom de base des datasets nescessaire à la validation */
+  int m_nbTestSets; /*!< Nombre de fichiers test */
+	int m_N; /*!< Nombre d'entrées dans les datasets de test */
+  std::vector<int> m_errors; /*!< Le Vecteur des erreurs commise par le MovieRecommender */
 };

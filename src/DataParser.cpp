@@ -113,17 +113,15 @@ void DataParser::parseMovies() {
   set.close();
 }
 
-Vector3* DataParser::parseTest() {
-  ifstream set(m_filename.c_str(), ios::in);
+void DataParser::parseTest(Vector3* d, int N) {
+  string file = m_filename+".test";
+  ifstream set(file.c_str(), ios::in);
   int idM, idU, Mark;
   string data;
   int i = 0;
 
-  while(getline(set, data)) ++m_N;
-  set.clear();
-  set.seekg (0, set.beg);
+  m_N = N;
 
-  Vector3 d[m_N];
   d[m_N] = Vector3();
 
   if (set) {
@@ -155,8 +153,6 @@ Vector3* DataParser::parseTest() {
       // on consomme le timestamp.
       set >> data;
 
-      d[i].printV();
-
       i++;
     }
   }
@@ -164,8 +160,6 @@ Vector3* DataParser::parseTest() {
     cout << "ERROR: cannot open dataset" << endl;
   }
   set.close();
-
-  return d;
 }
 
 vector<string> DataParser::split(string str, char separator) {
