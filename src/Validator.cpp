@@ -48,7 +48,7 @@ void Validator::computeError(string dataset){
 			errorCount++;
 	}
 
-	m_errors.push_back(errorCount/m_N);
+	m_errors.push_back((errorCount+0.0) * 100/m_N+0.0);
 
 	gsl_matrix_free(normalizerates);
 	delete(movieRecommender);
@@ -70,10 +70,10 @@ void Validator::printReport(){
 	cout << endl;
 	for(unsigned int i = 0; i < this->m_errors.size(); i++){
 		cout << "Dataset name :" << m_filename+to_string(i);
-		cout << " Error :" << to_string(this->m_errors[i]*100) + "%" << endl;
+		cout << " Error :" << to_string(this->m_errors[i]) + "%" << endl;
 	}
 	cout << endl;
-	cout << "GlobalError :" << to_string(computeGlobalError()*100) + "%" << endl;
+	cout << "GlobalError :" << to_string(computeGlobalError()) + "%" << endl;
 	cout << endl;
 	cout << "##############################" << endl;
 
