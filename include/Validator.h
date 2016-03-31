@@ -34,6 +34,8 @@ public:
 	 */
 	void start();
 
+	void startRMSE();
+
 	/*!
 	 *  \brief Calcul l'erreur d'un dataset.
 	 *  La fonction calcul l'erreur d'un dataset et l'ajoute au vector<int>
@@ -44,6 +46,8 @@ public:
 	 */
 	 void computeError(std::string dataset);
 
+	 void computeRMSE(std::string dataset);
+
 	 /*!
 	 *  \brief Calcul l'erreur de l'ensemble des dataset.
 	 *  La fonction somme l'ensemble des erreurs calculées dans
@@ -52,7 +56,7 @@ public:
 	 *
 	 *  \return un entier correspondant au résultat
 	 */
-	 int computeGlobalError();
+	 double computeGlobalError();
 
 	 /*!
 	 *  \brief Affiche un rapport détaillé des opérations effectués lors d'un
@@ -72,5 +76,5 @@ protected:
 	std::string m_filename; /*!< Nom de base des datasets nescessaire à la validation */
   int m_nbTestSets; /*!< Nombre de fichiers test */
 	int m_N; /*!< Nombre d'entrées dans les datasets de test */
-  std::vector<int> m_errors; /*!< Le Vecteur des erreurs commise par le MovieRecommender */
+  std::vector<double> m_errors; /*!< Le Vecteur des erreurs commise par le MovieRecommender */
 };

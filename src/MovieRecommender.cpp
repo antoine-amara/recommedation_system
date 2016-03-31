@@ -60,7 +60,7 @@ MovieRecommender::MovieRecommender(Saver saver) {
 }
 
 void MovieRecommender::train(double alpha, double lambda, int save) {
-  double threshold = 0.2;
+  double threshold = 0.1;
   double cost, oldcost;
   int i;
   gsl_matrix *error;
@@ -69,7 +69,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
 
   i = save;
 
-  cost = computeCost(lambda);
+  cost = computeCost(TRAINSET, lambda);
   oldcost = 0.0;
 
   regularizationX = gsl_matrix_alloc(this->m_X->size1, this->m_X->size2);
@@ -80,7 +80,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
 
   while(cost > threshold) {
     // on calcule les erreurs comises par le système
-    error = computeError();
+    error = computeTrainError();
 
 
     // on calcule la nouvelle matrice X(on effectue la decente de gradient)
@@ -100,7 +100,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
     gsl_matrix_sub(m_theta, intermediatetheta);
 
     oldcost = cost;
-    cost = computeCost(lambda);
+    cost = computeCost(TRAINSET, lambda);
     printState(lambda);
 
     if(cost > oldcost) {
@@ -112,7 +112,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
     else {
       cout << "alpha x 2" << endl;
       //on augmente alpha
-      alpha *= 2;
+      alpha *= 2.0;
       cout << alpha << endl;
     }
 
@@ -220,10 +220,11 @@ gsl_matrix* MovieRecommender::predict() {
     return movies;
   }
 
-  double MovieRecommender::computeCost(double lambda) {
+  double MovieRecommender::computeCost(int mode, double lambda) {
     unsigned int i, j;
     double sumX, sumTheta, sumError;
     double N;
+    gsl_matrix* error;
 
     N = m_parser->getN() + 0.0;
 
@@ -234,8 +235,12 @@ gsl_matrix* MovieRecommender::predict() {
     * Premier Element *
     * m_error_2 *
     */
-    //calcul de m_error_t (transposée de m_error)
-    gsl_matrix* error = computeError();
+    if(mode == TRAINSET)
+      error = computeTrainError();
+    else
+      error = computeTestError();
+
+
     //multiplication m_error*m_error_t dans m_error_2
     gsl_matrix* error_2 = gsl_matrix_alloc(error->size2, error->size2);
     gsl_blas_dgemm(CblasTrans,CblasNoTrans,
@@ -286,10 +291,10 @@ gsl_matrix* MovieRecommender::predict() {
           gsl_matrix_free(X_2);
           gsl_matrix_free(theta_2);
 
-          return 1.0/N * sumError + (lambda/N) * sumX + (lambda/N) * sumTheta;
+          return sqrt(1.0/N * sumError) + (lambda/N) * sumX + (lambda/N) * sumTheta;
         }
 
-        gsl_matrix* MovieRecommender::computeError() {
+        gsl_matrix* MovieRecommender::computeTrainError() {
 
           //computeError() = N*-N
           gsl_matrix* ratings;
@@ -310,6 +315,28 @@ gsl_matrix* MovieRecommender::predict() {
           return ratings;
         }
 
+        gsl_matrix* MovieRecommender::computeTestError() {
+          Vector3 testdatas[m_parser->getN()];// N
+          gsl_matrix* ratings, *result;
+          int i;
+
+          ratings = NULL;
+
+          ratings = normalize(); // N*
+
+          result = gsl_matrix_calloc(ratings->size1, ratings->size2); //N* - N
+
+          m_parser->parseTest(testdatas, m_parser->getN());
+
+          for(i = 0; i < m_parser->getN(); ++i) {
+            int error;
+            error = gsl_matrix_get(ratings, testdatas[i].x(), testdatas[i].y()) - testdatas[i].z();
+            gsl_matrix_set(result, testdatas[i].x(), testdatas[i].y(), error);
+          }
+
+          return result;
+        }
+
         void MovieRecommender::saveState(string filename) {
           Saver saver = Saver(filename);
           saver.save(this);
@@ -324,12 +351,18 @@ gsl_matrix* MovieRecommender::predict() {
           //printMatrix("Theta", m_theta);
           //printMatrix("X", m_X);
 
-          cout << "cout : " << computeCost(lambda) << endl;
+          cout << "cout d'entrainement: " << computeCost(TRAINSET, lambda) << endl;
+          cout << "cout de test: " << computeCost(TESTSET, lambda) << endl;
         }
 
         void MovieRecommender::setDatas(string set, int nbMovies, int nbUsers) {
           this->m_parser = new DataParser(set, nbMovies, nbUsers);
           m_parser->parse();
+        }
+
+        void MovieRecommender::setTestDatas(string set, int nbMovies, int nbUsers, int N) {
+          this->m_parser = new DataParser(set, nbMovies, nbUsers);
+          this->m_parser->setN(N);
         }
 
         gsl_matrix* MovieRecommender::getTheta() {

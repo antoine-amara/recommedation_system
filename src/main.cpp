@@ -20,7 +20,7 @@ int main(void) {
   nbUsers = 943;
   nbGenres = 19;
   lambda = 5/100;
-  alpha = 0.001;
+  alpha = 0.0001;
 
 
 
@@ -48,7 +48,7 @@ int main(void) {
   gsl_matrix_set(X, 4, 2, 1.0);*/
 
   //Saver s = Saver("train_result");
-  //MovieRecommender *mr = new MovieRecommender(s);
+  //MovieRecommender *mr = new MovieRecommender("data/u1", nbMovies, nbUsers, nbGenres);
   //mr->normalize();
   //gsl_matrix_memcpy(rates, mr->predict());
   //mr->train(alpha,lambda);
@@ -66,7 +66,7 @@ int main(void) {
 
   //DataParser parser = DataParser("data/testparser.base", 5, 4);
   Validator v = Validator("data/u", 5, 20000);
-  v.start();
+  v.startRMSE();
 
   return 0;
 }

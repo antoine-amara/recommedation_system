@@ -133,6 +133,15 @@ public:
   int getN();
 
   /*!
+     *  \brief Mettre à jour le paramètre N du dataset.
+     *
+     *  Setter permettant de mettre à jour le paramètre N du dataset qui correspond au nombre de données présente dans celui-ci.
+     *
+     *  \param N: la nouvelle taille du set.
+     */
+  void setN(int N);
+
+  /*!
      *  \brief Récupérer un tableau avec l'ensemble des genres précédemment construit par parseGenres.
      *
      *  Getter permettant de récupérer un tableau de string contenant l'ensemble des genres de films.

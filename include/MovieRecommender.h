@@ -10,6 +10,7 @@
 
 #include "AiInterface.h"
 #include "DataParser.h"
+#include "mode.h"
 
 class Saver;
 
@@ -158,12 +159,13 @@ public:
      *
      *  Méthode permettant de calculer la fonction de coût, qui représente la performance de l'algorithme.
      *  C'est donc une erreur qui est calculée. Cette erreur doit être minimale pour assurer la performance des recommandations effectuée.
-     *  L'entraînement est là pour minimiser cette erreur.
+     *  L'entraînement est là pour minimiser cette erreur. On peut aussi calculé l'erreur sur un jeu de test.
      *
+     *  \param mode: Le mode de fonctionnement du modèle, il est soit en entrainement(TRAINSET), soit en test(TESTSET).
      *  \param lambda : le paramètre de régularisation.
      *  \return un double représentant l'erreur globale que commet l'algorithme sur ces prédictions.
      */
-  double computeCost(double lambda);
+  double computeCost(int mode, double lambda);
 
   /*!
      *  \brief Sauvegarde d'un état de l'objet.
@@ -199,7 +201,7 @@ public:
   void printState(double lamba);
 
   /*!
-     *  \brief Changer le dataset.
+     *  \brief Changer le dataset d'entraînement.
      *
      *  Setter permettant de charger un nouveau dataset pour l'entraînement.
      *
@@ -208,6 +210,18 @@ public:
      *  \param nbUsers : le nombre d'utilisateurs.
      */
   void setDatas(std::string set, int nbMovies, int nbUsers);
+
+  /*!
+     *  \brief Changer le dataset de test.
+     *
+     *  Setter permettant de charger un nouveau dataset pour l'entraînement.
+     *
+     *  \param set : le nom du dataset.
+     *  \param nbMovies : le nombre de films.
+     *  \param nbUsers : le nombre d'utilisateurs.
+     *  \param N: La taille du set de test.
+     */
+  void setTestDatas(std::string set, int nbMovies, int nbUsers, int N);
 
   /*!
      *  \brief Récupérer la matrice de paramètres thêta.
@@ -244,7 +258,9 @@ protected:
   DataParser *m_parser; /*!< Objet DataParser contenant les informations du dataset, c'est-à-dire la matrice des notes données par les utilisateurs(incomplète), l'ensemble des genres de films présents dans le dataset ainsi que les titres de tous les films. */
 
 private:
-  gsl_matrix* computeError();
+  gsl_matrix* computeTrainError();
+
+  gsl_matrix* computeTestError();
 
   /*
    * Méthode permettant d'arrondir un nombre.

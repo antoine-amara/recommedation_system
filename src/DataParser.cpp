@@ -182,6 +182,10 @@ int DataParser::getN() {
   return m_N;
 }
 
+void DataParser::setN(int N) {
+  this->m_N = N;
+}
+
 vector<string> DataParser::getGenres() {
   return m_genres;
 }
