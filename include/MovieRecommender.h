@@ -10,6 +10,7 @@
 
 #include "AiInterface.h"
 #include "DataParser.h"
+#include "mode.h"
 
 class Saver;
 
@@ -29,6 +30,8 @@ class Saver;
 class MovieRecommender : public AiInterface {
 
 public:
+
+  MovieRecommender();
   /*!
      *  \brief Constructeur de base.
      *
@@ -125,8 +128,20 @@ public:
      *  les matrices de paramètres thêta et X pour effectuer les prédictions, donc il faut utiliser ce modèle
      *  pour faire des recommandations seulement si l'entrainement a été effectué.
      *
+     * \return une gsl_matrix avec les notes sous forme de réel entre 0 et 5.
      */
   gsl_matrix* predict();
+
+  /*!
+     *  \brief Construire la matrice complète et normalisé notes des films/utilisateurs.
+     *
+     *  Méthode permettant de construire la matrice des prédictions des notes des film par rapport aux utilisateurs
+     *  mais avec des valeurs normalisé. En effet les notes sont des entiers entre 0 et 5 et les prédictions de l'IA
+     *  nous renvoie des réels. Cette méthode est donc la pour résoudre ce problème.
+     *
+     *  \return une gsl_matrix avec les notes sous forme d'entier entre 0 et 5.
+     */
+  gsl_matrix* normalize();
 
   /*!
      *  \brief Recommander des films à un utilisateur.
@@ -144,12 +159,13 @@ public:
      *
      *  Méthode permettant de calculer la fonction de coût, qui représente la performance de l'algorithme.
      *  C'est donc une erreur qui est calculée. Cette erreur doit être minimale pour assurer la performance des recommandations effectuée.
-     *  L'entraînement est là pour minimiser cette erreur.
+     *  L'entraînement est là pour minimiser cette erreur. On peut aussi calculé l'erreur sur un jeu de test.
      *
+     *  \param mode: Le mode de fonctionnement du modèle, il est soit en entrainement(TRAINSET), soit en test(TESTSET).
      *  \param lambda : le paramètre de régularisation.
      *  \return un double représentant l'erreur globale que commet l'algorithme sur ces prédictions.
      */
-  double computeCost(double lambda);
+  double computeCost(int mode, double lambda);
 
   /*!
      *  \brief Sauvegarde d'un état de l'objet.
@@ -185,7 +201,7 @@ public:
   void printState(double lamba);
 
   /*!
-     *  \brief Changer le dataset.
+     *  \brief Changer le dataset d'entraînement.
      *
      *  Setter permettant de charger un nouveau dataset pour l'entraînement.
      *
@@ -194,6 +210,18 @@ public:
      *  \param nbUsers : le nombre d'utilisateurs.
      */
   void setDatas(std::string set, int nbMovies, int nbUsers);
+
+  /*!
+     *  \brief Changer le dataset de test.
+     *
+     *  Setter permettant de charger un nouveau dataset pour l'entraînement.
+     *
+     *  \param set : le nom du dataset.
+     *  \param nbMovies : le nombre de films.
+     *  \param nbUsers : le nombre d'utilisateurs.
+     *  \param N: La taille du set de test.
+     */
+  void setTestDatas(std::string set, int nbMovies, int nbUsers, int N);
 
   /*!
      *  \brief Récupérer la matrice de paramètres thêta.
@@ -207,7 +235,7 @@ public:
   /*!
      *  \brief Récupérer la matrice de paramètres X.
      *
-     *  Getter permettant de récupérer la matrice de paramètre thêta qui correspond aux catégorisations des films.
+     *  Getter permettant de récupérer la matrice de paramètre X qui correspond aux catégorisations des films.
      *
      *  \return une gsl_matrix avec des valeurs(double) représentant l'appartenance de chaque film aux différentes catégories.
      */
@@ -230,7 +258,14 @@ protected:
   DataParser *m_parser; /*!< Objet DataParser contenant les informations du dataset, c'est-à-dire la matrice des notes données par les utilisateurs(incomplète), l'ensemble des genres de films présents dans le dataset ainsi que les titres de tous les films. */
 
 private:
-  gsl_matrix* computeError();
+  gsl_matrix* computeTrainError();
+
+  gsl_matrix* computeTestError();
+
+  /*
+   * Méthode permettant d'arrondir un nombre.
+  */
+  int round(double a);
 
   /*
    *  Methode permettant d'initialiser les matrices de paramètres theta et X, les 2 matrices sont initialisés

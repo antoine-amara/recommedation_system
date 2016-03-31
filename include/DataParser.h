@@ -9,6 +9,7 @@
 #include <gsl/gsl_matrix.h>
 
 #include "ParserInterface.h"
+#include "Vector3.h"
 
 /*!
  * \file DataParser.h
@@ -72,7 +73,7 @@ public:
      *
      *  Méthode permettant de récupérer les notes données aux différents films par les utilisateurs.
      *  Ces informations sont stockées dans le fichier filename.data et sont organisées de la manière suivante:\n
-     *    film id   utilisateur id    note    timestamp\n
+     *    utilsateur id   film id    note    timestamp\n
      *  On notera que le séparateur est une tabulation.
      *
      */
@@ -102,6 +103,17 @@ public:
   void parseMovies();
 
   /*!
+     *  \brief Récupération des données d'un set de test.
+     *
+     *  Méthode permettant de récupérer l'ensemble des informations relatives à un set de test, c'est à dire les notes données par des utilisateurs à des films. Ces informations nous servent à vérifier que l'apprentissage est correct.
+     *  Ces informations sont stockées dans le fichier filename.test et sont organisés de la manière suivante:\n
+     *    utilsateur id   film id    note    timestamp\n
+     *  On notera que le séparateur est une tabulation.
+     *
+     */
+  void parseTest(Vector3* d, int N);
+
+  /*!
      *  \brief Récupérer la matrice des notes précédemment construite par parseDatas.
      *
      *  Getter permettant de récupérer la matrice des notes utilisateur.
@@ -119,6 +131,15 @@ public:
      *  \return un entier représentant le nombre de ligne que l'on a compté.
      */
   int getN();
+
+  /*!
+     *  \brief Mettre à jour le paramètre N du dataset.
+     *
+     *  Setter permettant de mettre à jour le paramètre N du dataset qui correspond au nombre de données présente dans celui-ci.
+     *
+     *  \param N: la nouvelle taille du set.
+     */
+  void setN(int N);
 
   /*!
      *  \brief Récupérer un tableau avec l'ensemble des genres précédemment construit par parseGenres.

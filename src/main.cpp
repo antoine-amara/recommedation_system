@@ -2,6 +2,7 @@
 #include "Saver.h"
 #include "MovieRecommender.h"
 #include "Vector3.h"
+#include "Validator.h"
 #include <gsl/gsl_matrix.h>
 #include <iostream>
 
@@ -19,8 +20,8 @@ int main(void) {
   nbUsers = 943;
   nbGenres = 19;
   lambda = 5/100;
-  alpha = 0.001;
-  
+  alpha = 0.0001;
+
 
 
   //rates = gsl_matrix_alloc(nbMovies, nbUsers);
@@ -47,9 +48,10 @@ int main(void) {
   gsl_matrix_set(X, 4, 2, 1.0);*/
 
   //Saver s = Saver("train_result");
-  MovieRecommender *mr = new MovieRecommender("data/u", nbMovies, nbUsers, nbGenres);
+  //MovieRecommender *mr = new MovieRecommender("data/u1", nbMovies, nbUsers, nbGenres);
+  //mr->normalize();
   //gsl_matrix_memcpy(rates, mr->predict());
-  mr->train(alpha,lambda);
+  //mr->train(alpha,lambda);
 
   /*cout << "user: 1" << " movie: 6" << "rates: " << gsl_matrix_get(rates, 6, 1) << endl;
   cout << "user: 1" << " movie: 10" << "rates: " << gsl_matrix_get(rates, 10, 1) << endl;
@@ -61,6 +63,10 @@ int main(void) {
   //gsl_matrix_free(X);
   //delete(mr);
   //gsl_matrix_free(rates);
+
+  //DataParser parser = DataParser("data/testparser.base", 5, 4);
+  Validator v = Validator("data/u", 5, 20000);
+  v.startRMSE();
 
   return 0;
 }

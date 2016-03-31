@@ -113,6 +113,55 @@ void DataParser::parseMovies() {
   set.close();
 }
 
+void DataParser::parseTest(Vector3* d, int N) {
+  string file = m_filename+".test";
+  ifstream set(file.c_str(), ios::in);
+  int idM, idU, Mark;
+  string data;
+  int i = 0;
+
+  m_N = N;
+
+  d[m_N] = Vector3();
+
+  if (set) {
+    // on consomme l'id de l'utilisateur.
+    set >> data;
+    idU = stoi(data) - 1;
+    // on consomme l'id du film.
+    set >> data;
+    idM = stoi(data) - 1;
+    // on consomme la note du film.
+    set >> data;
+    Mark = stoi(data);
+    // on consomme le timestamp.
+    set >> data;
+
+    while(!set.eof()) {
+
+      // les indices de la matrice sont décalée par rapport aux indices des films et utilisateurs.
+      d[i].set(idM, idU, Mark);
+      // on consomme l'id du film.
+      set >> data;
+      idU = stoi(data) - 1;
+      // on consomme l'id de l'utilisateur.
+      set >> data;
+      idM = stoi(data) - 1;
+      // on consomme la note du film.
+      set >> data;
+      Mark = stoi(data);
+      // on consomme le timestamp.
+      set >> data;
+
+      i++;
+    }
+  }
+  else {
+    cout << "ERROR: cannot open dataset" << endl;
+  }
+  set.close();
+}
+
 vector<string> DataParser::split(string str, char separator) {
   vector<string> internal;
   stringstream ss(str); // On transforme la chaine en stream.
@@ -131,6 +180,10 @@ gsl_matrix* DataParser::getDatas() {
 
 int DataParser::getN() {
   return m_N;
+}
+
+void DataParser::setN(int N) {
+  this->m_N = N;
 }
 
 vector<string> DataParser::getGenres() {

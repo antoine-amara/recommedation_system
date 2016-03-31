@@ -22,8 +22,6 @@ void Vector3::add(double x,double y,double z) {
     m_c[2]+=z;
 }
 
-
-
 void Vector3::printV() const {
     cout << "(" << this->x() << "," << this->y() << "," << this->z() << ")" << endl;
 }
