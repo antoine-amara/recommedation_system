@@ -120,9 +120,7 @@ void DataParser::parseTest(Vector3* d, int N) {
   string data;
   int i = 0;
 
-  m_N = N;
-
-  d[m_N] = Vector3();
+  d[N] = Vector3();
 
   if (set) {
     // on consomme l'id de l'utilisateur.

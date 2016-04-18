@@ -60,8 +60,8 @@ MovieRecommender::MovieRecommender(Saver saver) {
 }
 
 void MovieRecommender::train(double alpha, double lambda, int save) {
-  double threshold = 0.1;
-  double cost, oldcost;
+  bool firstIteration;
+  double cost, oldcost, testcost, oldtestcost;
   int i;
   gsl_matrix *error;
   gsl_matrix *regularizationX, *regularizationtheta;
@@ -70,7 +70,10 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
   i = save;
 
   cost = computeCost(TRAINSET, lambda);
+  testcost = computeCost(TESTSET, lambda);
   oldcost = 0.0;
+  oldtestcost = 0.0;
+  firstIteration = true;
 
   regularizationX = gsl_matrix_alloc(this->m_X->size1, this->m_X->size2);
   intermediateX = gsl_matrix_alloc(this->m_X->size1, this->m_X->size2);
@@ -78,7 +81,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
   regularizationtheta = gsl_matrix_alloc(this->m_theta->size1, this->m_theta->size2);
   intermediatetheta = gsl_matrix_alloc(this->m_theta->size1, this->m_theta->size2);
 
-  while(cost > threshold) {
+  while(!(cost < oldcost && testcost > oldtestcost) || firstIteration) {
     // on calcule les erreurs comises par le système
     error = computeTrainError();
 
@@ -100,8 +103,19 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
     gsl_matrix_sub(m_theta, intermediatetheta);
 
     oldcost = cost;
+    oldtestcost = testcost;
     cost = computeCost(TRAINSET, lambda);
+    testcost = computeCost(TESTSET, lambda);
     printState(lambda);
+
+    cout << "cost state" << endl;
+    cout << "cost: " << cost << " oldcost: " << oldcost << endl;
+    cout << "testcost" << testcost << " oldtestcost: " << oldtestcost << endl;
+    cout << (cost < oldcost && testcost > oldtestcost) << endl;
+
+    if(firstIteration) {
+      firstIteration = false;
+    }
 
     if(cost > oldcost) {
       // on diminue alpha
@@ -118,7 +132,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
 
     if(i == 0) {
       cout << "saving ..." << endl;
-      saveState("train_result");
+      saveState("save_train");
       i = save;
     }
     else {
@@ -129,7 +143,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
 
   cout << "end gradient decent saving ..." << endl;
 
-  saveState("train_result");
+  saveState("u1");
 
   gsl_matrix_free(regularizationX);
   gsl_matrix_free(regularizationtheta);
