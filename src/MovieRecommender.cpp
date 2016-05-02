@@ -251,7 +251,7 @@ gsl_matrix* MovieRecommender::predict() {
 
       if(round(abs(sum)) == 0) {
         cout << "note: " << gsl_matrix_get(Netoile, i, user) << endl;
-        movies.push_back(m_parser->getMovies()[i]);
+        movies.push_back("Titre : " + m_parser->getMovies()[i] + " | Note : " + std::to_string(gsl_matrix_get(Netoile, i, user)));
         nbMovies--;
       }
       i++;
