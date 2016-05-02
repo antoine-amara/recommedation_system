@@ -7,6 +7,7 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_rng.h>
+#include <ctime>
 
 #include "AiInterface.h"
 #include "DataParser.h"

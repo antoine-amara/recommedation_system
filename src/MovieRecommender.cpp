@@ -201,7 +201,7 @@ gsl_matrix* MovieRecommender::predict() {
     unsigned int bestMovie;
     const gsl_rng_type *T;
     gsl_rng* r;
-    double randMovie;
+    int randMovie;
     unsigned int i;
     gsl_matrix* Netoile;
 
@@ -216,13 +216,14 @@ gsl_matrix* MovieRecommender::predict() {
     gsl_matrix_get_row(bestMovieVec, m_X, bestMovie);
 
     gsl_rng_env_setup();
+    //to get real random each time
+    gsl_rng_default_seed = time(0);
 
     T = gsl_rng_default;
     r = gsl_rng_alloc(T);
 
-    randMovie = (gsl_rng_uniform(r)) * (m_X->size1-2);
-
-    i =  round(randMovie);
+    randMovie = gsl_rng_uniform_int(r, (m_X->size1-2));
+    i =  randMovie;
     i++;
     cout << "randMovie :" << randMovie <<endl;
     while(nbMovies != 0) {
@@ -427,6 +428,9 @@ gsl_matrix* MovieRecommender::predict() {
 
           T = gsl_rng_default;
           r = gsl_rng_alloc(T);
+
+          // to get real random each time
+          gsl_rng_default_seed = time(0);
 
           for(i = 0; i < m_theta->size1; ++i) {
             for(j = 0; j < m_theta->size2; ++j) {
