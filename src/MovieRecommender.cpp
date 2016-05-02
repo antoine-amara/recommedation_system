@@ -132,7 +132,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
 
     if(i == 0) {
       cout << "saving ..." << endl;
-      saveState("save_train");
+      saveState("data/save_train");
       i = save;
     }
     else {
@@ -143,7 +143,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
 
   cout << "end gradient decent saving ..." << endl;
 
-  saveState("u1");
+  saveState("data/u5");
 
   gsl_matrix_free(regularizationX);
   gsl_matrix_free(regularizationtheta);
@@ -197,39 +197,70 @@ gsl_matrix* MovieRecommender::predict() {
   }
 
   vector<string> MovieRecommender::recommend(int user, int nbMovies) {
-    gsl_vector *user_rates, *movie, *other_movie, *res;
-    int sum;
-    unsigned int j, i, best_movie;
     vector<string> movies;
+    unsigned int bestMovie;
+    const gsl_rng_type *T;
+    gsl_rng* r;
+    double randMovie;
+    unsigned int i;
+    gsl_matrix* Netoile;
 
-    user_rates = gsl_vector_alloc(this->m_parser->getDatas()->size2);
-    other_movie = gsl_vector_alloc(this->m_parser->getDatas()->size1);
-    movie = gsl_vector_alloc(this->m_parser->getDatas()->size1);
-    res = gsl_vector_alloc(this->m_parser->getDatas()->size1);
-    gsl_matrix_get_row(user_rates, this->m_parser->getDatas(), user);
+    Netoile = normalize();
 
-    best_movie = gsl_vector_max_index(user_rates);
+    gsl_vector *userRates = gsl_vector_alloc(m_parser->getDatas()->size1);
+    gsl_vector *bestMovieVec = gsl_vector_alloc(m_X->size2);
+    gsl_vector* movie = gsl_vector_alloc(m_X->size2);
 
-    gsl_matrix_get_row(movie, this->m_X, best_movie);
+    gsl_matrix_get_col(userRates, m_parser->getDatas(), user);
+    bestMovie = gsl_vector_max_index(userRates);
+    gsl_matrix_get_row(bestMovieVec, m_X, bestMovie);
 
-    for(i = 0; i < this->m_X->size2; ++i) {
-      sum = 0;
-      if(i != best_movie) {
-        gsl_vector_memcpy(res, movie);
-        gsl_matrix_get_row(other_movie, this->m_X, i);
-        gsl_vector_sub(res, other_movie);
-        for(j = 0; j < res->size; ++j) {
-          sum += gsl_vector_get(res, j);
-        }
-        if(sum > -1 && sum < 1 ) {
-          movies.push_back(this->m_parser->getMovies()[i]);
-        }
+    gsl_rng_env_setup();
+
+    T = gsl_rng_default;
+    r = gsl_rng_alloc(T);
+
+    randMovie = (gsl_rng_uniform(r)) * (m_X->size1-2);
+
+    i =  round(randMovie);
+    i++;
+    cout << "randMovie :" << randMovie <<endl;
+    while(nbMovies != 0) {
+      cout << "i :" << i << endl;
+      if (i== (unsigned int)round(randMovie)) {
+        break;
       }
+
+      if(i == m_X->size1-1) {
+        i = 0;
+      }
+
+      if(i == bestMovie) {
+        i++;
+        continue;
+      }
+
+      gsl_matrix_get_row(movie, m_X, i);
+      gsl_vector_sub(movie, bestMovieVec);
+
+      double sum = 0;
+      for(unsigned int j = 0; j < movie->size; ++j) {
+        sum += gsl_vector_get(movie, j);
+      }
+
+      if(round(abs(sum)) == 0) {
+        cout << "note: " << gsl_matrix_get(Netoile, i, user) << endl;
+        movies.push_back(m_parser->getMovies()[i]);
+        nbMovies--;
+      }
+      i++;
     }
-    gsl_vector_free(user_rates);
+
+    gsl_vector_free(userRates);
+    gsl_vector_free(bestMovieVec);
     gsl_vector_free(movie);
-    gsl_vector_free(other_movie);
-    gsl_vector_free(res);
+
+    gsl_rng_free(r);
 
     return movies;
   }
@@ -410,6 +441,8 @@ gsl_matrix* MovieRecommender::predict() {
               gsl_matrix_set(m_X, i, j, n);
             }
           }
+
+          gsl_rng_free(r);
         }
 
         void MovieRecommender::printMatrix(string message, gsl_matrix *matrix) {
