@@ -88,7 +88,7 @@ void DataParser::parseGenres() {
     }
   }
   else {
-    cout << "ERROR: cannot open dataset" << endl;
+    cout << "WARNING : Genres dataset is not available. Genres is needed only for recommend" << endl;
   }
   set.close();
 }
@@ -108,7 +108,7 @@ void DataParser::parseMovies() {
     }
   }
   else {
-    cout << "ERROR: cannot open dataset" << endl;
+    cout << "WARNING : Movies dataset is not available. Movies is needed only for recommend" << endl;
   }
   set.close();
 }
