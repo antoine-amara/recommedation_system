@@ -22,11 +22,19 @@ main (int argc, char **argv)
   int nbMovies, nbUsers, nbGenres;
   double lambda, alpha;
 
+  string datasets;
+  int nbDataSets, nbLignesSurUnJeu;
+
+  dataset = "data/u1";
   nbMovies = 1682;
   nbUsers = 943;
   nbGenres = 19;
   lambda = 5/100;
   alpha = 0.0001;
+
+  datasets = "data/u";
+  nbDataSets = 5;
+  nbLignesSurUnJeu = 20000;
 
   opterr = 0;
   while ((c = getopt (argc, argv, "TSVZ:")) != -1)
@@ -35,12 +43,18 @@ main (int argc, char **argv)
       case 'T':
         {
         if(argc < 3){
-          dataset = "data/u1";
           cout << "Dataset par défaut: " << dataset <<endl;
         }
         else{
           dataset = argv[2];
+          nbMovies = stoi(argv[3]);
+          nbUsers = stoi(argv[4]);
+          nbGenres = stoi(argv[5]);
           cout << "Dataset: " << dataset <<endl;
+        }
+        if(argc > 5){
+          lambda = stod(argv[6]);
+          alpha = stod(argv[7]);
         }
         MovieRecommender *mr = new MovieRecommender(dataset, nbMovies, nbUsers, nbGenres);
         mr->train(alpha,lambda);
@@ -48,14 +62,29 @@ main (int argc, char **argv)
         }
       case 'S':
         {
-        Saver s = Saver("data/u1");
-        MovieRecommender *mr2 = new MovieRecommender("data/u1", s);
+        if(argc < 3){
+          cout << "Dataset par défaut: " << dataset <<endl;
+        }
+        else{
+          dataset = argv[2];
+          cout << "Dataset: " << dataset <<endl;
+        }
+        Saver s = Saver(dataset);
+        MovieRecommender *mr2 = new MovieRecommender(dataset, s);
         vector<string> reco = mr2->recommend(12, 5);
         break;
         }
       case 'V':
         {
-        Validator v = Validator("data/u", 5, 20000);
+        if(argc < 3){
+          cout << "Datasets par défaut: " << datasets <<endl;
+        }
+        else{
+          datasets = argv[2];
+          nbDataSets = stoi(argv[3]);
+          nbLignesSurUnJeu = stoi(argv[4]);
+        }
+        Validator v = Validator(datasets, nbDataSets, nbLignesSurUnJeu);
         v.startRMSE();
         break;
         }
