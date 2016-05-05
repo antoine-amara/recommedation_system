@@ -15,7 +15,7 @@
  * \file DataParser.h
  * \brief Le parser à utilisé pour le système de recommandation de films.
  * \author Antoine Amara, Jean-Fréderic Durand.
- * \version 0.3
+ * \version 1.0
  */
 
 /*! \class DataParser

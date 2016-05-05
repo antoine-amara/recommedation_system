@@ -7,7 +7,7 @@
  * \file AiInterface.h
  * \brief Base de tout algorithme de machine learning.
  * \author Antoine Amara, Jean-Fréderic Durand.
- * \version 0.3
+ * \version 1.0
  */
 
  /*! \class AiInterface

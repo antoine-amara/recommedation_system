@@ -3,6 +3,21 @@
 
 #include <iostream>
 
+/*!
+ * \file Vector3.h
+ * \brief Tableau permettant de stocker des triplés.
+ * \author Antoine Amara, Jean-Fréderic Durand.
+ * \version 1.0
+ */
+
+ /*! \class Vector3
+   * \brief Classe permettant de gérer un tableau de triplé..
+   *
+   *  La classe permet de créer un tableau avec des cases contenant un triplé. Le tableau doit avoir une taille finit pour pouvoir allouer les éléments.
+	 * La création du tableau se fait de la manière suivante: Vector3 name[taille].
+	 * On notera que l'on peut récupérer chaque élément du triplet individuellement grâce aux fonctions getx(), gety() et getz().
+   */
+
 class Vector3{
 
 public:

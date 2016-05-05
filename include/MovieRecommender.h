@@ -19,7 +19,7 @@ class Saver;
  * \file MovieRecommender.h
  * \brief Algorithme d'apprentissage permettant de recommander des films à un utilisateur.
  * \author Antoine Amara, Jean-Fréderic Durand.
- * \version 0.3
+ * \version 1.0
  */
 
  /*! \class MovieRecommender

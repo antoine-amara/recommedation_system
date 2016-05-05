@@ -14,7 +14,7 @@
  * \file Saver.h
  * \brief Permets de sauvegarder l'état de l'IA.
  * \author Antoine Amara, Jean-Fréderic Durand.
- * \version 0.3
+ * \version 1.0
  */
 
  /*! \class Saver
