@@ -9,7 +9,7 @@
  */
 
 /*! \class ParserInterface
-   * \brief Interface permettant d'avoir la base d'un parser.
+   * \brief Interface permettant de construire la base sur laquelle on implémente un parser.
    *
    *  Cette classe contient les méthodes de base de tout parser.
    */

@@ -11,11 +11,11 @@
  */
 
  /*! \class Vector3
-   * \brief Classe permettant de gérer un tableau de triplé..
+   * \brief Classe permettant de gérer un tableau de triplet
    *
-   *  La classe permet de créer un tableau avec des cases contenant un triplé. Le tableau doit avoir une taille finit pour pouvoir allouer les éléments.
+   *  La classe permet de créer un tableau avec des cases contenant un triplet. Le tableau doit avoir une taille fini pour pouvoir allouer les éléments.
 	 * La création du tableau se fait de la manière suivante: Vector3 name[taille].
-	 * On notera que l'on peut récupérer chaque élément du triplet individuellement grâce aux fonctions getx(), gety() et getz().
+	 * On notera que l'on peut récupérer chaque élément du triplet individuellement grâce aux fonctions x(), y() et z().
    */
 
 class Vector3{
@@ -64,52 +64,82 @@ public:
 	}
 
 	/*!
-	  *  \brief Renvoie x ou a (le premier élément du triplet).
+	  *  \brief Renvoie x (le premier élément du triplet).
 	  *
 	  *  \return x
 	  */
 	inline double x() const {return m_c[0];}
+	/*!
+	  *  \brief Renvoie a (le premier élément du triplet).
+	  *
+	  *  \return a
+	  */
 	inline double a() const {return m_c[0];}
 
 	/*!
-	  *  \brief Renvoie y ou b (le deuxième élément du triplet).
+	  *  \brief Renvoie y  (le deuxième élément du triplet).
 	  *
 	  *  \return y
 	  */
 	inline double y() const {return m_c[1];}
+	/*!
+	  *  \brief Renvoie b (le deuxième élément du triplet).
+	  *
+	  *  \return b
+	  */
 	inline double b() const {return m_c[1];}
 
 	/*!
-	  *  \brief Renvoie z ou c (le dernier élément du triplet).
+	  *  \brief Renvoie z (le dernier élément du triplet).
 	  *
 	  *  \return z
 	  */
 	inline double z() const {return m_c[2];}
+	/*!
+	  *  \brief Renvoie c (le dernier élément du triplet).
+	  *
+	  *  \return c
+	  */
 	inline double c() const {return m_c[2];}
 
 
 
 	/*!
-	  *  \brief Set x ou a.
+	  *  \brief Set x.
 	  *
 	  *  \param k : un double
 	  */
 	inline void x(double k) {m_c[0]=k;}
+	/*!
+	  *  \brief Set a.
+	  *
+	  *  \param k : un double
+	  */
     inline void a(double k) {m_c[0]=k;}
 
     /*!
-	  *  \brief Set y ou b.
+	  *  \brief Set y.
 	  *
 	  *  \param k : un double
 	  */
     inline void y(double k) {m_c[1]=k;}
+    /*!
+	  *  \brief Set b.
+	  *
+	  *  \param k : un double
+	  */
     inline void b(double k) {m_c[1]=k;}
     /*!
-	  *  \brief Set z ou c.
+	  *  \brief Set z.
 	  *
 	  *  \param k : un double
 	  */
     inline void z(double k) {m_c[2]=k;}
+    /*!
+	  *  \brief Set c.
+	  *
+	  *  \param k : un double
+	  */
     inline void c(double k) {m_c[2]=k;}
 
     /*!

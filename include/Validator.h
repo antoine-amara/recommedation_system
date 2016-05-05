@@ -19,9 +19,11 @@
    * \brief Classe permettant de faire une cross-validation.
    *
    *  La classe permet de mettre en place de façon automatisée une cross-validation après un entraînement.
-	 * Elle permet ainsi de valider un apprentissage soit par rapport au nombre d'erreurs de prédictions, soit par rapport à la fonction de coût.
-	 * Elle fonctionne avec plusieurs jeux de données, il suffit de lui donner le nom du set de données et le nombre total de jeux et elle calcule l'erreur sur l'ensemble.
-	 * par exemple si le jeu de données se nomme u et qu'il y a 5 jeux en tout, elle calculera l'erreur sur les fichiers u1.test, u2.test, u3.test, u4.test et u5.test.
+   *
+   *  Elle permet ainsi de valider un apprentissage soit par rapport aux nombres d'erreurs de prédictions, soit par rapport à la fonction de coût.
+   *  Elle fonctionne avec plusieurs jeux de données, il suffit de lui donner le nom du set de données et le nombre total de jeux pour qu'elle calcule l'erreur sur l'ensemble des jeux.
+   *
+   *  Par exemple si le jeu de données se nomme u et qu'il y a 5 jeux en tout, elle calculera l'erreur sur les fichiers u1.test, u2.test, u3.test, u4.test et u5.test.
    */
 
 class Validator {
@@ -46,7 +48,8 @@ public:
 	/*!
 	 *  \brief Lance l'analyse du validateur.
 	 *
-	 *	Demarre l'analyse et imprime un rapport sur la sortie standard. L'analyse se fait ici par rappor au nombre prediction fausse.
+	 *	Demarre l'analyse et imprime un rapport sur la sortie standard. 
+	 *  L'analyse se fait ici par rapport au nombre prediction fausse.
 	 *
 	 */
 	void start();
@@ -54,7 +57,8 @@ public:
 	/*!
 	 *  \brief Lance l'analyse du validateur.
 	 *
-	 * Demarre l'analyse et imprime un rapport sur la sortie standard. L'analyse se fait ici par rappor à la fonction de coût (RMSE).
+	 * Demarre l'analyse et imprime un rapport sur la sortie standard. 
+	 * L'analyse se fait ici par rapport à la fonction de coût (RMSE).
 	 *
 	 */
 	void startRMSE();

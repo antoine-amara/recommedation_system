@@ -26,6 +26,17 @@ class Saver;
    * \brief Classe représentant l'algorithme de recommandation de film.
    *
    *  La classe gère la représentation des données, l'apprentissage, la sauvegarde des résultats et bien sûr la recommandation.
+   *
+   *  Notes concernant les matrices :
+   *
+   *   Matrice pour les données d'entrainements :
+   *   - les lignes représentes les id des films.
+   *   - les colonnes représentes les id des utilisateurs.
+   *
+   *   Matrice pour les recommandations (récupération des titres et des genres) :
+   *
+   *   - les Genres sont organisés de la façon suivante : vector[id_genre], et réciproquement pour récupérer
+   *  les titres de films.
    */
 
 class MovieRecommender : public AiInterface {
@@ -269,7 +280,7 @@ private:
   int round(double a);
 
   /*
-   *  Methode permettant d'initialiser les matrices de paramètres theta et X, les 2 matrices sont initialisés
+   *  Methode permettant d'initialiser les matrices de paramètres theta et X, les 2 matrices sont initialisées
    *  via un generateur de nombre aléatoire, ces nombres sont compris entre 0 et 1.
   */
   void initParams();

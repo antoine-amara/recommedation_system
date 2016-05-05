@@ -48,10 +48,10 @@ public:
   /*!
      *  \brief Sauvegarde d'une IA.
      *
-     *  Méthode permettant de sauvegarder l'état d'un objet MovieRecommender(de l'IA donc).
+     *  Méthode permettant de sauvegarder l'état d'un objet MovieRecommender (de l'IA donc).
      *  Les éléments sauvegardés seront les matrices thêta et X, qui sont les matrices des paramètres
-     *  permettant d'effectuer des prédictions(et donc de déduire des recommandations par la suite).
-     *  Theta sera sauvegardé dans le fichier filename.theta et X dans le fichier filename.X.
+     *  permettant d'effectuer des prédictions (et donc de déduire des recommandations par la suite).
+     *  Theta sera sauvegardée dans le fichier filename.theta et X dans le fichier filename.X.
      *
      *  \param object : l'objet représentant l'IA a sauvegardé.
      */
@@ -60,9 +60,9 @@ public:
   /*!
      *  \brief Chargement d'un état d'une IA.
      *
-     *  Méthode permettant de charger un état d'un objet MovieRecommender(de l'IA donc)
+     *  Méthode permettant de charger un état d'un objet MovieRecommender (de l'IA donc)
      *  précédemment sauvegardé dans 2 fichiers: filename.theta et filename.X. Les éléments chargés seront
-     *  les matrices de paramètres thêta et X permettant de faire des prédictions(et donc
+     *  les matrices de paramètres thêta et X permettant de faire des prédictions (et donc
      *  d'effectuer des recommandations).
      *
      */
