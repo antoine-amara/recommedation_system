@@ -35,7 +35,7 @@ main (int argc, char **argv)
       case 'T':
         {
         if(argc < 3){
-          dataset = "data/u5";
+          dataset = "data/u1";
           cout << "Dataset par défaut: " << dataset <<endl;
         }
         else{
