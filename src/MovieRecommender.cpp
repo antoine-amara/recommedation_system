@@ -368,7 +368,7 @@ gsl_matrix* MovieRecommender::predict() {
 
           ratings = NULL;
 
-          ratings = normalize(); // N*
+          ratings = predict(); // N*
 
           result = gsl_matrix_calloc(ratings->size1, ratings->size2); //N* - N
 
@@ -379,6 +379,8 @@ gsl_matrix* MovieRecommender::predict() {
             error = gsl_matrix_get(ratings, testdatas[i].x(), testdatas[i].y()) - testdatas[i].z();
             gsl_matrix_set(result, testdatas[i].x(), testdatas[i].y(), error);
           }
+
+          gsl_matrix_free(ratings);
 
           return result;
         }

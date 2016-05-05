@@ -65,17 +65,17 @@ int main(void) {
   //gsl_matrix_free(rates);
 
   //DataParser parser = DataParser("data/testparser.base", 5, 4);
-  //Validator v = Validator("data/u", 5, 20000);
-  //v.start();
+  Validator v = Validator("data/u", 5, 20000);
+  v.startRMSE();
 
-  Saver s = Saver("data/u1");
+  /*Saver s = Saver("data/u1");
   MovieRecommender *mr = new MovieRecommender("data/u1", s);
   vector<string> reco = mr->recommend(12, 5);
 
   cout << "movie for user 12:" << endl;
   for(int i = 0; i < reco.size(); ++i) {
     cout << reco[i] << endl;
-  }
+  }*/
 
   return 0;
 }
