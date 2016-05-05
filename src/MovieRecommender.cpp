@@ -171,6 +171,9 @@ gsl_matrix* MovieRecommender::predict() {
     for(i = 0; i < m->size1; ++i) {
       for(j = 0; j < m->size2; ++j) {
         int value = round(gsl_matrix_get(m, i, j));
+        if(value > 5) {
+          value = 5;
+        }
         gsl_matrix_set(m, i, j, (double)value);
       }
     }
