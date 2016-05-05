@@ -29,12 +29,12 @@ outils utilisés (pré-requis):
 
 *options:*
 
-> -T [dataset] [nbFilms] [nbUsers] [nbGenres] [lambda] [alpha] : lance un entrainement (MovieRecommender::train) depuis un fichier source.
+> -T [dataset] [nbFilms] [nbUsers] [nbGenres] [alpha] [lambda] : lance un entrainement (MovieRecommender::train) depuis un fichier source.
 * si aucun argument n'est fourni, lance un entrainement (MovieRecommender::train) avec les parmètre par défaut sur le dataset par défaut (u1).
 * si l'argument dataset est fourni alors il est nécéssaire de fournir nbFlms, nbUsers et nbGenres.
 * lambda et alpha sont par défaut réglés respectivement à 5/100 et 10^(-4).
 
-> -S [dataset] [lambda] [alpha] : lance un entrainement (MovieRecommender::train) depuis une sauvegarde.
+> -S [dataset] [alpha] [lambda] : lance un entrainement (MovieRecommender::train) depuis une sauvegarde.
 * si aucun argument n'est fourni, lance un Saver avec le dataset par défaut(u1).
 * lambda et alpha sont par défaut réglés respectivement à 5/100 et 10^(-4).
 

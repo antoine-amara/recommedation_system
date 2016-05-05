@@ -19,7 +19,7 @@ main (int argc, char **argv)
 
   string dataset;
   int nbMovies, nbUsers, nbGenres;
-  double lambda, alpha;
+  double alpha, lambda;
 
   string datasets;
   int nbDataSets, nbLignesSurUnJeu;
@@ -30,8 +30,8 @@ main (int argc, char **argv)
   nbMovies = 1682;
   nbUsers = 943;
   nbGenres = 19;
-  lambda = 5/100;
   alpha = 0.0001;
+  lambda = 5.0/100.0;
 
   datasets = "data/u";
   nbDataSets = 5;
@@ -40,7 +40,7 @@ main (int argc, char **argv)
   idUser = 13;
   nbRecommend = 5;
 
-
+  cout << "Nombres d'argument :" << argc <<endl;
   opterr = 0;
   while ((c = getopt (argc, argv, "TSVRZ:")) != -1)
     switch (c)
@@ -50,17 +50,24 @@ main (int argc, char **argv)
         if(argc < 3){
           cout << "Dataset par défaut: " << dataset <<endl;
         }
-        else{
+        else if (argc == 6){
           dataset = argv[2];
           nbMovies = stoi(argv[3]);
           nbUsers = stoi(argv[4]);
           nbGenres = stoi(argv[5]);
           cout << "Dataset: " << dataset <<endl;
         }
-        if(argc > 5){
-          lambda = stod(argv[6]);
-          alpha = stod(argv[7]);
+        else{
+          dataset = argv[2];
+          nbMovies = stoi(argv[3]);
+          nbUsers = stoi(argv[4]);
+          nbGenres = stoi(argv[5]);
+          cout << "Dataset: " << dataset <<endl;
+          alpha = stod(argv[6]);
+          lambda = stod(argv[7]);
         }
+        cout << "nbMovies: "<< nbMovies << " | nbUsers: " << nbUsers << " | nbGenres: " << nbGenres << endl;
+        cout << "lambda: " << lambda << " | alpha: "<< alpha << endl;
         MovieRecommender *mr = new MovieRecommender(dataset, nbMovies, nbUsers, nbGenres);
         mr->train(alpha,lambda);
         break;
@@ -76,9 +83,10 @@ main (int argc, char **argv)
         }
         else{
           dataset = argv[2];
-          lambda = stod(argv[3]);
-          alpha = stod(argv[4]);
+          alpha = stod(argv[3]);
+          lambda = stod(argv[4]);
         }
+        cout << "lambda: " << lambda << " | alpha: "<< alpha << endl;
         Saver s = Saver(dataset);
         MovieRecommender *mr2 = new MovieRecommender(dataset, s);
         mr2->train(alpha, lambda);
