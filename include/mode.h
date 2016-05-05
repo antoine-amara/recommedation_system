@@ -1,0 +1,1 @@
+enum mode {TRAINSET, TESTSET};
