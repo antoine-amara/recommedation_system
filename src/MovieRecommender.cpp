@@ -143,7 +143,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
 
   cout << "end gradient decent saving ..." << endl;
 
-  saveState("data/u5");
+  saveState(m_parser->getFilename());
 
   gsl_matrix_free(regularizationX);
   gsl_matrix_free(regularizationtheta);
@@ -171,6 +171,9 @@ gsl_matrix* MovieRecommender::predict() {
     for(i = 0; i < m->size1; ++i) {
       for(j = 0; j < m->size2; ++j) {
         int value = round(gsl_matrix_get(m, i, j));
+        if(value > 5) {
+          value = 5;
+        }
         gsl_matrix_set(m, i, j, (double)value);
       }
     }
@@ -225,9 +228,7 @@ gsl_matrix* MovieRecommender::predict() {
     randMovie = gsl_rng_uniform_int(r, (m_X->size1-2));
     i =  randMovie;
     i++;
-    cout << "randMovie :" << randMovie <<endl;
     while(nbMovies != 0) {
-      cout << "i :" << i << endl;
       if (i== (unsigned int)round(randMovie)) {
         break;
       }
@@ -250,7 +251,6 @@ gsl_matrix* MovieRecommender::predict() {
       }
 
       if(round(abs(sum)) == 0) {
-        cout << "note: " << gsl_matrix_get(Netoile, i, user) << endl;
         movies.push_back("Titre : " + m_parser->getMovies()[i] + " | Note : " + std::to_string(gsl_matrix_get(Netoile, i, user)));
         nbMovies--;
       }

@@ -5,11 +5,11 @@
  * \file ParserInterface.h
  * \brief Base de tous parser de fichier.
  * \author Antoine Amara, Jean-Fréderic Durand.
- * \version 0.3
+ * \version 1.0
  */
 
 /*! \class ParserInterface
-   * \brief Interface permettant d'avoir la base d'un parser.
+   * \brief Interface permettant de construire la base sur laquelle on implémente un parser.
    *
    *  Cette classe contient les méthodes de base de tout parser.
    */

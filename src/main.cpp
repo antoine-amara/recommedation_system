@@ -5,77 +5,138 @@
 #include "Validator.h"
 #include <gsl/gsl_matrix.h>
 #include <iostream>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 using namespace std;
 
+int
+main (int argc, char **argv)
+{
+  int c;
 
-int main(void) {
-
+  string dataset;
   int nbMovies, nbUsers, nbGenres;
-  //gsl_matrix *theta, *X;
-  //gsl_matrix *rates;
-  double lambda, alpha;
+  double alpha, lambda;
 
+  string datasets;
+  int nbDataSets, nbLignesSurUnJeu;
+
+  int idUser, nbRecommend;
+
+  dataset = "data/u1";
   nbMovies = 1682;
   nbUsers = 943;
   nbGenres = 19;
-  lambda = 5/100;
   alpha = 0.0001;
+  lambda = 5.0/100.0;
 
+  datasets = "data/u";
+  nbDataSets = 5;
+  nbLignesSurUnJeu = 20000;
 
+  idUser = 13;
+  nbRecommend = 5;
 
-  //rates = gsl_matrix_alloc(nbMovies, nbUsers);
-  /*theta = gsl_matrix_alloc(nbUsers, nbGenres);
-  X = gsl_matrix_calloc(nbMovies, nbGenres);
-
-  gsl_matrix_set(theta, 0, 0, 1.0);
-  gsl_matrix_set(theta, 0, 1, 5.0);
-  gsl_matrix_set(theta, 0, 2, 1.0);
-  gsl_matrix_set(theta, 1, 0, 1.0);
-  gsl_matrix_set(theta, 1, 1, 5.0);
-  gsl_matrix_set(theta, 1, 2, 1.0);
-  gsl_matrix_set(theta, 2, 0, 1.0);
-  gsl_matrix_set(theta, 2, 1, 1.0);
-  gsl_matrix_set(theta, 2, 2, 5.0);
-  gsl_matrix_set(theta, 3, 0, 1.0);
-  gsl_matrix_set(theta, 3, 1, 1.0);
-  gsl_matrix_set(theta, 3, 2, 5.0);
-
-  gsl_matrix_set(X, 0, 1, 1.0);
-  gsl_matrix_set(X, 1, 1, 1.0);
-  gsl_matrix_set(X, 2, 1, 1.0);
-  gsl_matrix_set(X, 3, 2, 1.0);
-  gsl_matrix_set(X, 4, 2, 1.0);*/
-
-  //Saver s = Saver("train_result");
-  //MovieRecommender *mr = new MovieRecommender("data/u5", nbMovies, nbUsers, nbGenres);
-  //mr->normalize();
-  //gsl_matrix_memcpy(rates, mr->predict());
-  //mr->train(alpha,lambda);
-
-  /*cout << "user: 1" << " movie: 6" << "rates: " << gsl_matrix_get(rates, 6, 1) << endl;
-  cout << "user: 1" << " movie: 10" << "rates: " << gsl_matrix_get(rates, 10, 1) << endl;
-  cout << "user: 1" << " movie: 12" << "rates: " << gsl_matrix_get(rates, 12, 1) << endl;
-  cout << "user: 1" << " movie: 14" << "rates: " << gsl_matrix_get(rates, 14, 1) << endl;
-  cout << "user: 1" << " movie: 17" << "rates: " << gsl_matrix_get(rates, 17, 1) << endl;*/
-
-  //gsl_matrix_free(theta);
-  //gsl_matrix_free(X);
-  //delete(mr);
-  //gsl_matrix_free(rates);
-
-  //DataParser parser = DataParser("data/testparser.base", 5, 4);
-  Validator v = Validator("data/u", 5, 20000);
-  v.startRMSE();
-
-  /*Saver s = Saver("data/u1");
-  MovieRecommender *mr = new MovieRecommender("data/u1", s);
-  vector<string> reco = mr->recommend(12, 5);
-
-  cout << "movie for user 12:" << endl;
-  for(int i = 0; i < reco.size(); ++i) {
-    cout << reco[i] << endl;
-  }*/
-
+  cout << "Nombres d'argument :" << argc <<endl;
+  opterr = 0;
+  while ((c = getopt (argc, argv, "TSVRZ:")) != -1)
+    switch (c)
+      {
+      case 'T':
+        {
+        if(argc < 3){
+          cout << "Dataset par défaut: " << dataset <<endl;
+        }
+        else if (argc == 6){
+          dataset = argv[2];
+          nbMovies = stoi(argv[3]);
+          nbUsers = stoi(argv[4]);
+          nbGenres = stoi(argv[5]);
+          cout << "Dataset: " << dataset <<endl;
+        }
+        else{
+          dataset = argv[2];
+          nbMovies = stoi(argv[3]);
+          nbUsers = stoi(argv[4]);
+          nbGenres = stoi(argv[5]);
+          cout << "Dataset: " << dataset <<endl;
+          alpha = stod(argv[6]);
+          lambda = stod(argv[7]);
+        }
+        cout << "nbMovies: "<< nbMovies << " | nbUsers: " << nbUsers << " | nbGenres: " << nbGenres << endl;
+        cout << "lambda: " << lambda << " | alpha: "<< alpha << endl;
+        MovieRecommender *mr = new MovieRecommender(dataset, nbMovies, nbUsers, nbGenres);
+        mr->train(alpha,lambda);
+        break;
+        }
+      case 'S':
+        {
+        if(argc < 3){
+          cout << "Dataset par défaut: " << dataset <<endl;
+        }
+        else if(argc == 3){
+          dataset = argv[2];
+          cout << "Dataset: " << dataset <<endl;
+        }
+        else{
+          dataset = argv[2];
+          alpha = stod(argv[3]);
+          lambda = stod(argv[4]);
+        }
+        cout << "lambda: " << lambda << " | alpha: "<< alpha << endl;
+        Saver s = Saver(dataset);
+        MovieRecommender *mr2 = new MovieRecommender(dataset, s);
+        mr2->train(alpha, lambda);
+        break;
+        }
+      case 'V':
+        {
+        if(argc < 3){
+          cout << "Datasets par défaut: " << datasets <<endl;
+        }
+        else{
+          datasets = argv[2];
+          nbDataSets = stoi(argv[3]);
+          nbLignesSurUnJeu = stoi(argv[4]);
+        }
+        Validator v = Validator(datasets, nbDataSets, nbLignesSurUnJeu);
+        v.startRMSE();
+        break;
+        }
+      case 'R' :
+        {
+        if(argc < 3){
+          cout << "Dataset par défaut: " << dataset <<endl;
+        }
+        else{
+          dataset = argv[2];
+          idUser = stoi(argv[3]);
+          nbRecommend = stoi(argv[4]);
+          cout << "Dataset: " << dataset <<endl;
+        }
+        Saver s = Saver(dataset);
+        MovieRecommender *mr2 = new MovieRecommender(dataset, s);
+        vector<string> reco = mr2->recommend(idUser, nbRecommend);
+        for(unsigned int i = 0; i < reco.size(); ++i) {
+          cout << reco[i] << endl;
+        }
+        break;
+        }
+      case '?':
+        if (optopt == 'Z')
+          fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+        else if (isprint (optopt))
+          fprintf (stderr, "Unknown option `-%c'.\n", optopt);
+        else
+          fprintf (stderr,
+                   "Unknown option character `\\x%x'.\n",
+                   optopt);
+        return 1;
+      default:
+        abort ();
+      }
   return 0;
 }

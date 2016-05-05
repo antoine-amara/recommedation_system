@@ -15,7 +15,7 @@
  * \file DataParser.h
  * \brief Le parser à utilisé pour le système de recommandation de films.
  * \author Antoine Amara, Jean-Fréderic Durand.
- * \version 0.3
+ * \version 1.0
  */
 
 /*! \class DataParser
@@ -23,6 +23,16 @@
    *
    *  La classe gère la lecture des différents fichiers du dataset pour récupérer les différentes données utiles au
    *  bon fonctionnement de l'algorithme.
+   *
+   *  On notera que pour parser les données d'entrainements, la matrice est organisée de la façon suivantes :
+   *
+   *   - les lignes représentes les id des films.
+   *   - les colonnes représentes les id des utilisateurs.
+   *
+   *  Pour récupérer la note d'un film donnée par un utilisateur, la commande est matrice[id_film][id_utilisateur].
+   *
+   *  A noter que les Genres sont organisés de la façon suivante : vector[id_genre], et réciproquement pour récupérer
+   *  les titres de films.
    */
 
 class DataParser : public ParserInterface {
@@ -159,6 +169,16 @@ public:
      *  \return un vector de string contenant les noms des films.
      */
   std::vector<std::string> getMovies();
+
+
+  /*!
+     *  \brief Récupérer le nom du jeu de données.
+     *
+     *  Getter permettant de récupérer le chemin relatif du fichier contenant les données.
+     *
+     *  \return un vector de string contenant les noms des films.
+     */
+  std::string getFilename();
 
   /*!
      *  \brief Destructeur

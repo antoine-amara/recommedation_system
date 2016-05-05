@@ -19,13 +19,24 @@ class Saver;
  * \file MovieRecommender.h
  * \brief Algorithme d'apprentissage permettant de recommander des films à un utilisateur.
  * \author Antoine Amara, Jean-Fréderic Durand.
- * \version 0.3
+ * \version 1.0
  */
 
  /*! \class MovieRecommender
    * \brief Classe représentant l'algorithme de recommandation de film.
    *
    *  La classe gère la représentation des données, l'apprentissage, la sauvegarde des résultats et bien sûr la recommandation.
+   *
+   *  Notes concernant les matrices :
+   *
+   *   Matrice pour les données d'entrainements :
+   *   - les lignes représentes les id des films.
+   *   - les colonnes représentes les id des utilisateurs.
+   *
+   *   Matrice pour les recommandations (récupération des titres et des genres) :
+   *
+   *   - les Genres sont organisés de la façon suivante : vector[id_genre], et réciproquement pour récupérer
+   *  les titres de films.
    */
 
 class MovieRecommender : public AiInterface {
@@ -109,14 +120,20 @@ public:
   /*!
      *  \brief Permets d'effectuer l'apprentissage.
      *
-     *  Méthode permettant d'effectuer l'apprentissage, c'est à dire d'affiner les paramètres thêta et X
-     *  permettant de produire des prédictions qui vont servir pour effectuer les recommandations.
-     *  On notera que l'entrainement se fait grâce à une décente de gradient. Le taux d'apprentissage alpha permet
-     *  de déterminer la vitesse de la décente du gradient.
+     *  Méthode permettant d'effectuer l'apprentissage. C'est à dire d'affiner les paramètres thêta et X
+     *  permettant de produire les meilleurs prédictions qui vont servir pour effectuer les recommandations.
+     *
+     *  On notera que l'entrainement se fait grâce à une descente de gradient. Le taux d'apprentissage alpha permet
+     *  de déterminer la vitesse de la descente du gradient.
+     * On notera que l'on sauvegarde régulièrement l'état des paramètres theta et X pour pouvoir les récupérer en cas de plantage.
+     * Le nom du fichier de sauvegarde intermédiare est save_train (ce qui donne les fichiers save_train.X et save_train.theta), il est stocké dans le dossier data.
+     *
+     * A la fin de l'entrainement, on sauvegarde l'état de theta et X dans un fichier portant le même nom que le jeu d'entrainement.
+     * Exemple, si le jeu d'entrainement est u1, on aura donc 2 fichiers u1.X et u1.theta.
      *
      *  \param alpha: le taux d'apprentissage utilisé pour la décente de gradient.
      *  \param lambda: le paramètre de régularisation.
-     *  \param save: definit la pas pour la sauvegarde régulière de l'IA, les matrices theta et x seront sauvegardé tous les "save" itérations de l'entraînement.
+     *  \param save: règle le pâs de la sauvegarde régulière de l'IA, les matrices theta et x seront sauvegardés tous les "save" itérations de l'entraînement.
      */
   void train(double alpha, double lambda, int save = 30);
 
@@ -269,7 +286,7 @@ private:
   int round(double a);
 
   /*
-   *  Methode permettant d'initialiser les matrices de paramètres theta et X, les 2 matrices sont initialisés
+   *  Methode permettant d'initialiser les matrices de paramètres theta et X, les 2 matrices sont initialisées
    *  via un generateur de nombre aléatoire, ces nombres sont compris entre 0 et 1.
   */
   void initParams();

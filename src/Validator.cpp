@@ -35,7 +35,7 @@ void Validator::start(){
 
 void Validator::startRMSE() {
 	cout << "##############################" << endl;
-	cout << "# Start Test Session         #" << endl;
+	cout << "#     Start Test Session     #" << endl;
 	cout << "##############################" << endl;
 	cout << endl;
 	cout << "dataset name: " << m_filename << endl;
@@ -98,11 +98,11 @@ double Validator::computeGlobalError(){
 
 void Validator::printReport(){
 	cout << "##############################" << endl;
-	cout << "# Test Report:               #" << endl;
+	cout << "#        Test Report:        #" << endl;
 	cout << "##############################" << endl;
 	cout << endl;
 	for(unsigned int i = 0; i < this->m_errors.size(); i++){
-		cout << "Dataset name :" << m_filename+to_string(i);
+		cout << "Dataset name :" << m_filename+to_string(i+1);
 		cout << " Error :" << to_string(this->m_errors[i]) << endl;
 	}
 	cout << endl;
