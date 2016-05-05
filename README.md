@@ -3,6 +3,8 @@ Recommendation System{#mainpage}
 
 ## PJI : système de recommandation d'items (Films)
 
+> version 1.0
+
 Dans le cas d'une recommandation de films :
 * Les datasets: [grouplens](http://grouplens.org/datasets/movielens/)
 
@@ -42,6 +44,6 @@ outils utilisés (pré-requis):
 * si aucun argument n'est fourni, lance la cross-validation (Validator::startRMSE) sur les jeux de données par défaut (u1 à u5).
 * si l'argument datasets est fourni alors il est nécéssaire de nbDataSets et nbLignesSurUnJeu.
 
->-R [dataset] [idUser] [nbRecommand] : lance une recommandation (MovieRecommender::recommend)
+> -R [dataset] [idUser] [nbRecommand] : lance une recommandation (MovieRecommender::recommend)
 * si aucun argument n'est fourni, lance la recommandation pour l'utilisateur numéro 13 avec 5 films.
 * pour les autres cas fournir les 3 arguments.
