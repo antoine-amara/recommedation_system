@@ -143,7 +143,7 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
 
   cout << "end gradient decent saving ..." << endl;
 
-  saveState("data/u5");
+  saveState(m_parser->getFilename());
 
   gsl_matrix_free(regularizationX);
   gsl_matrix_free(regularizationtheta);

@@ -170,6 +170,16 @@ public:
      */
   std::vector<std::string> getMovies();
 
+
+  /*!
+     *  \brief Récupérer le nom du jeu de données.
+     *
+     *  Getter permettant de récupérer le chemin relatif du fichier contenant les données.
+     *
+     *  \return un vector de string contenant les noms des films.
+     */
+  std::string getFilename();
+
   /*!
      *  \brief Destructeur
      *

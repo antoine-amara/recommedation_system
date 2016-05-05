@@ -192,6 +192,10 @@ vector<string> DataParser::getMovies() {
   return m_movies;
 }
 
+string DataParser::getFilename() {
+  return m_filename;
+}
+
 DataParser::~DataParser() {
   gsl_matrix_free(m_datas);
 }
