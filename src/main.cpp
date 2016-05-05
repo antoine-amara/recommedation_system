@@ -15,7 +15,6 @@ using namespace std;
 int
 main (int argc, char **argv)
 {
-  int index;
   int c;
 
   string dataset;
@@ -24,6 +23,8 @@ main (int argc, char **argv)
 
   string datasets;
   int nbDataSets, nbLignesSurUnJeu;
+
+  int idUser, nbRecommend;
 
   dataset = "data/u1";
   nbMovies = 1682;
@@ -36,8 +37,12 @@ main (int argc, char **argv)
   nbDataSets = 5;
   nbLignesSurUnJeu = 20000;
 
+  idUser = 13;
+  nbRecommend = 5;
+
+
   opterr = 0;
-  while ((c = getopt (argc, argv, "TSVZ:")) != -1)
+  while ((c = getopt (argc, argv, "TSVRZ:")) != -1)
     switch (c)
       {
       case 'T':
@@ -65,13 +70,18 @@ main (int argc, char **argv)
         if(argc < 3){
           cout << "Dataset par défaut: " << dataset <<endl;
         }
-        else{
+        else if(argc == 3){
           dataset = argv[2];
           cout << "Dataset: " << dataset <<endl;
         }
+        else{
+          dataset = argv[2];
+          lambda = stod(argv[3]);
+          alpha = stod(argv[4]);
+        }
         Saver s = Saver(dataset);
         MovieRecommender *mr2 = new MovieRecommender(dataset, s);
-        vector<string> reco = mr2->recommend(12, 5);
+        mr2->train(alpha, lambda);
         break;
         }
       case 'V':
@@ -88,6 +98,25 @@ main (int argc, char **argv)
         v.startRMSE();
         break;
         }
+      case 'R' :
+        {
+        if(argc < 3){
+          cout << "Dataset par défaut: " << dataset <<endl;
+        }
+        else{
+          dataset = argv[2];
+          idUser = stoi(argv[3]);
+          nbRecommend = stoi(argv[4]);
+          cout << "Dataset: " << dataset <<endl;
+        }
+        Saver s = Saver(dataset);
+        MovieRecommender *mr2 = new MovieRecommender(dataset, s);
+        vector<string> reco = mr2->recommend(idUser, nbRecommend);
+        for(unsigned int i = 0; i < reco.size(); ++i) {
+          cout << reco[i] << endl;
+        }
+        break;
+        }
       case '?':
         if (optopt == 'Z')
           fprintf (stderr, "Option -%c requires an argument.\n", optopt);
@@ -101,8 +130,5 @@ main (int argc, char **argv)
       default:
         abort ();
       }
-
-  for (index = optind; index < argc; index++)
-    printf ("Non-option argument %s\n", argv[index]);
   return 0;
 }

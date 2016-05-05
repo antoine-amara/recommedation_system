@@ -34,9 +34,14 @@ outils utilisés (pré-requis):
 * si l'argument dataset est fourni alors il est nécéssaire de fournir nbFlms, nbUsers et nbGenres.
 * lambda et alpha sont par défaut réglés respectivement à 5/100 et 10^(-4).
 
-> -S [dataset] : lance un entrainement (MovieRecommender::train) depuis une sauvegarde.
+> -S [dataset] [lambda] [alpha] : lance un entrainement (MovieRecommender::train) depuis une sauvegarde.
 * si aucun argument n'est fourni, lance un Saver avec le dataset par défaut(u1).
+* lambda et alpha sont par défaut réglés respectivement à 5/100 et 10^(-4).
 
-> -V [datasets] [nbDataSets] [nbLignesSurUnJeu]
+> -V [datasets] [nbDataSets] [nbLignesSurUnJeu] : Lance une cross-Validation (Validator::startRMSE)
 * si aucun argument n'est fourni, lance la cross-validation (Validator::startRMSE) sur les jeux de données par défaut (u1 à u5).
 * si l'argument datasets est fourni alors il est nécéssaire de nbDataSets et nbLignesSurUnJeu.
+
+>-R [dataset] [idUser] [nbRecommand] : lance une recommandation (MovieRecommender::recommend)
+* si aucun argument n'est fourni, lance la recommandation pour l'utilisateur numéro 13 avec 5 films.
+* pour les autres cas fournir les 3 arguments.

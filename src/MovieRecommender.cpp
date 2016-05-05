@@ -225,9 +225,7 @@ gsl_matrix* MovieRecommender::predict() {
     randMovie = gsl_rng_uniform_int(r, (m_X->size1-2));
     i =  randMovie;
     i++;
-    cout << "randMovie :" << randMovie <<endl;
     while(nbMovies != 0) {
-      cout << "i :" << i << endl;
       if (i== (unsigned int)round(randMovie)) {
         break;
       }
@@ -250,7 +248,6 @@ gsl_matrix* MovieRecommender::predict() {
       }
 
       if(round(abs(sum)) == 0) {
-        cout << "note: " << gsl_matrix_get(Netoile, i, user) << endl;
         movies.push_back("Titre : " + m_parser->getMovies()[i] + " | Note : " + std::to_string(gsl_matrix_get(Netoile, i, user)));
         nbMovies--;
       }
