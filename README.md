@@ -1,4 +1,5 @@
-# recommendation_system
+Recommendation System{#mainpage}
+=========
 
 __ pji système de recommandation de film, musique ou autre. __
 
