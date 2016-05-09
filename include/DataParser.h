@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <gsl/gsl_matrix.h>
+#include <gsl/gsl_spmatrix.h>
 
 #include "ParserInterface.h"
 #include "Vector3.h"
@@ -128,10 +129,10 @@ public:
      *
      *  Getter permettant de récupérer la matrice des notes utilisateur.
      *
-     *  \return une gsl_matrix avec les notes des films par rapport aux utilisateurs, c'est-à-dire que
-     *          chaque ligne est un film et chaque colonne un utilisateur.
+     *  \return une gsl_spmatrix avec les notes des films par rapport aux utilisateurs, c'est-à-dire que
+     *          chaque ligne est un film et chaque colonne un utilisateur. On notera que cette matrice est creuse, seul les éléments utiles sont stcokés en mémoire.
      */
-  gsl_matrix* getDatas();
+  gsl_spmatrix* getDatas();
 
   /*!
      *  \brief Récupérer le paramètre N du dataset.
@@ -185,7 +186,7 @@ public:
      *
      *  Destructeur de la classe DataParser.
      *
-     *  Permets de désallouer les éléments dynamiques, ici ce sera la gsl_matrix m_datas.
+     *  Permets de désallouer les éléments dynamiques, ici ce sera la gsl_spmatrix m_datas.
      */
   virtual ~DataParser();
 
@@ -194,7 +195,7 @@ protected:
   int m_nbMovies; /*!< Le nombre total de films disponible */
   int m_nbUsers; /*!< Le nombre total d'utilisateur */
   int m_N; /*!< Le nomre de données présente dans le dataset */
-  gsl_matrix *m_datas; /*!< La matrice contenant les notes des films données par les utilisateurs */
+  gsl_spmatrix *m_datas; /*!< La matrice contenant les notes des films données par les utilisateurs. De nombreuses notes sont manquantes (90%), m_datas est donc une matrice creuse. */
   std::vector<std::string> m_genres; /*!< Un tableau contenant les noms des genres des films */
   std::vector<std::string> m_movies; /*!< Un tableau contenant les titres des films */
 

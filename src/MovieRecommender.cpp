@@ -82,8 +82,9 @@ void MovieRecommender::train(double alpha, double lambda, int save) {
   intermediatetheta = gsl_matrix_alloc(this->m_theta->size1, this->m_theta->size2);
 
   while(!(cost < oldcost && testcost > oldtestcost) || firstIteration) {
+    error = gsl_matrix_alloc(m_X->size1, m_theta->size1);
     // on calcule les erreurs comises par le système
-    error = computeTrainError();
+    gsl_spmatrix_sp2d(error, computeTrainError());
 
 
     // on calcule la nouvelle matrice X(on effectue la decente de gradient)
@@ -199,31 +200,46 @@ gsl_matrix* MovieRecommender::predict() {
     return res;
   }
 
-  vector<string> MovieRecommender::recommend(int user, int nbMovies) {
+  vector<string> MovieRecommender::recommend(unsigned int user, int nbMovies) {
     vector<string> movies;
     unsigned int bestMovie;
     const gsl_rng_type *T;
     gsl_rng* r;
-    int randMovie;
+    int randMovie, randN;
     unsigned int i;
     gsl_matrix* Netoile;
+    gsl_spmatrix* fives, *N;
+    int fivesLength;
 
     Netoile = normalize();
+    N = m_parser->getDatas();
+    fives = gsl_spmatrix_alloc(1, Netoile->size1);
 
-    gsl_vector *userRates = gsl_vector_alloc(m_parser->getDatas()->size1);
+    gsl_vector *userRates = gsl_vector_alloc(N->size1);
     gsl_vector *bestMovieVec = gsl_vector_alloc(m_X->size2);
     gsl_vector* movie = gsl_vector_alloc(m_X->size2);
 
-    gsl_matrix_get_col(userRates, m_parser->getDatas(), user);
-    bestMovie = gsl_vector_max_index(userRates);
-    gsl_matrix_get_row(bestMovieVec, m_X, bestMovie);
+    fivesLength = 0;
+    for(i = 0; i < N->nz; ++i) {
+      if(N->p[i] == user) {
+        if(N->data[i] == 5 || N->data[i] == 4) {
+          gsl_spmatrix_set(fives, 1, fivesLength, N->i[i]);
+          fivesLength++;
+        }
+      }
+    }
 
     gsl_rng_env_setup();
     //to get real random each time
     gsl_rng_default_seed = time(0);
 
-    T = gsl_rng_default;
+    T = gsl_rng_taus;
     r = gsl_rng_alloc(T);
+
+    randN = gsl_rng_uniform_int(r, (fivesLength-1));
+    bestMovie = gsl_spmatrix_get(N, 1, randN);
+
+    gsl_matrix_get_row(bestMovieVec, m_X, bestMovie);
 
     randMovie = gsl_rng_uniform_int(r, (m_X->size1-2));
     i =  randMovie;
@@ -260,6 +276,7 @@ gsl_matrix* MovieRecommender::predict() {
     gsl_vector_free(userRates);
     gsl_vector_free(bestMovieVec);
     gsl_vector_free(movie);
+    gsl_matrix_free(Netoile);
 
     gsl_rng_free(r);
 
@@ -270,28 +287,19 @@ gsl_matrix* MovieRecommender::predict() {
     unsigned int i, j;
     double sumX, sumTheta, sumError;
     double N;
-    gsl_matrix* error;
+    gsl_spmatrix* error;
 
     N = m_parser->getN() + 0.0;
 
     sumX = 0;
     sumTheta = 0;
+    sumError = 0;
 
-    /*
-    * Premier Element *
-    * m_error_2 *
-    */
-    if(mode == TRAINSET)
+    if(mode == TRAINSET) {
       error = computeTrainError();
+    }
     else
       error = computeTestError();
-
-
-    //multiplication m_error*m_error_t dans m_error_2
-    gsl_matrix* error_2 = gsl_matrix_alloc(error->size2, error->size2);
-    gsl_blas_dgemm(CblasTrans,CblasNoTrans,
-      1.0, error,error,
-      0.0, error_2);
 
       /*
       * Deuxieme Element *
@@ -301,7 +309,6 @@ gsl_matrix* MovieRecommender::predict() {
         1.0, m_X, m_X,
         0.0, X_2);
 
-        sumX = 0;
         for(i = 0; i < X_2->size1; ++i) {
           for(j = 0; j < X_2->size2; ++j) {
             sumX += gsl_matrix_get(X_2, i, j);
@@ -318,7 +325,6 @@ gsl_matrix* MovieRecommender::predict() {
 
 
 
-          sumTheta = 0;
           /* sommes des éléments */
           for(i = 0; i < theta_2->size1; ++i) {
             for(j = 0; j < theta_2->size2; ++j) {
@@ -326,58 +332,57 @@ gsl_matrix* MovieRecommender::predict() {
             }
           }
 
-          sumError = 0;
-          for(i = 0; i < error_2->size1; ++i) {
-            for(j = 0; j < error_2->size2; ++j) {
-              sumError += gsl_matrix_get(error_2, i, j);
-            }
+          for(i  = 0; i < error->nz; ++i) {
+            sumError += pow(gsl_spmatrix_get(error, error->i[i], error->p[i]), 2);
           }
-          gsl_matrix_free(error);
-          gsl_matrix_free(error_2);
+
+          gsl_spmatrix_free(error);
           gsl_matrix_free(X_2);
           gsl_matrix_free(theta_2);
 
           return sqrt(1.0/N * sumError) + (lambda/N) * sumX + (lambda/N) * sumTheta;
         }
 
-        gsl_matrix* MovieRecommender::computeTrainError() {
+        gsl_spmatrix* MovieRecommender::computeTrainError() {
+          gsl_matrix* Netoile;
+          gsl_spmatrix* error;
+          unsigned int i;
 
-          //computeError() = N*-N
-          gsl_matrix* ratings;
+          Netoile = predict();
 
-          ratings = NULL;
+          error = gsl_spmatrix_alloc(m_parser->getDatas()->size1, m_parser->getDatas()->size2);
 
-          ratings = predict();
-          //la différence ne pouvant pas jouer sur les valeurs non prédites
-          //on remet a 0 celles non notés dans la copie de N*
-          for (unsigned int i = 0; i < this->m_parser->getDatas()->size1; i++){
-            for (unsigned int j = 0; j < this->m_parser->getDatas()->size2; j++){
-              if (gsl_matrix_get(this->m_parser->getDatas(), i, j) == 0)
-              gsl_matrix_set(ratings,i,j,0);
-            }
+          gsl_spmatrix_memcpy(error, m_parser->getDatas());
+
+          for(i = 0; i < error->nz; ++i) {
+            int e;
+            e = gsl_matrix_get(Netoile, error->i[i], error->p[i]) - error->data[i];
+            gsl_spmatrix_set(error, error->i[i], error->p[i], e);
           }
-          gsl_matrix_sub(ratings, this->m_parser->getDatas());
 
-          return ratings;
+          gsl_matrix_free(Netoile);
+
+          return error;
         }
 
-        gsl_matrix* MovieRecommender::computeTestError() {
+        gsl_spmatrix* MovieRecommender::computeTestError() {
           Vector3 testdatas[m_parser->getN()];// N
-          gsl_matrix* ratings, *result;
+          gsl_matrix* ratings;
+          gsl_spmatrix *result;
           int i;
 
           ratings = NULL;
 
           ratings = predict(); // N*
 
-          result = gsl_matrix_calloc(ratings->size1, ratings->size2); //N* - N
+          result = gsl_spmatrix_alloc(ratings->size1, ratings->size2); //N* - N
 
           m_parser->parseTest(testdatas, m_parser->getN());
 
           for(i = 0; i < m_parser->getN(); ++i) {
             int error;
             error = gsl_matrix_get(ratings, testdatas[i].x(), testdatas[i].y()) - testdatas[i].z();
-            gsl_matrix_set(result, testdatas[i].x(), testdatas[i].y(), error);
+            gsl_spmatrix_set(result, testdatas[i].x(), testdatas[i].y(), error);
           }
 
           gsl_matrix_free(ratings);

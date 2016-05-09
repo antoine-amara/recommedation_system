@@ -7,7 +7,7 @@ DataParser::DataParser() {
 
 DataParser::DataParser(int nbMovies, int nbUsers) {
   this->m_filename = "u";
-  m_datas = gsl_matrix_calloc(nbMovies, nbUsers);
+  m_datas = gsl_spmatrix_alloc(nbMovies, nbUsers);
   this->m_nbMovies = nbMovies;
   this->m_nbUsers = nbUsers;
   this->m_N = 0;
@@ -15,7 +15,7 @@ DataParser::DataParser(int nbMovies, int nbUsers) {
 
 DataParser::DataParser(string filename, int nbMovies, int nbUsers) {
   this->m_filename = filename;
-  m_datas = gsl_matrix_calloc(nbMovies, nbUsers);
+  m_datas = gsl_spmatrix_alloc(nbMovies, nbUsers);
   this->m_nbMovies = nbMovies;
   this->m_nbUsers = nbUsers;
   this->m_N = 0;
@@ -52,7 +52,7 @@ void DataParser::parseDatas() {
     while(!set.eof()) {
 
       // les indices de la matrice sont décalée par rapport aux indices des films et utilisateurs.
-      gsl_matrix_set(m_datas, idM, idU, Mark);
+      gsl_spmatrix_set(m_datas, idM, idU, Mark);
       // on consomme l'id du film.
       set >> data;
       idU = stoi(data) - 1;
@@ -172,7 +172,7 @@ vector<string> DataParser::split(string str, char separator) {
   return internal;
 }
 
-gsl_matrix* DataParser::getDatas() {
+gsl_spmatrix* DataParser::getDatas() {
   return m_datas;
 }
 
@@ -197,5 +197,5 @@ string DataParser::getFilename() {
 }
 
 DataParser::~DataParser() {
-  gsl_matrix_free(m_datas);
+  gsl_spmatrix_free(m_datas);
 }
