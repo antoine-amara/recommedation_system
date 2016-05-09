@@ -59,7 +59,7 @@ void Saver::save(MovieRecommender *object) {
     fputs("\n", theta);
 
     // on ecrit la matrice theta dans le fichier
-    gsl_matrix_fprintf(theta, copy_theta, "%f");
+    gsl_matrix_fwrite(theta, copy_theta);
 
     // on vide le stringstream
     size.str("");
@@ -82,7 +82,7 @@ void Saver::save(MovieRecommender *object) {
     fputs("\n", X);
 
     // on ecrit la matrice X dans le fichier
-    gsl_matrix_fprintf(X, copy_X, "%f");
+    gsl_matrix_fwrite(X, copy_X);
 
     fclose(theta);
     fclose(X);
@@ -119,7 +119,7 @@ void Saver::load() {
 
     this->m_theta = gsl_matrix_alloc(m,n);
 
-    gsl_matrix_fscanf(theta, m_theta);
+    gsl_matrix_fread(theta, m_theta);
 
     fgets(chaine, TAILLE_MAX, X);
 		m = atoi(chaine);
@@ -130,7 +130,7 @@ void Saver::load() {
 
 		this->m_X = gsl_matrix_alloc(m,n);
 
-		gsl_matrix_fscanf(X, m_X);
+		gsl_matrix_fread(X, m_X);
 	}
 	else
 		cout << "ERROR : Cannot open file" << endl;
