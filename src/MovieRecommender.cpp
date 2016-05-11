@@ -298,8 +298,13 @@ gsl_matrix* MovieRecommender::predict() {
     if(mode == TRAINSET) {
       error = computeTrainError();
     }
-    else
+    else{
+      //Pour le cout du test il faut ajuster N à 20% ce qui correspond à la taille d'un test.
+      //L'entrainement représente 80% (le N actuel) donc on fait N*25% pour obtenir ces 20%
+      N = m_parser->getN() * 25.0 / 100.0;
       error = computeTestError();
+    }
+
 
       /*
       * Deuxieme Element *
